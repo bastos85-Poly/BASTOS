@@ -1,0 +1,44 @@
+<?xml version="1.0" ?><Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="Bastos.Native.IsoCustomizationWindow" Title="Personnaliser l’ISO BASTOS" Width="720" Height="700" MinWidth="560" MinHeight="490" WindowStartupLocation="CenterOwner" Background="#111827" Foreground="#F3F6FF">
+  <Grid Margin="24">
+    <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+    <StackPanel Margin="0,0,0,16">
+      <TextBlock Text="Choisir ce que BASTOS retirera" FontSize="22" FontWeight="SemiBold"/>
+      <TextBlock Text="Toutes les suppressions facultatives sont cochées par défaut. Décoche un élément pour le conserver dans la nouvelle installation. Les composants essentiels de Windows sont toujours conservés." Foreground="#AAB7CE" TextWrapping="Wrap" Margin="0,8,0,0"/>
+    </StackPanel>
+    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+      <StackPanel>
+        <TextBlock Text="Après l’installation de Windows" FontSize="17" FontWeight="SemiBold" Margin="0,0,0,10"/>
+        <CheckBox IsChecked="{Binding RemoveOneDrive, Mode=TwoWay}" Content="Supprimer OneDrive et son application intégrée" Margin="0,0,0,5"/>
+        <TextBlock Text="Décoche pour garder le client de synchronisation, son démarrage et l’application OneDriveSync." Foreground="#AAB7CE" TextWrapping="Wrap" Margin="24,0,0,14"/>
+        <CheckBox IsChecked="{Binding DisableConsumerContent, Mode=TwoWay}" Content="Désactiver les suggestions, contenus sponsorisés et installations promotionnelles" Margin="0,0,0,5"/>
+        <TextBlock Text="Décoche pour garder ces réglages Windows. Pour conserver aussi l’application Widgets, décoche Widgets Windows dans la liste ci-dessous." Foreground="#AAB7CE" TextWrapping="Wrap" Margin="24,0,0,20"/>
+        <DockPanel Margin="0,0,0,10">
+          <TextBlock Text="Applications intégrées à retirer" FontSize="17" FontWeight="SemiBold" DockPanel.Dock="Left"/>
+          <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Right">
+            <Button Content="Tout cocher" Click="SelectAll_Click" Padding="10,5" Margin="0,0,8,0"/>
+            <Button Content="Tout décocher" Click="ClearAll_Click" Padding="10,5"/>
+          </StackPanel>
+        </DockPanel>
+        <ItemsControl ItemsSource="{Binding AppxRemovalOptions}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Border Background="#1B2940" CornerRadius="6" Padding="10,7" Margin="0,0,0,5">
+                <StackPanel>
+                  <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay}" Content="{Binding Display}" FontWeight="SemiBold"/>
+                  <TextBlock Text="{Binding PackageId}" Foreground="#AAB7CE" FontSize="11" Margin="24,2,0,0"/>
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </StackPanel>
+    </ScrollViewer>
+    <Grid Grid.Row="2" Margin="0,16,0,0">
+      <TextBlock Text="Microsoft Edge reste disponible tant qu’aucun autre navigateur n’a été choisi après l’installation." Foreground="#AAB7CE" TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,270,0"/>
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+        <Button Content="Annuler" Click="Cancel_Click" Padding="16,9" Margin="0,0,9,0" Style="{DynamicResource QuietButton}"/>
+        <Button Content="Créer l’ISO avec ces choix" Click="Create_Click" Padding="16,9" Background="#3582DC" Foreground="White"/>
+      </StackPanel>
+    </Grid>
+  </Grid>
+</Window>

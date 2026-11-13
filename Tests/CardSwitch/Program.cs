@@ -1,0 +1,51 @@
+using Bastos.Native.Models;
+using Bastos.Native.Infrastructure;
+
+int checks=0;
+void Check(bool condition,string text){if(!condition)throw new Exception(text);checks++;Console.WriteLine("OK: "+text);}
+int activated=0,restored=0; bool fail=false,allowed=true;
+TaskCompletionSource? pending=null;
+StatusCard card=null!;
+card=new StatusCard("Réglage","Description","Non appliqué",StatusTone.Neutral,
+    "Activer",new AsyncRelayCommand(async()=>{activated++;if(pending!=null)await pending.Task;if(!fail)card.SelectChoice(true);},()=>allowed),
+    "Restaurer",new AsyncRelayCommand(()=>{restored++;if(!fail)card.SelectChoice(false);return Task.CompletedTask;}),true,false,true);
+Check(card.IsToggleCard && card.ToggleState==false && card.ToggleLabel=="Désactivé","left position does not claim a restoration happened before use");
+await card.ToggleCommand.ExecuteAsync();
+Check(activated==1&&restored==0&&card.ToggleState==true,"right invokes original activate command");
+await card.ToggleCommand.ExecuteAsync();
+Check(activated==1&&restored==1&&card.ToggleState==false,"left invokes original restore command");
+fail=true;await card.ToggleCommand.ExecuteAsync();
+Check(card.ToggleState==false,"failed activation does not change state");
+card.SelectChoice(true);await card.ToggleCommand.ExecuteAsync();
+Check(card.ToggleState==true,"failed restoration does not change state");
+card.ClearChoice();int previous=activated+restored;await card.ToggleCommand.ExecuteAsync();
+Check(card.ToggleState==null&&!card.ToggleCommand.CanExecute(null)&&previous==activated+restored,"unknown state blocked and represented explicitly");
+card.SelectChoice(false);allowed=false;await card.ToggleCommand.ExecuteAsync();
+Check(!card.ToggleCommand.CanExecute(null)&&previous==activated+restored,"original availability retained");
+allowed=true;fail=false;pending=new TaskCompletionSource();
+var run=card.ToggleCommand.ExecuteAsync();
+Check(card.ToggleState==false&&!card.ToggleCommand.CanExecute(null),"busy operation retains confirmed position");
+previous=activated;await card.ToggleCommand.ExecuteAsync();
+Check(activated==previous,"rapid repeat does not run twice");
+pending.SetResult();await run;
+Check(card.ToggleState==true&&card.ToggleCommand.CanExecute(null),"verified completion restores availability");
+var nonBinary=new StatusCard("Installer","","",StatusTone.Neutral,"Installer",new AsyncRelayCommand(()=>Task.CompletedTask),"Ouvrir",new AsyncRelayCommand(()=>Task.CompletedTask),true);
+Check(!nonBinary.IsToggleCard&&nonBinary.ShowChoiceButtons,"nonbinary actions remain buttons");
+var disable=new StatusCard("Mode jeu","","",StatusTone.Neutral,"Activer",new AsyncRelayCommand(()=>Task.CompletedTask),"Désactiver",new AsyncRelayCommand(()=>Task.CompletedTask),true,false,true);
+Check(disable.IsToggleCard&&disable.ToggleLabel=="Désactivé","actual disable label preserved");
+var applyRestore=new StatusCard("Timers","","",StatusTone.Neutral,"Appliquer",new AsyncRelayCommand(()=>Task.CompletedTask),"Restaurer mes valeurs",new AsyncRelayCommand(()=>Task.CompletedTask),true,false,true);
+Check(applyRestore.IsToggleCard&&!applyRestore.ShowChoiceButtons,"apply / restore my values uses a switch");
+applyRestore.SelectChoice(true);applyRestore.IsPartiallyApplied=true;
+Check(applyRestore.ToggleLabel=="Partiellement appliqué"&&applyRestore.ToggleHelp.Contains("Restaurer"),"partial application retains restoration and clear label");
+bool? actual=false;bool mayApply=true,mayRestore=false;int applyCount=0,restoreCount=0;
+var adapter=new SettingSwitchModel("Adapter",new AsyncRelayCommand(()=>{applyCount++;actual=true;mayApply=false;mayRestore=true;return Task.CompletedTask;},()=>mayApply),new AsyncRelayCommand(()=>{restoreCount++;actual=false;return Task.CompletedTask;},()=>mayRestore),()=>actual);
+Check(adapter.ToggleCommand.CanExecute(null),"adapter can apply when no restoration backup exists yet");
+await adapter.ToggleCommand.ExecuteAsync();
+Check(actual==true&&applyCount==1&&adapter.ToggleCommand.CanExecute(null),"adapter can restore when activation is no longer available");
+await adapter.ToggleCommand.ExecuteAsync();
+Check(actual==false&&restoreCount==1,"adapter restores via original command");
+actual=null;adapter.Refresh();Check(!adapter.ToggleCommand.CanExecute(null),"adapter unknown state is disabled");
+actual=false;mayApply=true;
+var failedAdapter=new SettingSwitchModel("Failure",new AsyncRelayCommand(()=>Task.CompletedTask),new AsyncRelayCommand(()=>Task.CompletedTask),()=>actual);
+await failedAdapter.ToggleCommand.ExecuteAsync();Check(actual==false,"adapter does not announce activation after unconfirmed outcome");
+Console.WriteLine($"PASS: {checks} switch checks; no system commands executed.");

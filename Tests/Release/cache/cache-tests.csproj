@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup>
+ <ItemGroup>
+  <Compile Include="$(BastosSourceRoot)/Bastos.Native.Models/RecoveryPreflight.cs"/>
+  <Compile Include="$(BastosSourceRoot)/Bastos.Native.Models/RufusInstallOptions.cs"/>
+  <Compile Include="$(BastosSourceRoot)/Bastos.Native.Models/WindowsIsoEdition.cs"/>
+  <Compile Include="$(BastosSourceRoot)/Bastos.Native.Services/RecoveryPreflightBuilder.cs"/>
+  <Compile Include="$(BastosSourceRoot)/Bastos.Native.Services/RecoveryOperationVerifiers.cs"/>
+  <Compile Include="$(BastosSourceRoot)/Bastos.Native.Models/OperationResult.cs"/>
+ </ItemGroup>
+</Project>

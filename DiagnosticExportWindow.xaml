@@ -1,0 +1,42 @@
+<?xml version="1.0" ?><Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="Bastos.Native.DiagnosticExportWindow" Title="Bastos — Export du diagnostic" Width="1000" Height="850" MinWidth="720" MinHeight="620" WindowStartupLocation="CenterOwner" Background="#0B1020" Foreground="#F1F5FF">
+ <Grid Margin="24">
+  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="*"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+  <StackPanel Margin="0,0,0,16">
+   <TextBlock Text="Exporter un diagnostic" FontSize="23" FontWeight="SemiBold"/>
+   <TextBlock Text="Choisis le contenu, relis l’aperçu, puis enregistre une archive ZIP locale." Foreground="#AAB8CE" TextWrapping="Wrap" Margin="0,8,0,0"/>
+  </StackPanel>
+  <Grid Grid.Row="1" IsEnabled="{Binding CanEdit}" Margin="0,0,0,14">
+   <Grid.ColumnDefinitions><ColumnDefinition Width="260"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+   <StackPanel Margin="0,0,18,0"><TextBlock Text="Opérations à inclure" Foreground="#AAB8CE" Margin="0,0,0,7"/>
+    <ComboBox x:Name="DiagnosticScope" ItemsSource="{Binding Scopes}" SelectedItem="{Binding Scope}" Padding="8"/>
+   </StackPanel>
+   <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
+    <CheckBox x:Name="DiagnosticDetails" Content="Ajouter les messages et contrôles détaillés" IsChecked="{Binding IncludeDetails}" Foreground="#F1F5FF" Margin="0,0,0,10"/>
+    <TextBlock Text="Journaux bruts, profils d’installation, ISO et fichiers personnels exclus." Foreground="#AAB8CE" TextWrapping="Wrap"/>
+   </StackPanel>
+  </Grid>
+  <Border Grid.Row="2" Background="#182235" Padding="14" CornerRadius="8" Margin="0,0,0,14">
+   <StackPanel>
+    <TextBlock Text="Confidentialité" FontWeight="SemiBold" Margin="0,0,0,7"/>
+    <TextBlock Text="{Binding PrivacyNotice}" Foreground="#FFCF8C" TextWrapping="Wrap"/>
+    <TextBlock Text="{Binding Summary}" Foreground="#AAB8CE" TextWrapping="Wrap" Margin="0,10,0,4"/>
+    <ItemsControl ItemsSource="{Binding Files}"><ItemsControl.ItemTemplate><DataTemplate><TextBlock Text="{Binding}" Foreground="#D1DBEA" Margin="0,3,0,0"/></DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+   </StackPanel>
+  </Border>
+  <Grid Grid.Row="3"><Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="*"/></Grid.RowDefinitions>
+   <TextBlock Text="Contenu exact des fichiers de l’archive" FontWeight="SemiBold" Margin="0,0,0,9"/>
+   <TextBox x:Name="DiagnosticPreview" Grid.Row="1" Text="{Binding Preview, Mode=OneWay}" IsReadOnly="True" FontFamily="Consolas" FontSize="12" Background="#101624" Foreground="#D1DBEA" BorderBrush="#263449" Padding="12" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled"/>
+  </Grid>
+  <StackPanel Grid.Row="4" Margin="0,14,0,0">
+   <TextBlock x:Name="DiagnosticStatus" Text="{Binding Status}" Foreground="#FFCF8C" TextWrapping="Wrap" Margin="0,0,0,12"/>
+   <TextBlock Style="{DynamicResource ActionHint}" Text="{Binding ExportDisabledReason}"/>
+   <DockPanel>
+    <Button Content="Fermer" Click="Close_Click" ToolTip="Attends la fin de l’opération avant de fermer cette fenêtre." DockPanel.Dock="Right" Style="{DynamicResource QuietButton}" Margin="12,0,0,0" IsEnabled="{Binding CanEdit}"/>
+    <StackPanel Orientation="Horizontal">
+     <Button x:Name="DiagnosticRefreshButton" Content="Générer l’aperçu" Command="{Binding RefreshCommand}" Style="{DynamicResource SecondaryButton}" Margin="0,0,12,0"/>
+     <Button x:Name="DiagnosticSaveButton" ToolTip="{Binding ExportDisabledReason}" AutomationProperties.HelpText="{Binding ExportDisabledReason}" Content="Enregistrer le ZIP…" Click="Save_Click" IsEnabled="{Binding CanExport}" Style="{DynamicResource PrimaryButton}"/>
+    </StackPanel>
+   </DockPanel>
+  </StackPanel>
+ </Grid>
+</Window>

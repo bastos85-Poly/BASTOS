@@ -1,0 +1,24 @@
+<?xml version="1.0" ?><Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:native="clr-namespace:Bastos.Native;assembly=BASTOS-Native" x:Class="Bastos.Native.GameListWindow" Title="Bastos Game — gérer la liste" Width="760" Height="430" WindowStartupLocation="CenterOwner" Background="{StaticResource WindowBrush}">
+  <Grid Margin="22">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <TextBlock Name="Heading" FontSize="21" FontWeight="SemiBold" Margin="0,0,0,15"/>
+    <ListBox Name="Entries" Grid.Row="1" Background="{StaticResource SurfaceBrush}" Foreground="{StaticResource TextBrush}" BorderBrush="{StaticResource BorderBrush}" Padding="8">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate>
+          <StackPanel Margin="6">
+            <TextBlock FontWeight="SemiBold" Text="{Binding Name}"/>
+            <TextBlock Foreground="{StaticResource MutedBrush}" FontSize="11" TextWrapping="Wrap" Text="{Binding Path}"/>
+          </StackPanel>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ListBox>
+    <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,16,0,0">
+      <Button Content="Retirer la sélection" Style="{DynamicResource DestructiveButton}" Click="RemoveClicked"/>
+      <Button Content="Fermer" Style="{DynamicResource QuietButton}" Margin="10,0,0,0" Click="CloseClicked"/>
+    </StackPanel>
+  </Grid>
+</Window>

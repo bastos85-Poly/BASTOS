@@ -1,0 +1,786 @@
+[
+  {
+    "Category": "Navigateurs Web",
+    "Name": "Microsoft Edge",
+    "Id": "Microsoft.Edge",
+    "Description": "Navigateur Microsoft intégré à Windows, basé sur Chromium, avec lecture PDF et synchronisation."
+  },
+  {
+    "Category": "Navigateurs Web",
+    "Name": "Google Chrome",
+    "Id": "Google.Chrome",
+    "Description": "Navigateur Web de Google, rapide, largement compatible et synchronisé avec un compte Google."
+  },
+  {
+    "Category": "Navigateurs Web",
+    "Name": "Brave",
+    "Id": "Brave.Brave",
+    "Description": "Navigateur Chromium qui bloque par défaut les publicités et les pisteurs."
+  },
+  {
+    "Category": "Navigateurs Web",
+    "Name": "Mozilla Firefox",
+    "Id": "Mozilla.Firefox",
+    "Description": "Navigateur Web libre axé sur la confidentialité, les extensions et la protection contre le pistage."
+  },
+  {
+    "Category": "Navigateurs Web",
+    "Name": "Mozilla Firefox Nightly",
+    "Id": "Mozilla.Firefox.Nightly.MSIX",
+    "Description": "Version de développement quotidienne de Firefox, destinée aux essais des nouveautés."
+  },
+  {
+    "Category": "Navigateurs Web",
+    "Name": "Opera",
+    "Id": "Opera.Opera",
+    "Description": "Navigateur Chromium avec outils latéraux, bloqueur de publicité et fonctions intégrées."
+  },
+  {
+    "Category": "Navigateurs Web",
+    "Name": "Vivaldi",
+    "Id": "Vivaldi.Vivaldi",
+    "Description": "Navigateur très personnalisable avec groupes d’onglets, panneaux, notes et courrier."
+  },
+  {
+    "Category": "Messagerie",
+    "Name": "Zoom",
+    "Id": "Zoom.Zoom",
+    "Description": "Organise et rejoint des visioconférences, appels et partages d’écran."
+  },
+  {
+    "Category": "Messagerie",
+    "Name": "Discord",
+    "Id": "Discord.Discord",
+    "Description": "Discute par texte, voix ou vidéo dans des serveurs et groupes privés."
+  },
+  {
+    "Category": "Messagerie",
+    "Name": "Vencord",
+    "Id": "Vendicated.Vencord",
+    "Description": "Ajoute des extensions à Discord (plugins, thèmes et options de partage d’écran). Fermer Discord avant l’installation."
+  },
+  {
+    "Category": "Messagerie",
+    "Name": "Microsoft Teams",
+    "Id": "Microsoft.Teams",
+    "Description": "Réunit conversations, réunions vidéo, appels et collaboration Microsoft 365."
+  },
+  {
+    "Category": "Messagerie",
+    "Name": "Pidgin",
+    "Id": "Pidgin.Pidgin",
+    "Description": "Regroupe plusieurs réseaux de messagerie instantanée dans un même client."
+  },
+  {
+    "Category": "Messagerie",
+    "Name": "Mozilla Thunderbird",
+    "Id": "Mozilla.Thunderbird",
+    "Description": "Gère plusieurs comptes e-mail, calendriers, contacts et flux RSS."
+  },
+  {
+    "Category": "Messagerie",
+    "Name": "Trillian",
+    "Id": "CeruleanStudios.Trillian",
+    "Description": "Messagerie instantanée synchronisée entre ordinateur, téléphone et navigateur."
+  },
+  {
+    "Category": "Multimédia",
+    "Name": "iTunes",
+    "Id": "Apple.iTunes",
+    "Description": "Gère une bibliothèque musicale Apple et synchronise certains iPhone, iPad et iPod."
+  },
+  {
+    "Category": "Multimédia",
+    "Name": "VLC",
+    "Id": "VideoLAN.VLC",
+    "Description": "Lit presque tous les formats audio et vidéo, les DVD et les flux réseau."
+  },
+  {
+    "Category": "Multimédia",
+    "Name": "AIMP",
+    "Id": "AIMP.AIMP",
+    "Description": "Lecteur audio léger avec bibliothèque, égaliseur, radios Internet et conversion."
+  },
+  {
+    "Category": "Multimédia",
+    "Name": "foobar2000",
+    "Id": "PeterPawlowski.foobar2000",
+    "Description": "Lecteur audio léger et personnalisable, adapté aux grandes bibliothèques musicales."
+  },
+  {
+    "Category": "Multimédia",
+    "Name": "Winamp",
+    "Id": "Winamp.Winamp",
+    "Description": "Lit et organise la musique avec listes de lecture, égaliseur et extensions."
+  },
+  {
+    "Category": "Multimédia",
+    "Name": "Audacity",
+    "Id": "Audacity.Audacity",
+    "Description": "Enregistre, découpe, nettoie et monte des pistes audio multipistes."
+  },
+  {
+    "Category": "Multimédia",
+    "Name": "K-Lite Codec Pack Full",
+    "Id": "CodecGuide.K-LiteCodecPack.Full",
+    "Description": "Ajoute les codecs et filtres nécessaires pour lire de nombreux formats multimédias."
+  },
+  {
+    "Category": "Multimédia",
+    "Name": "GOM Player",
+    "Id": "GOMLab.GOMPlayer",
+    "Description": "Lecteur vidéo prenant en charge de nombreux formats, sous-titres et vidéos 360°."
+  },
+  {
+    "Category": "Multimédia",
+    "Name": "Spotify",
+    "Id": "Spotify.Spotify",
+    "Description": "Écoute de la musique, des podcasts et des livres audio en streaming."
+  },
+  {
+    "Category": "Multimédia",
+    "Name": "MediaMonkey",
+    "Id": "VentisMedia.MediaMonkey.2024",
+    "Description": "Classe, renomme, étiquette et synchronise de grandes bibliothèques audio et vidéo."
+  },
+  {
+    "Category": "Multimédia",
+    "Name": "HandBrake",
+    "Id": "HandBrake.HandBrake",
+    "Description": "Convertit des vidéos vers des formats modernes et réduit leur taille."
+  },
+  {
+    "Category": "Multimédia",
+    "Name": "FxSound",
+    "Id": "FxSound.FxSound",
+    "Description": "Améliore le son de Windows avec égaliseur, amplification et effets audio."
+  },
+  {
+    "Category": "Compression",
+    "Name": "7-Zip",
+    "Id": "7zip.7zip",
+    "Description": "Compresse et extrait les archives 7z, ZIP, RAR et de nombreux autres formats."
+  },
+  {
+    "Category": "Compression",
+    "Name": "PeaZip",
+    "Id": "Giorgiotani.Peazip",
+    "Description": "Crée, extrait, chiffre et convertit des archives dans de nombreux formats."
+  },
+  {
+    "Category": "Compression",
+    "Name": "WinRAR",
+    "Id": "RARLab.WinRAR",
+    "Description": "Crée et extrait des archives RAR ou ZIP, avec réparation et chiffrement."
+  },
+  {
+    "Category": "Images et création",
+    "Name": "Krita",
+    "Id": "KDE.Krita",
+    "Description": "Dessine et peint numériquement avec calques, brosses et outils pour illustrateurs."
+  },
+  {
+    "Category": "Images et création",
+    "Name": "Blender",
+    "Id": "BlenderFoundation.Blender",
+    "Description": "Crée des modèles, animations, rendus, effets visuels et scènes en 3D."
+  },
+  {
+    "Category": "Images et création",
+    "Name": "Paint.NET",
+    "Id": "dotPDN.PaintDotNet",
+    "Description": "Retouche simplement des images avec calques, effets et outils de dessin."
+  },
+  {
+    "Category": "Images et création",
+    "Name": "GIMP",
+    "Id": "GIMP.GIMP.3",
+    "Description": "Retouche et compose des images avec calques, masques, filtres et extensions."
+  },
+  {
+    "Category": "Images et création",
+    "Name": "IrfanView",
+    "Id": "IrfanSkiljan.IrfanView",
+    "Description": "Affiche rapidement des images et effectue des conversions ou traitements par lot."
+  },
+  {
+    "Category": "Images et création",
+    "Name": "XnView Classic",
+    "Id": "XnSoft.XnView.Classic",
+    "Description": "Parcourt, classe et convertit des photos dans un grand nombre de formats."
+  },
+  {
+    "Category": "Images et création",
+    "Name": "Inkscape",
+    "Id": "Inkscape.Inkscape",
+    "Description": "Crée et modifie des dessins vectoriels, logos, icônes et fichiers SVG."
+  },
+  {
+    "Category": "Images et création",
+    "Name": "FastStone Image Viewer",
+    "Id": "FastStone.Viewer",
+    "Description": "Visionne, organise, compare et corrige rapidement des photos."
+  },
+  {
+    "Category": "Images et création",
+    "Name": "Greenshot",
+    "Id": "Greenshot.Greenshot",
+    "Description": "Capture une zone de l’écran puis l’annote, l’enregistre ou la partage."
+  },
+  {
+    "Category": "Images et création",
+    "Name": "ShareX",
+    "Id": "ShareX.ShareX",
+    "Description": "Capture l’écran, enregistre des GIF ou vidéos et automatise leur partage."
+  },
+  {
+    "Category": "Documents",
+    "Name": "Foxit PDF Reader",
+    "Id": "Foxit.FoxitReader",
+    "Description": "Lit, annote, remplit et signe des documents PDF."
+  },
+  {
+    "Category": "Documents",
+    "Name": "LibreOffice",
+    "Id": "TheDocumentFoundation.LibreOffice",
+    "Description": "Suite bureautique pour créer des textes, tableaux, présentations et bases de données."
+  },
+  {
+    "Category": "Documents",
+    "Name": "SumatraPDF",
+    "Id": "SumatraPDF.SumatraPDF",
+    "Description": "Lecteur léger et rapide pour PDF, ebooks, bandes dessinées et fichiers d’aide."
+  },
+  {
+    "Category": "Documents",
+    "Name": "CutePDF Writer",
+    "Id": "AcroSoftware.CutePDFWriter",
+    "Description": "Ajoute une imprimante virtuelle pour convertir tout document imprimable en PDF."
+  },
+  {
+    "Category": "Documents",
+    "Name": "OpenOffice",
+    "Id": "Apache.OpenOffice",
+    "Description": "Suite bureautique pour documents texte, feuilles de calcul et présentations."
+  },
+  {
+    "Category": "Outils",
+    "Name": "AnyDesk",
+    "Id": "AnyDesk.AnyDesk",
+    "Description": "Permet d’accéder à distance à un ordinateur ou d’aider un autre utilisateur."
+  },
+  {
+    "Category": "Outils",
+    "Name": "TeamViewer",
+    "Id": "TeamViewer.TeamViewer",
+    "Description": "Contrôle un ordinateur à distance pour l’assistance, l’accès ou le transfert de fichiers."
+  },
+  {
+    "Category": "Outils",
+    "Name": "ImgBurn",
+    "Id": "LIGHTNINGUK.ImgBurn",
+    "Description": "Grave ou crée des images disque sur CD, DVD et Blu-ray."
+  },
+  {
+    "Category": "Outils",
+    "Name": "RealVNC Connect Viewer",
+    "Id": "RealVNC.VNCConnect.Viewer",
+    "Description": "Client VNC actuel de RealVNC. Compte RealVNC requis ; acces et fonctions selon le forfait. Remplace le lien public obsolete du Viewer 7."
+  },
+  {
+    "Category": "Outils",
+    "Name": "TightVNC",
+    "Id": "GlavSoft.TightVNC",
+    "Description": "Fournit un serveur et un client VNC pour contrôler un PC à distance."
+  },
+  {
+    "Category": "Outils",
+    "Name": "TeraCopy",
+    "Id": "CodeSector.TeraCopy",
+    "Description": "Copie et déplace des fichiers avec vérification, reprise et gestion des erreurs."
+  },
+  {
+    "Category": "Outils",
+    "Name": "Revo Uninstaller",
+    "Id": "RevoUninstaller.RevoUninstaller",
+    "Description": "Désinstalle des programmes puis recherche leurs fichiers et clés de registre résiduels."
+  },
+  {
+    "Category": "Outils",
+    "Name": "Launchy",
+    "Id": "CodeJelly.Launchy",
+    "Description": "Lance rapidement programmes, fichiers et dossiers en tapant quelques lettres."
+  },
+  {
+    "Category": "Outils",
+    "Name": "WinDirStat",
+    "Id": "WinDirStat.WinDirStat",
+    "Description": "Analyse l’espace disque et montre les dossiers et fichiers les plus volumineux."
+  },
+  {
+    "Category": "Outils",
+    "Name": "WizTree",
+    "Id": "AntibodySoftware.WizTree",
+    "Description": "Repère très rapidement les fichiers et dossiers qui occupent le disque."
+  },
+  {
+    "Category": "Outils",
+    "Name": "Glary Utilities",
+    "Id": "Glarysoft.GlaryUtilities",
+    "Description": "Regroupe des outils de nettoyage, réparation et maintenance de Windows."
+  },
+  {
+    "Category": "Outils",
+    "Name": "Open-Shell",
+    "Id": "Open-Shell.Open-Shell-Menu",
+    "Description": "Remplace le menu Démarrer par une interface classique et personnalisable."
+  },
+  {
+    "Category": "Outils",
+    "Name": "ExplorerPatcher",
+    "Id": "valinet.ExplorerPatcher",
+    "Source": "winget",
+    "Description": "Personnalise le menu Démarrer, la barre des tâches et les fenêtres Windows. Les fonctions disponibles dépendent de la version de Windows."
+  },
+  {
+    "Category": "Outils",
+    "Name": "CCleaner",
+    "Id": "Piriform.CCleaner",
+    "Description": "Supprime des fichiers temporaires et gère certains éléments de démarrage et logiciels."
+  },
+  {
+    "Category": "Outils",
+    "Name": "VibranceGUI",
+    "Id": "BASTOS.VibranceGUI",
+    "CustomAction": "VibranceGUI",
+    "DesktopShortcut": "VibranceGUI.lnk",
+    "Description": "Applique automatiquement une saturation différente pendant les jeux puis la restaure."
+  },
+  {
+    "Category": "Outils",
+    "Name": "Snappy Driver Installer Origin",
+    "Id": "GlennDelahoy.SnappyDriverInstallerOrigin",
+    "Description": "Détecte et installe hors ligne des pilotes depuis des packs téléchargés séparément."
+  },
+  {
+    "Category": "Outils",
+    "Name": "Wise Registry Cleaner",
+    "Id": "WiseCleaner.WiseRegistryCleaner",
+    "Description": "Analyse les entrées de registre obsolètes et propose leur nettoyage avec sauvegarde."
+  },
+  {
+    "Category": "Maintenance",
+    "Name": "FluentCleaner",
+    "Id": "Builtbybel.FluentCleaner",
+    "Description": "Nettoyeur Windows moderne pour supprimer les fichiers temporaires et inutiles."
+  },
+  {
+    "Category": "Maintenance",
+    "Name": "Display Driver Uninstaller (DDU)",
+    "Id": "Wagnardsoft.DisplayDriverUninstaller",
+    "Description": "Supprime proprement les anciens pilotes graphiques avant une réinstallation."
+  },
+  {
+    "Category": "Maintenance",
+    "Name": "Windows Utility (Chris Titus Tech)",
+    "Id": "christitus.com/win",
+    "CustomAction": "WindowsUtility",
+    "Description": "Boîte à outils avancée pour réparer, configurer et alléger Windows."
+  },
+  {
+    "Category": "Maintenance",
+    "Name": "Winhance",
+    "Id": "get.winhance.net",
+    "CustomAction": "Winhance",
+    "Description": "Personnalise et allège Windows depuis une interface centralisée."
+  },
+  {
+    "Category": "Maintenance",
+    "Name": "Process Explorer",
+    "Id": "Microsoft.Sysinternals.ProcessExplorer",
+    "Description": "Process Explorer portable officiel Microsoft ; signatures verifiees avant mise a disposition.",
+    "CustomAction": "OfficialTool:ProcessExplorer"
+  },
+  {
+    "Category": "Maintenance",
+    "Name": "NSudo",
+    "Id": "BASTOS.NSudo",
+    "CustomAction": "OfficialTool:NSudo",
+    "Description": "Lance ponctuellement un outil avec les droits TrustedInstaller ou SYSTEM pour les réparations avancées."
+  },
+  {
+    "Category": "Maintenance",
+    "Name": "DriverView",
+    "Id": "BASTOS.DriverView",
+    "CustomAction": "OfficialTool:DriverView",
+    "Description": "Liste les pilotes chargés par Windows avec leur version, éditeur, adresse mémoire et fichier associé."
+  },
+  {
+    "Category": "Maintenance",
+    "Name": "WU Manager",
+    "Id": "BASTOS.WUManager",
+    "CustomAction": "OfficialTool:WUManager",
+    "Description": "Recherche, installe, masque ou désinstalle les mises à jour Windows avec un contrôle détaillé."
+  },
+  {
+    "Category": "Maintenance",
+    "Name": "Geek Uninstaller",
+    "Id": "GeekUninstaller.GeekUninstaller",
+    "Description": "Désinstalle une application puis recherche ses fichiers et clés de registre résiduels."
+  },
+  {
+    "Category": ".NET et runtimes",
+    "Name": "Visual C++ Runtime All-in-One",
+    "Id": "abbodi1406.vcredist",
+    "Description": "Installe en une fois les bibliothèques Visual C++ nécessaires aux jeux et logiciels."
+  },
+  {
+    "Category": ".NET et runtimes",
+    "Name": "DirectX Runtime Offline",
+    "Id": "Microsoft.DirectX",
+    "Description": "Ajoute les anciens composants DirectX encore requis par certains jeux."
+  },
+  {
+    "Category": "Jeux et mesures",
+    "Name": "CapFrameX",
+    "Id": "CXWorld.CapFrameX",
+    "Description": "Mesure les FPS, les temps d’image et la fluidité des jeux."
+  },
+  {
+    "Category": "Jeux et mesures",
+    "Name": "RivaTuner Statistics Server",
+    "Id": "Guru3D.RTSS",
+    "Description": "Affiche les statistiques en jeu et permet de limiter les images par seconde."
+  },
+  {
+    "Category": "Jeux et mesures",
+    "Name": "Mouse Tester",
+    "Id": "BASTOS.MouseTester",
+    "CustomAction": "OfficialTool:MouseTester",
+    "Description": "Analyse la fréquence d’interrogation, la régularité et les mouvements bruts d’une souris."
+  },
+  {
+    "Category": "Jeux et mesures",
+    "Name": "Measure Sleep",
+    "Id": "BASTOS.MeasureSleep",
+    "CustomAction": "OfficialTool:MeasureSleep",
+    "Description": "Mesure la précision réelle des temporisations Sleep et calcule leur moyenne et leur écart-type."
+  },
+  {
+    "Category": "Jeux et mesures",
+    "Name": "OCAT",
+    "Id": "BASTOS.OCAT",
+    "CustomAction": "OfficialTool:OCAT",
+    "Description": "Enregistre les FPS, temps d’image et saccades des jeux DirectX 11, DirectX 12 ou Vulkan."
+  },
+  {
+    "Category": "Jeux et mesures",
+    "Name": "Perf Measurement",
+    "Id": "BASTOS.PerfMeasurement",
+    "CustomAction": "OfficialTool:PerfMeasurement",
+    "Description": "Génère un rapport Windows sur les performances, services, pilotes et goulets d’étranglement."
+  },
+  {
+    "Category": "Périphériques",
+    "Name": "Onboard Memory Manager",
+    "Id": "Logitech.OnboardMemoryManager",
+    "Description": "Configure les profils enregistrés dans la mémoire interne des souris Logitech G compatibles."
+  },
+  {
+    "Category": "Diagnostic matériel",
+    "Name": "HWiNFO",
+    "Id": "REALiX.HWiNFO",
+    "Description": "Affiche des informations détaillées et les capteurs du matériel."
+  },
+  {
+    "Category": "Diagnostic matériel",
+    "Name": "OCCT Personal",
+    "Id": "OCBase.OCCT.Personal",
+    "Description": "Teste la stabilité, les températures et l’alimentation du PC."
+  },
+  {
+    "Category": "Diagnostic matériel",
+    "Name": "LatencyMon",
+    "Id": "Resplendence.LatencyMon",
+    "Description": "Détecte les pilotes responsables de coupures et latences audio."
+  },
+  {
+    "Category": "Outils AMD",
+    "Name": "Radeon Tuner",
+    "Id": "GitHub.dumbie.RadeonTuner",
+    "CustomAction": "RadeonTool:RadeonTuner",
+    "Description": "Ajuste certains paramètres avancés des cartes graphiques AMD Radeon."
+  },
+  {
+    "Category": "Jeux et affichage",
+    "Name": "Scaled Resolution Editor",
+    "Id": "ToastyX.ScaledResolutionEditor",
+    "CustomAction": "ScaledResolutionEditor",
+    "Description": "Crée et ajuste des résolutions personnalisées mises à l’échelle."
+  },
+  {
+    "Category": "Audio",
+    "Name": "REAL - latence audio",
+    "Id": "miniant-git/REAL",
+    "CustomAction": "RealAudioLatency",
+    "Description": "Réduit la taille des tampons audio pour diminuer la latence de lecture."
+  },
+  {
+    "Category": "Audio",
+    "Name": "Equalizer APO",
+    "Id": "BASTOS.EqualizerAPO",
+    "CustomAction": "AudioTool:EqualizerAPO",
+    "Description": "Égaliseur système pour Windows. Bastos télécharge la version officielle 64 bits 1.4.2 et ouvre l’assistant pour choisir les périphériques audio.",
+    "UninstallWarning": "Peace dépend d’Equalizer APO. Désinstallez Peace en premier si vous souhaitez retirer les deux."
+  },
+  {
+    "Category": "Audio",
+    "Name": "Peace Equalizer",
+    "Id": "BASTOS.PeaceEqualizer",
+    "CustomAction": "AudioTool:Peace",
+    "Description": "Interface graphique pour Equalizer APO avec profils, égaliseur paramétrique et import AutoEQ. Bastos installe d’abord Equalizer APO si nécessaire, puis Peace 1.6.9.11."
+  },
+  {
+    "Category": "Autres",
+    "Name": "Evernote",
+    "Id": "Evernote.Evernote",
+    "Description": "Centralise notes, listes, documents numérisés et tâches avec synchronisation."
+  },
+  {
+    "Category": "Autres",
+    "Name": "Google Earth Pro",
+    "Id": "Google.EarthPro",
+    "Description": "Explore le globe en images satellite, mesure des lieux et consulte des données géographiques."
+  },
+  {
+    "Category": "Autres",
+    "Name": "Steam",
+    "Id": "Valve.Steam",
+    "Description": "Achète, installe, met à jour et lance des jeux depuis la plateforme Steam."
+  },
+  {
+    "Category": "Autres",
+    "Name": "Epic Games Launcher",
+    "Id": "EpicGames.EpicGamesLauncher",
+    "Description": "Achète, installe, met à jour et lance les jeux de la boutique Epic Games."
+  },
+  {
+    "Category": "Autres",
+    "Name": "KeePass 2",
+    "Id": "DominikReichl.KeePass",
+    "Description": "Conserve les mots de passe dans une base locale chiffrée protégée par un mot de passe maître."
+  },
+  {
+    "Category": "Autres",
+    "Name": "Everything",
+    "Id": "voidtools.Everything",
+    "Description": "Retrouve presque instantanément un fichier ou dossier par son nom sur les disques NTFS."
+  },
+  {
+    "Category": "Autres",
+    "Name": "Enpass",
+    "Id": "Sinew.Enpass",
+    "Description": "Stocke mots de passe et informations sensibles dans un coffre chiffré synchronisable."
+  },
+  {
+    "Category": "Autres",
+    "Name": "NVDA",
+    "Id": "NVAccess.NVDA",
+    "Description": "Lecteur d’écran qui vocalise Windows et les applications pour les personnes malvoyantes."
+  },
+  {
+    "Category": "Partage de fichiers",
+    "Name": "qBittorrent",
+    "Id": "qBittorrent.qBittorrent",
+    "Description": "Télécharge et partage des fichiers avec le protocole BitTorrent, sans publicité intégrée."
+  },
+  {
+    "Category": "Stockage en ligne",
+    "Name": "Dropbox",
+    "Id": "Dropbox.Dropbox",
+    "Description": "Synchronise des dossiers et partage des fichiers avec le stockage en ligne Dropbox."
+  },
+  {
+    "Category": "Stockage en ligne",
+    "Name": "Google Drive",
+    "Id": "Google.GoogleDrive",
+    "Description": "Synchronise les fichiers Google Drive et les rend accessibles depuis l’Explorateur."
+  },
+  {
+    "Category": "Stockage en ligne",
+    "Name": "OneDrive",
+    "Id": "Microsoft.OneDrive",
+    "Description": "Synchronise les fichiers Microsoft OneDrive avec Windows et Microsoft 365."
+  },
+  {
+    "Category": "Développement",
+    "Name": "Python 3.13",
+    "Id": "Python.Python.3.13",
+    "Description": "Installe l’interpréteur Python 3.13 pour exécuter des scripts et applications Python."
+  },
+  {
+    "Category": "Développement",
+    "Name": "Python 3.12",
+    "Id": "Python.Python.3.12",
+    "Description": "Installe l’interpréteur Python 3.12 pour les projets exigeant cette version."
+  },
+  {
+    "Category": "Développement",
+    "Name": "Git",
+    "Id": "Git.Git",
+    "Description": "Suit l’historique du code et synchronise des dépôts Git locaux ou distants."
+  },
+  {
+    "Category": "Développement",
+    "Name": "Notepad++",
+    "Id": "Notepad++.Notepad++",
+    "Description": "Édite rapidement du texte et du code avec onglets, recherche avancée et coloration syntaxique."
+  },
+  {
+    "Category": "Développement",
+    "Name": "WinSCP",
+    "Id": "WinSCP.WinSCP",
+    "Description": "Transfère et synchronise des fichiers avec des serveurs SFTP, SCP, FTP ou WebDAV."
+  },
+  {
+    "Category": "Développement",
+    "Name": "PuTTY",
+    "Id": "PuTTY.PuTTY",
+    "Description": "Ouvre des connexions SSH, Telnet et série vers des serveurs ou équipements réseau."
+  },
+  {
+    "Category": "Développement",
+    "Name": "WinMerge",
+    "Id": "WinMerge.WinMerge",
+    "Description": "Compare visuellement deux fichiers ou dossiers et fusionne leurs différences."
+  },
+  {
+    "Category": "Développement",
+    "Name": "Visual Studio Code",
+    "Id": "Microsoft.VisualStudioCode",
+    "Description": "Éditeur de code extensible avec terminal, débogage, Git et nombreuses extensions."
+  },
+  {
+    "Category": "Développement",
+    "Name": "Cursor",
+    "Id": "Anysphere.Cursor",
+    "Description": "Éditeur de code basé sur VS Code avec assistance IA intégrée au projet."
+  },
+  {
+    "Category": "Développement",
+    "Name": "PowerShell 7",
+    "Id": "Microsoft.PowerShell",
+    "Description": "Shell moderne pour automatiser Windows, administrer le système et exécuter des scripts."
+  },
+  {
+    "Category": "Développement",
+    "Name": "Codex",
+    "Id": "9PLM9XGG6VKS",
+    "Source": "msstore",
+    "Description": "Agent de programmation qui analyse un projet, modifie le code et exécute des tâches techniques."
+  },
+  {
+    "Category": ".NET et runtimes",
+    "Name": ".NET Desktop Runtime 8",
+    "Id": "Microsoft.DotNet.DesktopRuntime.8",
+    "Description": "Permet d’exécuter les applications de bureau Windows conçues avec .NET 8."
+  },
+  {
+    "Category": ".NET et runtimes",
+    "Name": ".NET Desktop Runtime 9",
+    "Id": "Microsoft.DotNet.DesktopRuntime.9",
+    "Description": "Permet d’exécuter les applications de bureau Windows conçues avec .NET 9."
+  },
+  {
+    "Category": ".NET et runtimes",
+    "Name": ".NET Desktop Runtime 10",
+    "Id": "Microsoft.DotNet.DesktopRuntime.10",
+    "Description": "Permet d’exécuter les applications de bureau Windows conçues avec .NET 10."
+  },
+  {
+    "Category": ".NET et runtimes",
+    "Name": "ASP.NET Core Runtime 8",
+    "Id": "Microsoft.DotNet.AspNetCore.8",
+    "Description": "Permet d’exécuter localement les applications et services Web basés sur ASP.NET Core 8."
+  },
+  {
+    "Category": ".NET et runtimes",
+    "Name": "ASP.NET Core Runtime 9",
+    "Id": "Microsoft.DotNet.AspNetCore.9",
+    "Description": "Permet d’exécuter localement les applications et services Web basés sur ASP.NET Core 9."
+  },
+  {
+    "Category": "Java",
+    "Name": "Java Temurin 8 JRE",
+    "Id": "EclipseAdoptium.Temurin.8.JRE",
+    "Description": "Permet d’exécuter les applications Java compatibles avec Java 8."
+  },
+  {
+    "Category": "Java",
+    "Name": "Java Temurin 11 JRE",
+    "Id": "EclipseAdoptium.Temurin.11.JRE",
+    "Description": "Permet d’exécuter les applications Java compatibles avec Java 11."
+  },
+  {
+    "Category": "Java",
+    "Name": "Java Temurin 17 JRE",
+    "Id": "EclipseAdoptium.Temurin.17.JRE",
+    "Description": "Permet d’exécuter les applications Java compatibles avec Java 17."
+  },
+  {
+    "Category": "Java",
+    "Name": "Java Temurin 21 JRE",
+    "Id": "EclipseAdoptium.Temurin.21.JRE",
+    "Description": "Permet d’exécuter les applications Java compatibles avec Java 21."
+  },
+  {
+    "Category": "Java",
+    "Name": "JDK Temurin 8",
+    "Id": "EclipseAdoptium.Temurin.8.JDK",
+    "Description": "Fournit le compilateur et les outils nécessaires pour développer en Java 8."
+  },
+  {
+    "Category": "Java",
+    "Name": "JDK Temurin 11",
+    "Id": "EclipseAdoptium.Temurin.11.JDK",
+    "Description": "Fournit le compilateur et les outils nécessaires pour développer en Java 11."
+  },
+  {
+    "Category": "Java",
+    "Name": "JDK Temurin 17",
+    "Id": "EclipseAdoptium.Temurin.17.JDK",
+    "Description": "Fournit le compilateur et les outils nécessaires pour développer en Java 17."
+  },
+  {
+    "Category": "Java",
+    "Name": "JDK Temurin 21",
+    "Id": "EclipseAdoptium.Temurin.21.JDK",
+    "Description": "Fournit le compilateur et les outils nécessaires pour développer en Java 21."
+  },
+  {
+    "Category": "Sécurité",
+    "Name": "Malwarebytes",
+    "Id": "Malwarebytes.Malwarebytes",
+    "Description": "Analyse le PC et supprime logiciels malveillants, rançongiciels et programmes indésirables."
+  },
+  {
+    "Category": "Sécurité",
+    "Name": "Malwarebytes AdwCleaner",
+    "Id": "Malwarebytes.AdwCleaner",
+    "Description": "Recherche et supprime rapidement adwares, barres d’outils et programmes indésirables."
+  },
+  {
+    "Category": ".NET et runtimes",
+    "Name": "Microsoft Edge WebView2 Runtime",
+    "Id": "Microsoft.EdgeWebView2Runtime",
+    "Description": "Permet aux applications Windows d’afficher des interfaces et contenus Web intégrés.",
+    "UninstallWarning": "WebView2 est utilisé par BASTOS, Codex et de nombreuses applications Windows. Sa désinstallation peut empêcher leurs interfaces de fonctionner."
+  },
+  {
+    "Category": "Outils",
+    "Name": "OpenWhispr",
+    "Id": "OpenWhispr.OpenWhispr",
+    "Source": "winget",
+    "Description": "Dicte du texte à la voix dans tes applications, avec transcription locale ou services cloud configurables."
+  }
+]

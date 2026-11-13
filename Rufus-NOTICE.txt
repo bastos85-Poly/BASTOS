@@ -1,0 +1,19 @@
+BASTOS 7.120 : adaptation du generateur Windows User Experience de Rufus.
+Rufus, Copyright (C) 2022-2026 Pete Batard et ses contributeurs.
+Source : https://github.com/pbatard/rufus/blob/875f221d5b4fa2c43cad1b85ae975d106964949f/src/wue.c
+Adaptation : Bastos.Rufus.psm1, menu WPF et liaison au moteur interne BASTOS.
+Licence GPL v3 ou ulterieure : voir Rufus-LICENSE.txt.
+Source complet et instructions de compilation : Bastos.Native/Source-Current.zip.
+Le moteur USB complet de Rufus n'est pas utilise pour formater le disque interne.
+Les outils independants regroupes avec BASTOS gardent leurs licences respectives.
+QoL parity (BASTOS 7.120.58): Rufus v4.15 src/wue.c UNATTEND_QOL_ENHANCEMENTS.
+https://github.com/pbatard/rufus/blob/v4.15/src/wue.c
+Original preserved in Source-Current.zip: ThirdParty/Rufus/wue-qol-v4.15.c.
+Adaptation and tests shipped in source archive; GPL-3.0-or-later.
+
+
+QoL parity (BASTOS 7.120.59): Rufus v4.15 src/wue.c UNATTEND_QOL_ENHANCEMENTS.
+https://github.com/pbatard/rufus/blob/v4.15/src/wue.c
+Original preserved in Source-Current.zip: ThirdParty/Rufus/wue-qol-v4.15.c.
+Adaptation and tests shipped in source archive; GPL-3.0-or-later.
+

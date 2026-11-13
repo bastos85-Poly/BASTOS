@@ -1,0 +1,4 @@
+https://github.com/pbatard/rufus
+Commit=875f221d5b4fa2c43cad1b85ae975d106964949f
+
+QoL parity update: Rufus v4.15 src/wue.c, https://github.com/pbatard/rufus/blob/v4.15/src/wue.c. Original source preserved in wue-qol-v4.15.c. Adapted into Bastos.InstallationOptions.psm1 and Bastos.Rufus.psm1. GPL-3.0-or-later.

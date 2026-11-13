@@ -1,0 +1,1 @@
+using System.Windows.Controls; namespace Bastos.Native; public partial class AppearanceProfilesPage:UserControl { public AppearanceProfilesPage() { InitializeComponent(); } }

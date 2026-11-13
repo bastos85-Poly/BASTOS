@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl xmlns:native="clr-namespace:Bastos.Native" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="Bastos.Native.ExtraPowerPage">
+  <UserControl.Resources>
+    <Style x:Key="Card" TargetType="Border">
+      <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+      <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="7" />
+      <Setter Property="Padding" Value="16" />
+      <Setter Property="Margin" Value="0,0,16,16" />
+    </Style>
+    <Style x:Key="Description" TargetType="TextBlock">
+      <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+      <Setter Property="Margin" Value="0,8,0,12" />
+    </Style>
+  </UserControl.Resources>
+  <StackPanel IsEnabled="{Binding Available}">
+    <Border Style="{StaticResource Card}">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+          <TextBlock Text="Alimentation avancée du plan actif" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap" />
+          <TextBlock Text="Modifiez les états minimal et maximal du processeur du plan déjà sélectionné. Le choix du plan Normal, Performances élevées ou Zoic AMD se trouve dans le cadre Alimentation au-dessus. Ces pourcentages ne sont pas une fréquence garantie. Un minimum élevé augmente la consommation ; réduire le maximum peut limiter les performances." Style="{StaticResource Description}" />
+          <TextBlock Text="{Binding PlanText}" TextWrapping="Wrap" Foreground="{StaticResource AccentBrush}" Margin="0,8" />
+          <TextBlock Text="Réglage du processeur à modifier" Foreground="{StaticResource MutedBrush}" Margin="0,4,0,0" />
+          <ComboBox ItemsSource="{Binding PowerOptions}" SelectedItem="{Binding SelectedPower}" DisplayMemberPath="Name" Margin="0,8" />
+          <WrapPanel>
+            <TextBlock Text="Secteur (%)" VerticalAlignment="Center" Margin="0,0,8,0" />
+            <TextBox Text="{Binding AcValue, UpdateSourceTrigger=PropertyChanged}" Width="65" MaxLength="3" />
+            <TextBlock Text="Batterie (%)" VerticalAlignment="Center" Margin="18,0,8,0" />
+            <TextBox Text="{Binding DcValue, UpdateSourceTrigger=PropertyChanged}" Width="65" MaxLength="3" />
+          </WrapPanel>
+          <WrapPanel Margin="0,12,0,0">
+            <Button Content="Actualiser le plan" Command="{Binding RefreshPowerCommand}" Margin="0,0,8,4">
+              <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource SecondaryButton}">
+                  <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                      <Setter Property="Opacity" Value="0.45" />
+                    </Trigger>
+                  </Style.Triggers>
+                </Style>
+              </Button.Style>
+            </Button>
+          </WrapPanel>
+          <TextBlock Style="{DynamicResource ActionHint}" Text="{Binding ApplyPowerCommand.DisabledReason}" />
+          <native:OperationMessageView Text="{Binding PowerStatus}" Foreground="{StaticResource AccentBrush}" Margin="0,8" />
+        </StackPanel>
+        <ContentControl Content="{Binding PowerSwitch}" ContentTemplate="{StaticResource SettingSwitchVisual}" HorizontalContentAlignment="Stretch" Margin="24,0,0,0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" MaxWidth="200" />
+      </Grid>
+    </Border>
+  </StackPanel>
+</UserControl>

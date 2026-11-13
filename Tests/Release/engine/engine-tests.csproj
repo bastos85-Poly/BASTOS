@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings></PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(BastosSourceRoot)\Bastos.Native.Services\OperationTrackingService.cs" Link="OperationTrackingService.cs"/>
+    <Compile Include="$(BastosSourceRoot)\Bastos.Native.Services\AdkInstallationService.cs" Link="AdkInstallationService.cs"/>
+    <Compile Include="$(BastosSourceRoot)\Bastos.Native.Services\DeploymentOperationVerifiers.cs" Link="DeploymentOperationVerifiers.cs"/>
+    <Compile Include="$(BastosSourceRoot)\Bastos.Native.Services\WebView2RuntimeService.cs" Link="WebView2RuntimeService.cs"/>
+    <Compile Include="$(BastosSourceRoot)\Bastos.Native.Models\NativeOperationReport.cs" Link="NativeOperationReport.cs"/>
+    <Compile Include="$(BastosSourceRoot)\Bastos.Native.Services\OfficialDriverService.cs" Link="OfficialDriverService.cs"/>
+    <Compile Include="$(BastosSourceRoot)\Bastos.Native.Services\NetworkDiagnosticsService.cs" Link="NetworkDiagnosticsService.cs"/>
+    <Compile Include="$(BastosSourceRoot)\Bastos.Native.Models\OperationResult.cs" Link="OperationResult.cs"/>
+    <Compile Include="$(BastosSourceRoot)\Bastos.Native.Models\WorkerProgress.cs" Link="WorkerProgress.cs"/>
+    <Compile Include="$(BastosSourceRoot)\Bastos.Native.Services\CommandResult.cs" Link="CommandResult.cs"/>
+    <Compile Include="$(BastosSourceRoot)\Bastos.Native.Services\VerifiedOperationService.cs" Link="VerifiedOperationService.cs"/>
+    <Compile Include="$(BastosSourceRoot)\Bastos.Native.Services\OperationVerifiers.cs" Link="OperationVerifiers.cs"/>
+    <Compile Include="$(BastosSourceRoot)\Bastos.Native.Services\ProcessExecutionService.cs" Link="ProcessExecutionService.cs"/>
+  </ItemGroup>
+</Project>

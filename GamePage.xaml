@@ -1,0 +1,117 @@
+<?xml version="1.0" ?><UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="Bastos.Native.GamePage" Foreground="#F0F5FF">
+ <UserControl.Resources>
+  <Style x:Key="GameCard" TargetType="Border">
+   <Setter Property="Background" Value="#111827"/><Setter Property="BorderBrush" Value="#263449"/>
+   <Setter Property="BorderThickness" Value="1"/><Setter Property="CornerRadius" Value="7"/>
+   <Setter Property="Padding" Value="16"/><Setter Property="Margin" Value="0,0,0,16"/>
+  </Style>
+  <Style x:Key="GameText" TargetType="TextBlock">
+   <Setter Property="Foreground" Value="#A9BAD1"/><Setter Property="TextWrapping" Value="Wrap"/>
+   <Setter Property="LineHeight" Value="20"/><Setter Property="Margin" Value="0,7,0,12"/>
+  </Style>
+  <Style x:Key="GameHeading" TargetType="TextBlock">
+   <Setter Property="FontSize" Value="16"/><Setter Property="FontWeight" Value="SemiBold"/>
+  </Style>
+  <Style x:Key="GameCheck" TargetType="CheckBox">
+   <Setter Property="Foreground" Value="#F0F5FF"/><Setter Property="FontSize" Value="14"/>
+   <Setter Property="Margin" Value="0,9,0,0"/><Setter Property="VerticalContentAlignment" Value="Center"/>
+  </Style>
+ </UserControl.Resources>
+ <ScrollViewer x:Name="PageScroll" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled" Padding="0,0,12,0">
+  <StackPanel>
+   <Border Style="{StaticResource GameCard}" Background="#102139" BorderBrush="#294969" Padding="16">
+    <Grid>
+     <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+     <StackPanel Margin="0,0,24,0">
+      <TextBlock Text="MOTEUR DE JEU" Foreground="#79B9FF" FontSize="11" FontWeight="Bold"/>
+      <TextBlock Text="{Binding GameSettings.Headline}" FontSize="20" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,9,0,0" Foreground="{Binding GameSettings.Accent}"/>
+      <TextBlock Style="{StaticResource GameText}" Text="{Binding GameSettings.Detail}"/>
+      <TextBlock Text="{Binding GameSettings.Activity}" Foreground="#D5E4F7" TextWrapping="Wrap" FontSize="12"/>
+     </StackPanel>
+     <StackPanel Grid.Column="1" VerticalAlignment="Center" MinWidth="130">
+      <Button Content="Démarrer" Style="{StaticResource PrimaryButton}" Command="{Binding CurrentPage.Cards[0].PrimaryCommand}" Margin="0,0,0,8"/>
+      <Button Content="Arrêter le moteur" Style="{StaticResource SecondaryButton}" Command="{Binding CurrentPage.Cards[0].SecondaryCommand}"/>
+     </StackPanel>
+    </Grid>
+   </Border>
+   
+   
+   
+   
+   <TabControl Style="{StaticResource GuidedTabs}"><TabItem Header="1 · Mes jeux"><StackPanel><Grid>
+    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="16"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+    <Border Style="{StaticResource GameCard}">
+     <StackPanel>
+      <TextBlock Text="Mes jeux" Style="{StaticResource GameHeading}"/>
+      <Expander Header="En savoir plus" Margin="0,8,0,6"><TextBlock Style="{StaticResource GameText}" Text="Ajoutez le fichier .exe d’un jeu si Bastos ne le reconnaît pas automatiquement."/></Expander>
+      <Border Background="#1A2940" CornerRadius="8" Padding="12" Margin="0,0,0,14">
+       <TextBlock Text="{Binding CurrentPage.Cards[1].State}" Foreground="#83BDFF" TextWrapping="Wrap" FontWeight="SemiBold"/>
+      </Border>
+      <WrapPanel>
+       <Button Content="Ajouter un jeu" Style="{StaticResource PrimaryButton}" Command="{Binding CurrentPage.Cards[1].PrimaryCommand}" Margin="0,0,8,6"/>
+       <Button Content="Gérer mes jeux" Style="{StaticResource SecondaryButton}" Command="{Binding CurrentPage.Cards[1].SecondaryCommand}" Margin="0,0,0,6"/>
+      </WrapPanel>
+     </StackPanel>
+    </Border>
+    <Border Grid.Column="2" Style="{StaticResource GameCard}">
+     <StackPanel>
+      <TextBlock Text="Applications à ignorer" Style="{StaticResource GameHeading}"/>
+      <Expander Header="En savoir plus" Margin="0,8,0,6"><TextBlock Style="{StaticResource GameText}" Text="Bastos ne modifiera pas ces applications. Elles restent libres de fonctionner normalement."/></Expander>
+      <Border Background="#1A2940" CornerRadius="8" Padding="12" Margin="0,0,0,14">
+       <TextBlock Text="{Binding CurrentPage.Cards[2].State}" Foreground="#B6C8DE" TextWrapping="Wrap" FontWeight="SemiBold"/>
+      </Border>
+      <WrapPanel>
+       <Button Content="Exclure une application" Style="{StaticResource SecondaryButton}" Command="{Binding CurrentPage.Cards[2].PrimaryCommand}" Margin="0,0,8,6"/>
+       <Button Content="Gérer les exclusions" Style="{StaticResource SecondaryButton}" Command="{Binding CurrentPage.Cards[2].SecondaryCommand}" Margin="0,0,0,6"/>
+      </WrapPanel>
+     </StackPanel>
+    </Border>
+   </Grid></StackPanel></TabItem><TabItem Header="2 · Mes réglages"><StackPanel><Border Style="{StaticResource GameCard}" DataContext="{Binding GameSettings}">
+    <StackPanel>
+     <Grid>
+      <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="30"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+      <StackPanel>
+       <CheckBox Content="Reconnaître mes jeux automatiquement" Style="{StaticResource GameCheck}" IsChecked="{Binding AutoDetect}"/>
+       <Expander Header="En savoir plus" Margin="0,8,0,6"><TextBlock Style="{StaticResource GameText}" Text="Recherche les jeux lancés depuis Steam, Epic, Xbox et les autres bibliothèques prises en charge."/></Expander>
+       <CheckBox Content="Réduire la priorité de l’arrière-plan" Style="{StaticResource GameCheck}" IsChecked="{Binding Background}"/>
+       <Expander Header="En savoir plus" Margin="0,8,0,6"><TextBlock Style="{StaticResource GameText}" Text="Pendant une partie, donne moins de priorité CPU à certaines applications, dont les navigateurs et Discord. À désactiver si vos appels ou vidéos saccadent."/></Expander>
+      </StackPanel>
+      <StackPanel Grid.Column="2">
+       <TextBlock Text="Priorité CPU des jeux" FontWeight="SemiBold" FontSize="14" Margin="0,9,0,10"/>
+       <ComboBox SelectedValue="{Binding Priority}" SelectedValuePath="Tag" HorizontalAlignment="Stretch" MinHeight="35">
+        <ComboBoxItem Content="Normale — priorité habituelle" Tag="Normal"/>
+        <ComboBoxItem Content="Au-dessus de la normale — compromis" Tag="AboveNormal"/>
+        <ComboBoxItem Content="Élevée — davantage de priorité au jeu" Tag="High"/>
+       </ComboBox>
+       <Expander Header="En savoir plus" Margin="0,8,0,6"><TextBlock Style="{StaticResource GameText}" Text="Définit la priorité par défaut. Un profil propre à un jeu reste prioritaire. Ce réglage ne garantit pas plus de FPS."/></Expander>
+       <CheckBox Content="Observation seule" Style="{StaticResource GameCheck}" IsChecked="{Binding Observe}"/>
+       <Expander Header="En savoir plus" Margin="0,8,0,6"><TextBlock Style="{StaticResource GameText}" Text="Pour comprendre ce que Bastos détecte : aucune optimisation appliquée aux processus, et restauration des changements précédents."/></Expander>
+      </StackPanel>
+     </Grid>
+     <Expander Header="Réglage complémentaire" Foreground="#B8CAE0" Margin="0,2,0,12">
+      <StackPanel Margin="0,10,0,0">
+       <CheckBox Content="Réduire la priorité des auxiliaires PUBG" Style="{StaticResource GameCheck}" IsChecked="{Binding Auxiliary}"/>
+       <Expander Header="En savoir plus" Margin="0,8,0,6"><TextBlock Style="{StaticResource GameText}" Text="Concerne les processus auxiliaires ExecPubg pris en charge, séparément du jeu. Les exclusions restent prioritaires."/></Expander>
+      </StackPanel>
+     </Expander>
+     <Separator Background="#263449" Margin="0,0,0,16"/>
+     <WrapPanel>
+      <Button Content="Appliquer mes réglages" Style="{StaticResource PrimaryButton}" Command="{Binding ApplyCommand}" Margin="0,0,8,6"/>
+      <Button Content="Recharger les réglages" Style="{DynamicResource QuietButton}" Command="{Binding ReloadCommand}" Margin="0,0,0,6"/>
+     </WrapPanel>
+     <TextBlock Style="{DynamicResource ActionHint}" Text="{Binding ApplyCommand.DisabledReason}"/><TextBlock Style="{StaticResource GameText}" Text="{Binding Message}" Margin="0,8,0,0"/>
+    </StackPanel>
+   </Border></StackPanel></TabItem></TabControl><Expander Header="Fonctionnement et journal" Margin="0,8,0,6"><Border Style="{StaticResource GameCard}" Background="#0E1522">
+    <StackPanel>
+     <TextBlock Text="Ce qui se passe pendant une partie" FontWeight="SemiBold" FontSize="16"/>
+     <Expander Header="En savoir plus" Margin="0,8,0,6"><TextBlock Style="{StaticResource GameText}" Text="Bastos repère le jeu → applique les réglages autorisés → tente de rétablir les valeurs d’origine à la fin. Il ne ferme pas vos applications et n’injecte pas de code dans le jeu."/></Expander>
+     <WrapPanel>
+      <Button Content="Consulter le journal" Style="{StaticResource SecondaryButton}" Command="{Binding CurrentPage.Cards[3].SecondaryCommand}" Margin="0,0,12,0"/>
+      <TextBlock Text="État actualisé automatiquement toutes les 2 secondes" Foreground="#8298B4" VerticalAlignment="Center" TextWrapping="Wrap"/>
+     </WrapPanel>
+     <TextBlock Text="{Binding CurrentPage.Cards[0].State}" Foreground="#A9BAD1" TextWrapping="Wrap" Margin="0,12,0,0"/>
+    </StackPanel>
+   </Border></Expander>
+  </StackPanel>
+ </ScrollViewer>
+</UserControl>

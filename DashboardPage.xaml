@@ -1,0 +1,163 @@
+<?xml version="1.0" ?><UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:d="http://schemas.microsoft.com/expression/blend/2008" x:Class="Bastos.Native.DashboardPage" mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="520">
+  <UserControl.Resources>
+    <Style x:Key="HardwareGauge" TargetType="ProgressBar">
+      <Setter Property="Height" Value="10"/>
+      <Setter Property="Background" Value="#1A2940"/>
+      <Setter Property="Foreground" Value="#168CFF"/>
+      <Setter Property="BorderThickness" Value="0"/>
+      <Setter Property="Template">
+        <Setter.Value>
+          <ControlTemplate TargetType="ProgressBar">
+            <Grid Height="10">
+              <Border Background="{TemplateBinding Background}" CornerRadius="5"/>
+              <Border Name="PART_Track" Background="Transparent" CornerRadius="5" ClipToBounds="True">
+                <Border Name="PART_Indicator" HorizontalAlignment="Left" Background="{TemplateBinding Foreground}" CornerRadius="5"/>
+              </Border>
+            </Grid>
+          </ControlTemplate>
+        </Setter.Value>
+      </Setter>
+    </Style>
+    <Style x:Key="HardwareName" TargetType="TextBlock">
+      <Setter Property="Foreground" Value="#F4F8FF"/>
+      <Setter Property="FontSize" Value="14"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+      <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    </Style>
+  </UserControl.Resources>
+
+  <StackPanel Margin="0,0,16,4">
+    <Border Padding="20" CornerRadius="14" Background="#09111E" BorderBrush="#263A55" BorderThickness="1">
+      <Grid>
+        <Rectangle RadiusX="12" RadiusY="12" Opacity="0.72">
+          <Rectangle.Fill>
+            <DrawingBrush TileMode="Tile" Viewport="0,0,24,24" ViewportUnits="Absolute">
+              <DrawingBrush.Drawing>
+                <GeometryDrawing Brush="#091321">
+                  <GeometryDrawing.Pen><Pen Brush="#17304D" Thickness="0.6"/></GeometryDrawing.Pen>
+                  <GeometryDrawing.Geometry>
+                    <GeometryGroup>
+                      <LineGeometry StartPoint="0,0" EndPoint="24,0"/>
+                      <LineGeometry StartPoint="0,0" EndPoint="0,24"/>
+                    </GeometryGroup>
+                  </GeometryDrawing.Geometry>
+                </GeometryDrawing>
+              </DrawingBrush.Drawing>
+            </DrawingBrush>
+          </Rectangle.Fill>
+        </Rectangle>
+
+        <Viewbox Stretch="Uniform" HorizontalAlignment="Center">
+          <Canvas Width="1000" Height="500">
+            <TextBlock Canvas.Left="28" Canvas.Top="24" Text="VUE MATÉRIELLE" Foreground="#8EBFFF" FontSize="11" FontWeight="SemiBold"/>
+            <TextBlock Canvas.Left="28" Canvas.Top="43" Text="Composants détectés une fois • utilisation en direct" Foreground="#7890AE" FontSize="11"/>
+
+            <!-- Boîtier vitré : perspective simple et régulière -->
+            <Border Canvas.Left="66" Canvas.Top="76" Width="292" Height="382" CornerRadius="8" Background="#081522" BorderBrush="#8BC6FF" BorderThickness="2"/>
+            <Polygon Points="66,76 94,56 383,56 358,76" Fill="#10243A" Stroke="#8BC6FF" StrokeThickness="1.4"/>
+            <Polygon Points="358,76 383,56 383,433 358,458" Fill="#0B1C2D" Stroke="#8BC6FF" StrokeThickness="1.4"/>
+            <Line X1="78" Y1="88" X2="346" Y2="88" Stroke="#315879" StrokeThickness="1"/>
+            <Line X1="78" Y1="446" X2="346" Y2="446" Stroke="#315879" StrokeThickness="1"/>
+            <Ellipse Canvas.Left="78" Canvas.Top="88" Width="4" Height="4" Fill="#6FADE7"/>
+            <Ellipse Canvas.Left="342" Canvas.Top="88" Width="4" Height="4" Fill="#6FADE7"/>
+            <Ellipse Canvas.Left="78" Canvas.Top="440" Width="4" Height="4" Fill="#6FADE7"/>
+            <Ellipse Canvas.Left="342" Canvas.Top="440" Width="4" Height="4" Fill="#6FADE7"/>
+
+            <!-- Carte mère organisée en cinq zones lisibles -->
+            <Border Canvas.Left="96" Canvas.Top="98" Width="228" Height="330" CornerRadius="4" Background="#0C2135" BorderBrush="#315F87" BorderThickness="1.2"/>
+            <Path Data="M108,115 L312,115 M108,205 L312,205 M108,298 L312,298 M108,389 L312,389" Stroke="#173B59" StrokeThickness="1"/>
+
+            <!-- Processeur -->
+            <Border Canvas.Left="130" Canvas.Top="103" Width="80" Height="62" CornerRadius="4" Background="#112E49" BorderBrush="#69B4F8" BorderThickness="1.5">
+              <Grid Margin="8"><Border Background="#168CFF" CornerRadius="2" Opacity="0.72"/><TextBlock Text="CPU" Foreground="#EAF6FF" FontSize="11" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/></Grid>
+            </Border>
+            <Path Data="M124,112 L130,112 M124,124 L130,124 M124,136 L130,136 M124,148 L130,148 M210,112 L216,112 M210,124 L216,124 M210,136 L216,136 M210,148 L216,148" Stroke="#69B4F8" StrokeThickness="1"/>
+
+            <!-- Mémoire vive -->
+            <Border Canvas.Left="235" Canvas.Top="120" Width="20" Height="72" CornerRadius="2" Background="#263316" BorderBrush="#FFD84B" BorderThickness="1.5"/>
+            <Border Canvas.Left="265" Canvas.Top="120" Width="20" Height="72" CornerRadius="2" Background="#263316" BorderBrush="#FFD84B" BorderThickness="1.5"/>
+            <Path Data="M240,133 L250,133 M240,145 L250,145 M240,157 L250,157 M240,169 L250,169 M270,133 L280,133 M270,145 L280,145 M270,157 L280,157 M270,169 L280,169" Stroke="#FFD84B" StrokeThickness="2"/>
+
+            <!-- Carte graphique -->
+            <Border Canvas.Left="112" Canvas.Top="222" Width="196" Height="62" CornerRadius="4" Background="#102B45" BorderBrush="#69B4F8" BorderThickness="1.5">
+              <Grid>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="12,0,0,0" VerticalAlignment="Center">
+                  <Grid Width="44" Height="44"><Ellipse Stroke="#69B4F8" StrokeThickness="1.4"/><Ellipse Width="18" Height="18" Stroke="#69B4F8"/><Line X1="22" Y1="3" X2="22" Y2="41" Stroke="#386C98"/><Line X1="3" Y1="22" X2="41" Y2="22" Stroke="#386C98"/></Grid>
+                  <Grid Width="44" Height="44" Margin="10,0,0,0"><Ellipse Stroke="#69B4F8" StrokeThickness="1.4"/><Ellipse Width="18" Height="18" Stroke="#69B4F8"/><Line X1="22" Y1="3" X2="22" Y2="41" Stroke="#386C98"/><Line X1="3" Y1="22" X2="41" Y2="22" Stroke="#386C98"/></Grid>
+                </StackPanel>
+                <TextBlock Text="GPU" Foreground="#9ACFFF" FontSize="10" FontWeight="Bold" HorizontalAlignment="Right" Margin="0,0,13,0" VerticalAlignment="Center"/>
+              </Grid>
+            </Border>
+            <Rectangle Canvas.Left="135" Canvas.Top="284" Width="148" Height="5" Fill="#C99E2F"/>
+
+            <!-- Disque -->
+            <Border Canvas.Left="188" Canvas.Top="314" Width="120" Height="58" CornerRadius="4" Background="#102A42" BorderBrush="#69B4F8" BorderThickness="1.4">
+              <Grid Margin="11,8"><TextBlock Text="NVMe / SSD" Foreground="#A9D7FF" FontSize="10" FontWeight="SemiBold" VerticalAlignment="Top"/><Line X1="0" Y1="29" X2="78" Y2="29" Stroke="#3F789F"/><Ellipse Width="8" Height="8" Fill="#168CFF" HorizontalAlignment="Right" VerticalAlignment="Bottom"/></Grid>
+            </Border>
+
+            <!-- Carte réseau -->
+            <Border Canvas.Left="252" Canvas.Top="397" Width="56" Height="35" CornerRadius="3" Background="#102A42" BorderBrush="#69B4F8" BorderThickness="1.4">
+              <Grid><Path Data="M12,8 L44,8 L44,27 L12,27 Z M18,8 L18,15 M24,8 L24,15 M30,8 L30,15 M36,8 L36,15" Stroke="#69B4F8" StrokeThickness="1.2"/><Ellipse Width="5" Height="5" Fill="#42D394" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,6,5"/></Grid>
+            </Border>
+
+            <!-- Repères alignés, sans croisement -->
+            <Polyline Points="210,125 366,68 444,68" Stroke="#5D94C9" StrokeThickness="1.2"/>
+            <Polyline Points="285,160 390,160 444,160" Stroke="#5D94C9" StrokeThickness="1.2"/>
+            <Polyline Points="308,252 400,252 444,252" Stroke="#5D94C9" StrokeThickness="1.2"/>
+            <Polyline Points="308,343 400,344 444,344" Stroke="#5D94C9" StrokeThickness="1.2"/>
+            <Polyline Points="308,414 400,436 444,436" Stroke="#5D94C9" StrokeThickness="1.2"/>
+            <Ellipse Canvas.Left="439" Canvas.Top="63" Width="10" Height="10" Fill="#168CFF"/>
+            <Ellipse Canvas.Left="439" Canvas.Top="155" Width="10" Height="10" Fill="#168CFF"/>
+            <Ellipse Canvas.Left="439" Canvas.Top="247" Width="10" Height="10" Fill="#168CFF"/>
+            <Ellipse Canvas.Left="439" Canvas.Top="339" Width="10" Height="10" Fill="#168CFF"/>
+            <Ellipse Canvas.Left="439" Canvas.Top="431" Width="10" Height="10" Fill="#168CFF"/>
+
+            <!-- Processeur -->
+            <Grid Canvas.Left="465" Canvas.Top="33" Width="500" Height="72">
+              <Grid.RowDefinitions><RowDefinition Height="16"/><RowDefinition Height="24"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+              <TextBlock Text="PROCESSEUR" Foreground="#67ADFF" FontSize="10" FontWeight="SemiBold"/>
+              <Grid Grid.Row="1"><TextBlock Style="{StaticResource HardwareName}" Text="{Binding CpuHardwareName}"/><TextBlock HorizontalAlignment="Right" Text="{Binding CpuMetric.Percent, StringFormat={}{0:0}%}" Foreground="#46A5FF" FontSize="16" FontWeight="Bold"/></Grid>
+              <ProgressBar Grid.Row="2" Maximum="100" Value="{Binding CpuMetric.Percent, Mode=OneWay}" Style="{StaticResource HardwareGauge}"/>
+            </Grid>
+            <!-- Mémoire -->
+            <Grid Canvas.Left="465" Canvas.Top="125" Width="500" Height="72">
+              <Grid.RowDefinitions><RowDefinition Height="16"/><RowDefinition Height="24"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+              <TextBlock Text="MÉMOIRE VIVE" Foreground="#67ADFF" FontSize="10" FontWeight="SemiBold"/>
+              <Grid Grid.Row="1"><TextBlock Style="{StaticResource HardwareName}" Text="{Binding MemoryHardwareName}"/><TextBlock HorizontalAlignment="Right" Text="{Binding MemoryMetric.Percent, StringFormat={}{0:0}%}" Foreground="#46A5FF" FontSize="16" FontWeight="Bold"/></Grid>
+              <ProgressBar Grid.Row="2" Maximum="100" Value="{Binding MemoryMetric.Percent, Mode=OneWay}" Style="{StaticResource HardwareGauge}"/>
+            </Grid>
+            <!-- Carte graphique -->
+            <Grid Canvas.Left="465" Canvas.Top="217" Width="500" Height="72">
+              <Grid.RowDefinitions><RowDefinition Height="16"/><RowDefinition Height="24"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+              <TextBlock Text="CARTE GRAPHIQUE" Foreground="#67ADFF" FontSize="10" FontWeight="SemiBold"/>
+              <Grid Grid.Row="1"><TextBlock Style="{StaticResource HardwareName}" Text="{Binding GpuHardwareName}"/><TextBlock HorizontalAlignment="Right" Text="{Binding GpuMetric.Percent, StringFormat={}{0:0}%}" Foreground="#46A5FF" FontSize="16" FontWeight="Bold"/></Grid>
+              <ProgressBar Grid.Row="2" Maximum="100" Value="{Binding GpuMetric.Percent, Mode=OneWay}" Style="{StaticResource HardwareGauge}"/>
+            </Grid>
+            <!-- Disque -->
+            <Grid Canvas.Left="465" Canvas.Top="309" Width="500" Height="72">
+              <Grid.RowDefinitions><RowDefinition Height="16"/><RowDefinition Height="24"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+              <TextBlock Text="DISQUE SYSTÈME" Foreground="#67ADFF" FontSize="10" FontWeight="SemiBold"/>
+              <Grid Grid.Row="1"><TextBlock Style="{StaticResource HardwareName}" Text="{Binding DiskHardwareName}"/><TextBlock HorizontalAlignment="Right" Text="{Binding DiskMetric.Percent, StringFormat={}{0:0}%}" Foreground="#46A5FF" FontSize="16" FontWeight="Bold"/></Grid>
+              <ProgressBar Grid.Row="2" Maximum="100" Value="{Binding DiskMetric.Percent, Mode=OneWay}" Style="{StaticResource HardwareGauge}"/>
+            </Grid>
+            <!-- Réseau -->
+            <Grid Canvas.Left="465" Canvas.Top="401" Width="500" Height="72">
+              <Grid.RowDefinitions><RowDefinition Height="16"/><RowDefinition Height="24"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+              <TextBlock Text="CARTE RÉSEAU" Foreground="#67ADFF" FontSize="10" FontWeight="SemiBold"/>
+              <Grid Grid.Row="1"><TextBlock Style="{StaticResource HardwareName}" Text="{Binding NetworkHardwareName}"/><TextBlock HorizontalAlignment="Right" Text="{Binding NetworkMetric.Percent, StringFormat={}{0:0}%}" Foreground="#46A5FF" FontSize="16" FontWeight="Bold"/></Grid>
+              <ProgressBar Grid.Row="2" Maximum="100" Value="{Binding NetworkMetric.Percent, Mode=OneWay}" Style="{StaticResource HardwareGauge}"/>
+            </Grid>
+          </Canvas>
+        </Viewbox>
+      </Grid>
+    </Border>
+    <Border Padding="13,9" Margin="0,12,0,0" CornerRadius="9" Background="#0E1D33" BorderBrush="#1D4777" BorderThickness="1">
+      <Grid>
+        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+        <Ellipse Width="8" Height="8" Fill="#39C77B" Margin="0,0,10,0" VerticalAlignment="Center"/>
+        <TextBlock Grid.Column="1" Foreground="#C7D7F4" FontSize="11" VerticalAlignment="Center" Text="{Binding DashboardStatus}"/>
+        <TextBlock Grid.Column="2" Foreground="#7482A4" FontSize="10" VerticalAlignment="Center" Margin="14,0,0,0" Text="{Binding DashboardUpdatedAt}"/>
+      </Grid>
+    </Border>
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,145 @@
+{
+  "Upstream": "https://github.com/pbatard/rufus/blob/v4.15/src/wue.c",
+  "Sha256": "C6DEC15C5FC11D570F300E7991001E0575C010F82E4C02F2DB2E76DA7CA6CC86",
+  "Specialize": [
+    "reg add \"HKLM\\Software\\Policies\\Microsoft\\Windows\\OneDrive\" /v DisableFileSyncNGSC /t REG_DWORD /d 1 /f",
+    "PowerShell -NonInteractive -WindowStyle Hidden -Command \"Remove-Item -Path $env:SystemRoot\\System32\\OneDriveSetup.exe -Force -Confirm:$false; Remove-Item -Path $env:SystemRoot\\SysWOW64\\OneDriveSetup.exe -Force -Confirm:$false;\"",
+    "PowerShell -NonInteractive -WindowStyle Hidden -Command \"Get-AppxProvisionedPackage -Online | Where-Object {$_.PackageName -like '*Outlook*'} | Remove-AppxProvisionedPackage -Online\"",
+    "PowerShell -NonInteractive -WindowStyle Hidden -Command \"Get-AppxPackage -AllUsers *Outlook* | Remove-AppxPackage -AllUsers\"",
+    "PowerShell -NonInteractive -WindowStyle Hidden -Command \"Get-AppxProvisionedPackage -Online | Where-Object {$_.PackageName -like '*Teams*'} | Remove-AppxProvisionedPackage -Online\"",
+    "PowerShell -NonInteractive -WindowStyle Hidden -Command \"Get-AppxPackage -AllUsers *Teams* | Remove-AppxPackage -AllUsers\""
+  ],
+  "FirstLogon": [
+    "reg add \"HKLM\\System\\CurrentControlSet\\Control\\Session Manager\\Power\" /v HiberbootEnabled /t REG_DWORD /d 0 /f",
+    "reg add \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\" /v ShowCopilotButton /t REG_DWORD /d 0 /f",
+    "reg add \"HKLM\\Software\\Policies\\Microsoft\\Windows\\WindowsCopilot\" /v TurnOffWindowsCopilot /t REG_DWORD /d 1 /f",
+    "reg add \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Search\" /v SearchboxTaskbarMode /t REG_DWORD /d 1 /f",
+    "reg add \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Search\" /v SearchboxTaskbarModeCache /t REG_DWORD /d 1 /f",
+    "reg add \"HKLM\\Software\\Policies\\Microsoft\\Windows\\CloudContent\" /v DisableWindowsConsumerFeatures /t REG_DWORD /d 1 /f",
+    "reg add \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager\" /v SystemPaneSuggestionsEnabled /t REG_DWORD /d 0 /f",
+    "reg add \"HKCU\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search\" /v BingSearchEnabled /t REG_DWORD /d 0 /f",
+    "reg add \"HKLM\\Software\\Policies\\Microsoft\\Dsh\" /v AllowNewsAndInterests /t REG_DWORD /d 0 /f",
+    "reg add \"HKLM\\Software\\Policies\\Microsoft\\Windows\\Windows Feeds\" /v EnableFeeds /t REG_DWORD /d 0 /f",
+    "reg add \"HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Communications\" /v ConfigureChatAutoInstall /t REG_DWORD /d 0 /f",
+    "reg add \"HKLM\\Software\\Policies\\Microsoft\\Windows\\CloudContent\" /v DisableCloudOptimizedContent /t REG_DWORD /d 1 /f",
+    "reg add \"HKLM\\Software\\Policies\\Microsoft\\Edge\" /v HideFirstRunExperience /t REG_DWORD /d 1 /f",
+    "reg add \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced\" /v Start_Layout /t REG_DWORD /d 1 /f",
+    "PowerShell -NonInteractive -WindowStyle Hidden -Command \"Set-ItemProperty -Path 'Registry::HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Start' -Name 'VisiblePlaces' -Value $([convert]::FromBase64String('ztU0LVr6Q0WC8iLm6vd3PC+zZ+PeiVVDv85h83sYqTe8JIoUDNaJQqCAbtm7okiCRIF1/g0IrkKL2jTtl7ZjlEqwvXRK+WhPi9ZDmAcdqLyGCHNSqlFDQp97J3ZYRlnU')) -Type 'Binary'\""
+  ],
+  "Registry": [
+    {
+      "Value": 1,
+      "Name": "DisableFileSyncNGSC",
+      "Type": "DWord",
+      "Path": "HKLM:\\Software\\Policies\\Microsoft\\Windows\\OneDrive",
+      "Option": "DisableConsumerContent"
+    },
+    {
+      "Value": 0,
+      "Name": "HiberbootEnabled",
+      "Type": "DWord",
+      "Path": "HKLM:\\System\\CurrentControlSet\\Control\\Session Manager\\Power",
+      "Option": "DisableConsumerContent"
+    },
+    {
+      "Value": 0,
+      "Name": "ShowCopilotButton",
+      "Type": "DWord",
+      "Path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+      "Option": "DisableConsumerContent"
+    },
+    {
+      "Value": 1,
+      "Name": "TurnOffWindowsCopilot",
+      "Type": "DWord",
+      "Path": "HKLM:\\Software\\Policies\\Microsoft\\Windows\\WindowsCopilot",
+      "Option": "DisableConsumerContent"
+    },
+    {
+      "Value": 1,
+      "Name": "SearchboxTaskbarMode",
+      "Type": "DWord",
+      "Path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Search",
+      "Option": "DisableConsumerContent"
+    },
+    {
+      "Value": 1,
+      "Name": "SearchboxTaskbarModeCache",
+      "Type": "DWord",
+      "Path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Search",
+      "Option": "DisableConsumerContent"
+    },
+    {
+      "Value": 1,
+      "Name": "DisableWindowsConsumerFeatures",
+      "Type": "DWord",
+      "Path": "HKLM:\\Software\\Policies\\Microsoft\\Windows\\CloudContent",
+      "Option": "DisableConsumerContent"
+    },
+    {
+      "Value": 0,
+      "Name": "SystemPaneSuggestionsEnabled",
+      "Type": "DWord",
+      "Path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+      "Option": "DisableConsumerContent"
+    },
+    {
+      "Value": 0,
+      "Name": "BingSearchEnabled",
+      "Type": "DWord",
+      "Path": "HKCU:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Search",
+      "Option": "DisableConsumerContent"
+    },
+    {
+      "Value": 0,
+      "Name": "AllowNewsAndInterests",
+      "Type": "DWord",
+      "Path": "HKLM:\\Software\\Policies\\Microsoft\\Dsh",
+      "Option": "DisableConsumerContent"
+    },
+    {
+      "Value": 0,
+      "Name": "EnableFeeds",
+      "Type": "DWord",
+      "Path": "HKLM:\\Software\\Policies\\Microsoft\\Windows\\Windows Feeds",
+      "Option": "DisableConsumerContent"
+    },
+    {
+      "Value": 0,
+      "Name": "ConfigureChatAutoInstall",
+      "Type": "DWord",
+      "Path": "HKLM:\\Software\\Microsoft\\Windows\\CurrentVersion\\Communications",
+      "Option": "DisableConsumerContent"
+    },
+    {
+      "Value": 1,
+      "Name": "DisableCloudOptimizedContent",
+      "Type": "DWord",
+      "Path": "HKLM:\\Software\\Policies\\Microsoft\\Windows\\CloudContent",
+      "Option": "DisableConsumerContent"
+    },
+    {
+      "Value": 1,
+      "Name": "HideFirstRunExperience",
+      "Type": "DWord",
+      "Path": "HKLM:\\Software\\Policies\\Microsoft\\Edge",
+      "Option": "DisableConsumerContent"
+    },
+    {
+      "Value": 1,
+      "Name": "Start_Layout",
+      "Type": "DWord",
+      "Path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+      "Option": "DisableConsumerContent"
+    },
+    {
+      "Value": "ztU0LVr6Q0WC8iLm6vd3PC+zZ+PeiVVDv85h83sYqTe8JIoUDNaJQqCAbtm7okiCRIF1/g0IrkKL2jTtl7ZjlEqwvXRK+WhPi9ZDmAcdqLyGCHNSqlFDQp97J3ZYRlnU",
+      "Name": "VisiblePlaces",
+      "Type": "Binary",
+      "Path": "HKCU:\\Software\\Microsoft\\Windows\\CurrentVersion\\Start",
+      "Option": "DisableConsumerContent"
+    }
+  ],
+  "NotIncluded": "BitLocker (unchecked); hardware checks and account flow remain independent",
+  "Flag": "DisableConsumerContent (existing persisted option; UI now names full QoL block)"
+}

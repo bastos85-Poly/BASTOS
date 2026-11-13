@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl xmlns:native="clr-namespace:Bastos.Native" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="Bastos.Native.AppearanceProfilesPage">
+  <UserControl.Resources>
+    <Style x:Key="Card" TargetType="Border">
+      <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+      <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="7" />
+      <Setter Property="Padding" Value="16" />
+      <Setter Property="Margin" Value="0,0,0,10" />
+    </Style>
+    <Style x:Key="Description" TargetType="TextBlock">
+      <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+      <Setter Property="Margin" Value="0,8,0,12" />
+    </Style>
+  </UserControl.Resources>
+  <StackPanel IsEnabled="{Binding Available}">
+    <Border Style="{StaticResource Card}">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+          <TextBlock Text="Profils de personnalisation" FontSize="16" FontWeight="SemiBold" TextWrapping="Wrap" />
+          <TextBlock Text="Cochez les réglages voulus, puis cliquez sur Appliquer. Restaurer remet leurs valeurs sauvegardées ; pour le menu clic droit, il rétablit le menu récent de Windows. L’Explorateur peut redémarrer. Selon la version de Windows, le menu classique peut ne pas être pris en charge." Style="{StaticResource Description}" />
+          <ComboBox ItemsSource="{Binding Presets}" SelectedItem="{Binding Preset}" Margin="0,8" />
+          <ItemsControl ItemsSource="{Binding AppearanceOptions}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate>
+                <WrapPanel Margin="0,4">
+                  <CheckBox IsChecked="{Binding Selected}" Content="{Binding Title}" />
+                  <TextBlock Text="{Binding State}" ToolTip="{Binding Detail}" Foreground="{StaticResource MutedBrush}" Margin="16,0,0,0" />
+                </WrapPanel>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+          <Border Background="{Binding PreviewBackground}" CornerRadius="8" Padding="16" Margin="0,12">
+            <StackPanel>
+              <TextBlock Text="Aperçu des choix" Foreground="{Binding PreviewForeground}" FontWeight="SemiBold" />
+              <TextBlock Text="{Binding Preview}" Foreground="{Binding PreviewForeground}" TextWrapping="Wrap" Margin="0,8,0,0" />
+            </StackPanel>
+          </Border>
+          <WrapPanel>
+            <Button Content="Appliquer les choix" Command="{Binding ApplyProfileCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,4" />
+            <Button Content="Restaurer les choix" Command="{Binding RestoreProfileCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,8,4" />
+            <Button Content="Actualiser les états" Command="{Binding RefreshProfilesCommand}" Margin="0,0,8,4">
+              <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource SecondaryButton}">
+                  <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                      <Setter Property="Opacity" Value="0.45" />
+                    </Trigger>
+                  </Style.Triggers>
+                </Style>
+              </Button.Style>
+            </Button>
+          </WrapPanel>
+          <TextBlock Style="{DynamicResource ActionHint}" Text="{Binding ApplyProfileCommand.DisabledReason}" />
+          <native:OperationMessageView Text="{Binding ProfileStatus}" Foreground="{StaticResource AccentBrush}" Margin="0,8" />
+        </StackPanel>
+      </Grid>
+    </Border>
+  </StackPanel>
+</UserControl>

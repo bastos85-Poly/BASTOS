@@ -1,0 +1,13 @@
+# Bastos 7.120.40 — courbes de souris
+
+Personnalisation > Clavier et souris : le contrôle existant propose désormais Défaut, MarkC, CPL et CheeseM. Le sélecteur commence sur Défaut et un libellé séparé identifie les courbes actuellement enregistrées. La sélection et l'ouverture de la page ne modifient pas Windows. Appliquer cette courbe écrit les deux tableaux binaires SmoothMouseXCurve / SmoothMouseYCurve du compte actuel, puis les relit.
+
+Les valeurs numériques sont celles du fichier MouseAccelerationFix.kos, flux NTFS KirbyOS de l'ISO inspectée. Aucun script Kirby n'est exécuté. Chaque tableau contient 40 octets. MarkC correspond au fichier 100 % / position centrale 6-sur-11 (10-sur-20). CPL correspond à CPL Modified et CheeseM à 200.reg. Il s'agit de profils expérimentaux proposés pour comparaison, sans promesse de gain universel ni adaptation automatique au DPI ou à l'échelle d'affichage.
+
+Le profil de courbe ne change pas la vitesse, l'état d'accélération, les DPI ou le polling de la souris. Ces courbes concernent le pointeur Windows et peuvent être ignorées en Raw Input. Les changements de courbe nécessitent de fermer puis rouvrir la session Windows, ou de redémarrer, avant de comparer leur effet. L'interface distingue donc les courbes enregistrées d'un effet immédiatement actif.
+
+Les commandes déjà présentes pour la vitesse et l'accélération conservent ces courbes. Restaurer mon profil partage la sauvegarde MouseProfile.json existante : les anciens fichiers v39 sont pris en charge, les courbes initiales sont ajoutées avant la première écriture, et les essais suivants n'écrasent pas cet original. La restauration remet aussi l'absence d'une valeur si celle-ci n'existait pas. Les changements effectués à l'extérieur de Bastos sont conservés par champ. Défaut désigne les courbes Windows standard du fichier Kirby ; Restaurer mon profil désigne les valeurs personnelles sauvegardées, qui peuvent être différentes.
+
+Validation : compilation autonome x64 ; 20 contrôles en VM et capture de l'interface, couvrant les quatre profils, la relecture exacte, l'indépendance de la vitesse et de l'accélération, la restauration après essais successifs, les changements externes, la migration des sauvegardes v39 et la restitution des valeurs absentes. Les tests vérifient les valeurs de registre, pas une mesure subjective des mouvements après reconnexion de session. Aucune courbe n'est modifiée sur le PC utilisateur à l'installation.
+
+Référence de l'auteur MarkC pour les conditions de DPI et la reconnexion de session : https://donewmouseaccel.blogspot.com/2010/03/markc-windows-7-mouse-acceleration-fix.html

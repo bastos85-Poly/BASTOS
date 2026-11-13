@@ -1,0 +1,17 @@
+<Window x:Class="Bastos.Native.RecoveryEditionWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="BASTOS — Édition Windows" Width="560" Height="310" MinWidth="480" MinHeight="280"
+        WindowStartupLocation="CenterOwner" Background="#111827" Foreground="#EDF2F7">
+  <DockPanel Margin="24">
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,20,0,0">
+      <Button Content="Annuler" Click="Cancel_Click" IsCancel="True" Padding="18,9" Margin="0,0,9,0" Background="#243247" Foreground="#EDF2F7" BorderBrush="#58718F" />
+      <Button x:Name="ContinueButton" Content="Continuer" Click="Continue_Click" IsDefault="True" IsEnabled="False" Padding="18,9" Background="#2563EB" Foreground="White" BorderBrush="#2563EB" />
+    </StackPanel>
+    <StackPanel>
+      <TextBlock Text="Choisir l’édition Windows" FontSize="21" FontWeight="SemiBold" />
+      <TextBlock Text="Cette ISO contient plusieurs éditions. Choisis celle qui sera préparée sur BASTOS_RECOVERY. Tu pourras vérifier ce choix dans le bilan avant la réinstallation." TextWrapping="Wrap" MaxWidth="430" HorizontalAlignment="Left" Foreground="#AAB8CE" Margin="0,12,0,18" />
+      <ComboBox x:Name="EditionCombo" DisplayMemberPath="Display" MinHeight="36" Padding="8" SelectionChanged="Edition_SelectionChanged" />
+    </StackPanel>
+  </DockPanel>
+</Window>

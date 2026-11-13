@@ -1,0 +1,64 @@
+<?xml version="1.0" ?><Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="Bastos.Native.RecoveryPreflightWindow" Title="BASTOS — Bilan avant lancement" Width="860" Height="850" MinWidth="660" MinHeight="580" WindowStartupLocation="CenterOwner" Background="#111827" Foreground="#EDF2F7">
+  <Window.Resources>
+    <Style TargetType="TextBlock"><Setter Property="TextWrapping" Value="Wrap"/></Style>
+    <Style x:Key="Section" TargetType="TextBlock"><Setter Property="FontSize" Value="18"/><Setter Property="FontWeight" Value="SemiBold"/><Setter Property="Margin" Value="0,20,0,8"/></Style>
+    
+  </Window.Resources>
+  <DockPanel Margin="24">
+    <StackPanel DockPanel.Dock="Top" Margin="0,0,0,14">
+      <TextBlock Text="{Binding Title}" FontSize="26" FontWeight="SemiBold"/>
+      <TextBlock Text="Relis ce bilan avant d’autoriser l’action." Foreground="#B6C2D2" Margin="0,6,0,0"/>
+    </StackPanel>
+    <StackPanel DockPanel.Dock="Bottom" Margin="0,14,0,0"><TextBlock x:Name="LaunchHint" Style="{DynamicResource ActionHint}"/>
+      <CheckBox x:Name="Acknowledgement" Foreground="#EDF2F7" IsEnabled="{Binding CanContinue}" Checked="Acknowledgement_Changed" Unchecked="Acknowledgement_Changed" Margin="0,0,0,12">
+        <TextBlock Text="J’ai vérifié le plan et sauvegardé les fichiers à conserver."/>
+      </CheckBox>
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+        <Button Content="Fermer sans lancer" Background="#334155" IsCancel="True" Click="Cancel_Click" Style="{DynamicResource QuietButton}"/>
+        <Button x:Name="LaunchButton" Content="{Binding ActionLabel}" IsEnabled="False" Click="Launch_Click" Style="{DynamicResource DestructiveButton}" Margin="10,0,0,0"/>
+      </StackPanel>
+    </StackPanel>
+    <ScrollViewer x:Name="ReviewScroll" VerticalScrollBarVisibility="Auto">
+      <StackPanel Margin="0,0,16,0">
+        <Border Background="#1E293B" CornerRadius="8" Padding="14">
+          <StackPanel>
+            <TextBlock Text="{Binding Result}" FontSize="17" FontWeight="SemiBold"/>
+            <ItemsControl ItemsSource="{Binding Blockers}"><ItemsControl.ItemTemplate><DataTemplate><TextBlock Text="{Binding}" Foreground="#FCA5A5" Margin="0,8,0,0"/></DataTemplate></ItemsControl.ItemTemplate></ItemsControl>
+          </StackPanel>
+        </Border>
+        <TextBlock Text="ISO et Windows" Style="{StaticResource Section}"/>
+        <TextBlock Text="{Binding IsoPath}" Foreground="#B6C2D2"/>
+        <TextBlock Text="{Binding Edition}" Margin="0,7,0,0"/>
+        <TextBlock Text="Compte, clavier et nettoyage" Style="{StaticResource Section}"/>
+        <TextBlock Text="{Binding Profile}"/>
+        <TextBlock Text="{Binding Cleanup}" Foreground="#B6C2D2" Margin="0,7,0,0"/>
+        <TextBlock Text="Disque et partitions" Style="{StaticResource Section}"/>
+        <TextBlock Text="{Binding Disk.DiskDescription}" FontWeight="SemiBold"/>
+        <TextBlock Text="{Binding Disk.Target}" Margin="0,5,0,8"/>
+        <ItemsControl ItemsSource="{Binding Disk.Partitions}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <Border Background="#1E293B" CornerRadius="5" Padding="10" Margin="0,0,0,5">
+                <Grid>
+                  <Grid.ColumnDefinitions><ColumnDefinition Width="110"/><ColumnDefinition Width="*"/><ColumnDefinition Width="100"/></Grid.ColumnDefinitions>
+                  <TextBlock Text="{Binding Decision}" FontWeight="Bold">
+                    <TextBlock.Style><Style TargetType="TextBlock"><Setter Property="Foreground" Value="#86EFAC"/><Style.Triggers><DataTrigger Binding="{Binding Decision}" Value="EFFACER"><Setter Property="Foreground" Value="#FCA5A5"/></DataTrigger></Style.Triggers></Style></TextBlock.Style>
+                  </TextBlock>
+                  <TextBlock Grid.Column="1"><Run Text="Partition "/><Run Text="{Binding Number}"/><Run Text=" — "/><Run Text="{Binding Location}"/></TextBlock>
+                  <TextBlock Grid.Column="2" Text="{Binding SizeDisplay}" TextAlignment="Right"/>
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBlock Text="{Binding PartitionCreation}" Foreground="#B6C2D2" Margin="0,6,0,0"/>
+        <TextBlock Text="Les autres disques ne sont pas inclus dans ce plan." Foreground="#B6C2D2" Margin="0,5,0,0"/>
+        <TextBlock Text="Espace disponible" Style="{StaticResource Section}"/>
+        <TextBlock Text="{Binding Space}"/>
+        <TextBlock Text="Le besoin tient compte des images vérifiées et réutilisables. Une conversion ESD vers WIM peut demander davantage d’espace. Les contrôles d’espace, d’empreintes et d’identité seront répétés pendant la préparation." Foreground="#B6C2D2" Margin="0,7,0,0"/>
+        <TextBlock Text="Ce qui va se passer" Style="{StaticResource Section}"/>
+        <Border Background="#33251D" CornerRadius="8" Padding="14"><TextBlock Text="{Binding Consequences}" Foreground="#FED7AA"/></Border>
+      </StackPanel>
+    </ScrollViewer>
+  </DockPanel>
+</Window>

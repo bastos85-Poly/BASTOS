@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl xmlns:native="clr-namespace:Bastos.Native" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" x:Class="Bastos.Native.ExtraMtuPage">
+  <UserControl.Resources>
+    <Style x:Key="Card" TargetType="Border">
+      <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+      <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="7" />
+      <Setter Property="Padding" Value="16" />
+      <Setter Property="Margin" Value="0,0,16,16" />
+    </Style>
+    <Style x:Key="Description" TargetType="TextBlock">
+      <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+      <Setter Property="Margin" Value="0,8,0,12" />
+    </Style>
+  </UserControl.Resources>
+  <StackPanel IsEnabled="{Binding Available}">
+    <Border Style="{StaticResource Card}">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*" />
+          <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+          <TextBlock Text="Diagnostic MTU par carte" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap" />
+          <TextBlock Text="Mesure IPv4 avec des paquets sans fragmentation. Choisissez une destination autorisant les réponses ICMP. Une absence de réponse donne un résultat indéterminé, pas une valeur à appliquer. Le résultat concerne ce trajet et ne garantit pas une baisse du ping. Appliquer ne modifie que la MTU de la carte choisie." Style="{StaticResource Description}" />
+          <ComboBox ItemsSource="{Binding Adapters}" SelectedItem="{Binding SelectedAdapter}" DisplayMemberPath="Name" Margin="0,8" />
+          <TextBlock Text="{Binding MtuCurrent}" TextWrapping="Wrap" Foreground="{StaticResource AccentBrush}" Margin="0,8" />
+          <TextBlock Text="Destination IPv4 ou nom de serveur" />
+          <TextBox Text="{Binding Destination, UpdateSourceTrigger=PropertyChanged}" MaxLength="253" Margin="0,6,0,12" />
+          <WrapPanel>
+            <Button Content="Détecter / actualiser" Command="{Binding RefreshMtuCommand}" Margin="0,0,8,4">
+              <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource SecondaryButton}">
+                  <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                      <Setter Property="Opacity" Value="0.45" />
+                    </Trigger>
+                  </Style.Triggers>
+                </Style>
+              </Button.Style>
+            </Button>
+            <Button Content="Diagnostiquer" Command="{Binding MeasureMtuCommand}" Margin="0,0,8,4">
+              <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource PrimaryButton}">
+                  <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                      <Setter Property="Opacity" Value="0.45" />
+                    </Trigger>
+                  </Style.Triggers>
+                </Style>
+              </Button.Style>
+            </Button>
+          </WrapPanel>
+          <TextBlock Style="{DynamicResource ActionHint}" Text="{Binding MeasureMtuCommand.DisabledReason}" />
+          <native:OperationMessageView Text="{Binding MtuStatus}" Foreground="{StaticResource AccentBrush}" Margin="0,8" />
+        </StackPanel>
+        <ContentControl Content="{Binding MtuSwitch}" ContentTemplate="{StaticResource SettingSwitchVisual}" HorizontalContentAlignment="Stretch" Margin="24,0,0,0" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right" MaxWidth="200" />
+      </Grid>
+    </Border>
+  </StackPanel>
+</UserControl>

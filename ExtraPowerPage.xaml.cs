@@ -1,0 +1,1 @@
+using System.Windows.Controls; namespace Bastos.Native; public partial class ExtraPowerPage:UserControl { public ExtraPowerPage() { InitializeComponent(); } }

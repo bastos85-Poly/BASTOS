@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+  <PropertyGroup>
+    <AssemblyName>BASTOS-Native</AssemblyName>
+    <RootNamespace>Bastos.Native</RootNamespace>
+    <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
+    <OutputType>WinExe</OutputType>
+    <UseWPF>True</UseWPF>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <PlatformTarget>x64</PlatformTarget>
+    <IncludeNativeLibrariesForSelfExtract>True</IncludeNativeLibrariesForSelfExtract>
+  </PropertyGroup>
+  <PropertyGroup>
+    <LangVersion>12.0</LangVersion>
+    <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup><Compile Remove="Tests\**\*.cs" /><EmbeddedResource Remove="Tests\**\*" /><Page Remove="Tests\**\*.xaml" /></ItemGroup>
+  <ItemGroup><Compile Remove="Build\Installer\**\*.cs" /></ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\EngineIntegrity.json" LogicalName="Bastos.EngineIntegrity.json" />
+    <EmbeddedResource Include="Assets\WindowsDownloadCatalog.json" LogicalName="Bastos.WindowsDownloadCatalog.json" />
+    <EmbeddedResource Include="Assets\Zoic-Ultimate-Performance-AMD.pow" LogicalName="Bastos.PowerPlans.ZoicAMD.pow" />
+    <EmbeddedResource Include="Assets\Zoicware-LICENSE.txt" LogicalName="Bastos.PowerPlans.Zoicware-LICENSE.txt" />
+  </ItemGroup>
+  <PropertyGroup>
+    <!-- Public build: do not embed the developer's local PDB/source paths. -->
+    <DebugType>none</DebugType>
+    <DebugSymbols>false</DebugSymbols>
+    <Deterministic>true</Deterministic>
+    <PathMap>$(MSBuildProjectDirectory)=/_/BASTOS</PathMap>
+  </PropertyGroup>
+</Project>

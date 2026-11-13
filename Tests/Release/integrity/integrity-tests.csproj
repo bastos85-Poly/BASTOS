@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+ <PropertyGroup><OutputType>Exe</OutputType><TargetFramework>net8.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable></PropertyGroup>
+ <ItemGroup>
+  <EmbeddedResource Include="$(BastosSourceRoot)/Assets/EngineIntegrity.json" LogicalName="Bastos.EngineIntegrity.json"/>
+  <Compile Include="$(BastosSourceRoot)/Bastos.Native.Services/WorkerIntegrityService.cs"/>
+  <Compile Include="$(BastosSourceRoot)/Bastos.Native.Services/PowerShellWorkerService.cs"/>
+  <Compile Include="$(BastosSourceRoot)/Bastos.Native.Services/ProcessExecutionService.cs"/>
+  <Compile Include="$(BastosSourceRoot)/Bastos.Native.Services/CommandResult.cs"/>
+  <Compile Include="$(BastosSourceRoot)/Bastos.Native.Services/AppPaths.cs"/>
+  <Compile Include="$(BastosSourceRoot)/Bastos.Native.Services/OperationLogService.cs"/>
+  <Compile Include="$(BastosSourceRoot)/Bastos.Native.Services/VerifiedOperationService.cs"/>
+  <Compile Include="$(BastosSourceRoot)/Bastos.Native.Services/OperationTrackingService.cs"/>
+  <Compile Include="$(BastosSourceRoot)/Bastos.Native.Models/OperationResult.cs"/>
+  <Compile Include="$(BastosSourceRoot)/Bastos.Native.Models/NativeOperationReport.cs"/>
+  <Compile Include="$(BastosSourceRoot)/Bastos.Native.Models/WorkerProgress.cs"/>
+ </ItemGroup>
+</Project>

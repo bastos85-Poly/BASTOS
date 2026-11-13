@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:models="clr-namespace:Bastos.Native.Models" xmlns:native="clr-namespace:Bastos.Native" x:Class="Bastos.Native.WindowsSettingsPage" Foreground="#F0F5FF">
+  <UserControl.Resources>
+    <Style x:Key="SettingsCard" TargetType="Border">
+      <Setter Property="Background" Value="{StaticResource SurfaceBrush}" />
+      <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="16" />
+      <Setter Property="Padding" Value="16" />
+      <Setter Property="Margin" Value="0,0,0,16" />
+    </Style>
+    <Style x:Key="SettingsDescription" TargetType="TextBlock">
+      <Setter Property="Foreground" Value="{StaticResource MutedBrush}" />
+      <Setter Property="TextWrapping" Value="Wrap" />
+      <Setter Property="LineHeight" Value="20" />
+      <Setter Property="Margin" Value="0,8,0,12" />
+    </Style>
+    <DataTemplate x:Key="WindowsCard" DataType="{x:Type models:StatusCard}">
+      <Border Style="{StaticResource SettingsCard}">
+        <Grid>
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+          </Grid.RowDefinitions>
+          <TextBlock Text="{Binding Title}" FontSize="18" FontWeight="SemiBold" TextWrapping="Wrap" Grid.ColumnSpan="{Binding IsToggleCard, Converter={StaticResource SettingCardSpanConverter}}" />
+          <TextBlock Grid.Row="1" Text="{Binding Description}" Style="{StaticResource SettingsDescription}" Grid.ColumnSpan="{Binding IsToggleCard, Converter={StaticResource SettingCardSpanConverter}}" />
+          <native:OperationMessageView Grid.Row="2" Text="{Binding State}" FontWeight="SemiBold" Foreground="{StaticResource AccentBrush}" Grid.ColumnSpan="{Binding IsToggleCard, Converter={StaticResource SettingCardSpanConverter}}" />
+          <ContentControl Visibility="{Binding ShowChoiceActions, Converter={StaticResource BooleanToVisibilityConverter}}" Content="{Binding}" ContentTemplate="{StaticResource StatusCardActions}" HorizontalContentAlignment="Stretch">
+            <ContentControl.Style>
+              <Style TargetType="ContentControl">
+                <Setter Property="Grid.Row" Value="3" />
+                <Setter Property="Grid.Column" Value="0" />
+                <Setter Property="Grid.ColumnSpan" Value="2" />
+                <Setter Property="Margin" Value="0,14,0,0" />
+                <Style.Triggers>
+                  <DataTrigger Binding="{Binding IsToggleCard}" Value="True">
+                    <Setter Property="Grid.Row" Value="0" />
+                    <Setter Property="Grid.Column" Value="1" />
+                    <Setter Property="Grid.ColumnSpan" Value="1" />
+                    <Setter Property="Grid.RowSpan" Value="4" />
+                    <Setter Property="Margin" Value="24,0,0,0" />
+                    <Setter Property="VerticalAlignment" Value="Center" />
+                    <Setter Property="HorizontalAlignment" Value="Right" />
+                    <Setter Property="MaxWidth" Value="200" />
+                  </DataTrigger>
+                </Style.Triggers>
+              </Style>
+            </ContentControl.Style>
+          </ContentControl>
+          <WrapPanel Grid.Row="3" Margin="0,16,0,0" Visibility="{Binding ShowStandardActions, Converter={StaticResource BooleanToVisibilityConverter}}" Grid.ColumnSpan="{Binding IsToggleCard, Converter={StaticResource SettingCardSpanConverter}}">
+            <Button Content="{Binding PrimaryText}" Command="{Binding PrimaryCommand}" Style="{StaticResource PrimaryButton}" Margin="0,0,8,4" />
+            <Button Content="{Binding SecondaryText}" Command="{Binding SecondaryCommand}" Style="{StaticResource SecondaryButton}" Margin="0,0,0,4" />
+          </WrapPanel>
+        </Grid>
+      </Border>
+    </DataTemplate>
+  </UserControl.Resources>
+  <StackPanel Margin="0,0,16,0">
+    <Border Style="{StaticResource SettingsCard}" Background="#102139" BorderBrush="#294969" DataContext="{Binding PowerPlans}">
+      <StackPanel>
+        <TextBlock Text="ALIMENTATION" FontSize="11" FontWeight="Bold" Foreground="#79B9FF" />
+        <TextBlock Text="Le bon plan pour votre utilisation" FontSize="22" FontWeight="SemiBold" TextWrapping="Wrap" Margin="0,7,0,10" />
+        <TextBlock Text="{Binding ActiveText}" Foreground="#55D6B0" TextWrapping="Wrap" FontWeight="SemiBold" Margin="0,0,0,16" />
+        <Grid IsEnabled="{Binding IsAvailable}">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="Auto" />
+          </Grid.ColumnDefinitions>
+          <ComboBox ItemsSource="{Binding Plans}" SelectedItem="{Binding Selected}" DisplayMemberPath="Name" AutomationProperties.Name="Plan d’alimentation" MinHeight="38" HorizontalAlignment="Stretch" />
+          <Button Grid.Column="1" Content="Appliquer" Command="{Binding ApplyCommand}" Style="{StaticResource PrimaryButton}" Margin="12,0,0,0" />
+        </Grid>
+        <Expander Header="En savoir plus" Margin="0,8,0,6">
+          <TextBlock Text="{Binding Description}" Style="{StaticResource SettingsDescription}" />
+        </Expander>
+        <WrapPanel>
+          <Button Content="Actualiser les plans" Command="{Binding RefreshCommand}" Style="{DynamicResource QuietButton}" Margin="0,0,12,6" />
+        </WrapPanel>
+        <TextBlock Text="{Binding Message}" Foreground="#A9BAD1" TextWrapping="Wrap" FontSize="12" Margin="0,5,0,0" />
+      </StackPanel>
+    </Border>
+    <ItemsControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" ItemsSource="{Binding CurrentPage.Cards}" ItemTemplate="{StaticResource WindowsCard}" />
+  </StackPanel>
+</UserControl>

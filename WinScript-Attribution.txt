@@ -1,0 +1,20 @@
+WinScript source attribution
+============================
+
+The BASTOS WinScript feature catalogue was reviewed against the open-source
+WinScript project by Francesco (flick9000):
+
+  https://github.com/flick9000/winscript
+  Commit: ff88ff2f03beff369912bcabf8ddbbf2fa55c52a
+  License: GNU General Public License v3.0
+
+BASTOS does not execute WinScript as a monolithic script. The Windows settings
+were adapted into independent local operations with current-state detection,
+pre-change snapshots, explicit elevation, post-change verification and restore.
+
+Deliberately excluded:
+- Microsoft Activation Scripts (MAS) and any license-bypass functionality.
+- Blind remote execution such as "irm ... | iex".
+- Automatic application of Basic, Strict or Extreme presets.
+- Destructive browser cleanup while a browser is running.
+- Commands that remove a local user or decrypt an existing drive.

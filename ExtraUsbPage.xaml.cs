@@ -1,0 +1,1 @@
+using System.Windows.Controls; namespace Bastos.Native; public partial class ExtraUsbPage:UserControl { public ExtraUsbPage() { InitializeComponent(); } }
