@@ -60,4 +60,7 @@ $auth.BaselineId=[guid]::NewGuid().ToString();$auth.DiskPath='C:\Other.vhdx';Wri
 Refused {Read-BastosLabAuthorization $plan $authPath} 'Disque prive divergent refuse'
 $auth.DiskPath=$plan.DiskPath;$plan.LabId='00000000000000000000000000000001';$auth.LabId=$plan.LabId;Write-Auth
 Refused {Read-BastosLabAuthorization $plan $authPath} 'Identifiant exemple refuse comme autorisation reelle'
+& $module {function script:Get-VMIntegrationService {param($VM);@([pscustomobject]@{Id='Microsoft:VM\6C09BB55-D683-4DA0-8931-C9BF705F6480';Name='Nom traduit';Enabled=$false},[pscustomobject]@{Id='Microsoft:VM\84EAAE65-2F2E-45F5-9BB5-0E857DC8EB47';Name='Battement traduit';Enabled=$true})}}
+Check ((Get-BastosVmIntegrationComponent $vm '6c09bb55-d683-4da0-8931-c9bf705f6480').Name -eq 'Nom traduit') 'Composant Hyper-V identifie sans nom anglais'
+Refused {Get-BastosVmIntegrationComponent $vm ([guid]::NewGuid())} 'Composant Hyper-V inconnu refuse'
 'PASS : '+$count+' controles isolation VM, simulations uniquement.'

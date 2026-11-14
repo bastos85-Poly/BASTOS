@@ -468,8 +468,8 @@ public sealed partial class ReinstallViewModel : ObservableObject
 				.Select(name => new IsoRemovalChoice(name, AppxRemovalDisplay(name))));
 		Releases = new ObservableCollection<NamedChoice>
 		{
-			new NamedChoice("Windows 11 25H2 — version publique", "Retail25H2"),
-			new NamedChoice("Windows 11 26H2 — Windows Insider", "Insider26H2")
+			new NamedChoice("Windows 11 — version publique actuelle", "Retail25H2"),
+			new NamedChoice("Windows 11 — Windows Insider (préversion)", "Insider26H2")
 		};
 		Methods = new ObservableCollection<NamedChoice>
 		{
@@ -544,7 +544,7 @@ public sealed partial class ReinstallViewModel : ObservableObject
 				}
 				Status = text + " Ouverture du téléchargement Windows…";
 			}
-			Status = ((SelectedRelease.Value == "Insider26H2") ? "Connexion Microsoft Insider : connecte-toi, puis choisis manuellement l’édition Windows 11 souhaitée." : "Microsoft prépare puis télécharge l’ISO Windows 11 25H2…");
+			Status = ((SelectedRelease.Value == "Insider26H2") ? "Connexion Microsoft Insider : connecte-toi, puis choisis manuellement l’édition Windows 11 souhaitée." : "Microsoft prépare puis télécharge l’ISO Windows 11 actuellement proposée sur son site…");
 			Progress<IsoDownloadProgress> progress = new Progress<IsoDownloadProgress>(UpdateDownloadProgress);
 			(bool, string, string) tuple2 = await service.DownloadWindowsAsync(SelectedLanguage, SelectedRelease, progress);
 			RefreshIsos(tuple2.Item3);

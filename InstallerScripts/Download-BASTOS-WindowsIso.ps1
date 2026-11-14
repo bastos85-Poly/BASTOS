@@ -155,7 +155,7 @@ function Get-BastosIsoOutputPath {
     $fileName = [Uri]::UnescapeDataString([IO.Path]::GetFileName($parsed.AbsolutePath))
     if (-not $fileName -or [IO.Path]::GetExtension($fileName) -ne '.iso') {
         $safeLanguage = ($Language -replace '[^A-Za-z0-9]+','-').Trim('-')
-        $releaseName = if ($Release -eq 'Insider26H2') { '26H2-Insider' } else { '25H2' }
+        $releaseName = if ($Release -eq 'Insider26H2') { 'Insider' } else { 'Public' }
         $fileName = "Windows11-$releaseName-$safeLanguage-$Architecture.iso"
     }
     $fileName = [string]::Join('_', $fileName.Split([IO.Path]::GetInvalidFileNameChars()))
@@ -331,7 +331,7 @@ Add-Type -Path (Join-Path $webViewRoot 'Microsoft.Web.WebView2.Core.dll')
 Add-Type -Path (Join-Path $webViewRoot 'Microsoft.Web.WebView2.WinForms.dll')
 
 $form = New-Object Windows.Forms.Form
-$releaseDisplay = if ($Release -eq 'Insider26H2') { 'Windows 11 26H2 Insider' } else { 'Windows 11 25H2' }
+$releaseDisplay = if ($Release -eq 'Insider26H2') { 'Windows 11 Insider' } else { 'Windows 11 - version publique actuelle' }
 $insiderDownloadPageUri = 'https://www.microsoft.com/en-us/software-download/windowsinsiderpreviewiso'
 $officialPageUri = if ($Release -eq 'Insider26H2') {
     $insiderDownloadPageUri

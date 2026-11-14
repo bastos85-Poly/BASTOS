@@ -113,4 +113,11 @@ function Read-BastosLabAuthorization {
     return $auth
 }
 
-Export-ModuleMember -Function Assert-BastosLabPath,New-BastosVmPlan,Get-BastosVmReadiness,Assert-BastosVmIsolation,Read-BastosLabAuthorization
+function Get-BastosVmIntegrationComponent {
+    param([Parameter(Mandatory)]$Vm,[Parameter(Mandatory)][guid]$ComponentId)
+    $matches=@(Get-VMIntegrationService -VM $Vm|Where-Object {[string]$_.Id -match [regex]::Escape($ComponentId.ToString())})
+    if($matches.Count -ne 1){throw 'VM_LAB_COMPONENT : composant Hyper-V absent ou ambigu.'}
+    return $matches[0]
+}
+
+Export-ModuleMember -Function Assert-BastosLabPath,New-BastosVmPlan,Get-BastosVmReadiness,Assert-BastosVmIsolation,Read-BastosLabAuthorization,Get-BastosVmIntegrationComponent

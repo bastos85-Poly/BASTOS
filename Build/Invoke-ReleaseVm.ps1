@@ -20,7 +20,8 @@ try {
  Restore-VMSnapshot -VMSnapshot $baseline[0] -Confirm:$false
  Assert-Lab
  Set-VM -VM $vm -AutomaticCheckpointsEnabled $false
- Enable-VMIntegrationService -VM $vm -Name 'Guest Service Interface'
+ $guestService=Get-BastosVmIntegrationComponent $vm '6c09bb55-d683-4da0-8931-c9bf705f6480'
+ Enable-VMIntegrationService -VM $vm -Name $guestService.Name
  Start-VM -VM $vm
  $credential=Import-Clixml (Join-Path $plan.Directory 'GuestCredential.clixml')
  $until=[DateTime]::UtcNow.AddMinutes(3)
@@ -70,7 +71,7 @@ try {
  while([DateTime]::UtcNow -lt $until){
   Start-Sleep -Seconds 3
   Assert-Lab
-  $heartbeat=Get-VMIntegrationService -VM $vm -Name Heartbeat
+  $heartbeat=Get-BastosVmIntegrationComponent $vm '84eaae65-2f2e-45f5-9bb5-0e857dc8eb47'
   if([string]$heartbeat.PrimaryStatusDescription -ne 'OK'){$seenRecovery=$true;continue}
   if(-not $seenRecovery){continue}
   try {
