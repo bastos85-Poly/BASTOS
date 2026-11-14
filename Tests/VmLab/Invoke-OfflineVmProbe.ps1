@@ -1,4 +1,4 @@
-param([Parameter(Mandatory)][ValidateSet('Collect')][string]$Action,[ValidateSet('RecreateEFI','KeepEFI')][string]$Scenario='KeepEFI',[Parameter(Mandatory)][string]$PlanPath,[Parameter(Mandatory)][string]$EvidenceRoot,[Parameter(Mandatory)][string]$CandidateRoot)
+param([Parameter(Mandatory)][ValidateSet('Collect')][string]$Action,[ValidateSet('RecreateEFI','KeepEFI')][string]$Scenario='KeepEFI',[Parameter(Mandatory)][string]$PlanPath,[Parameter(Mandatory)][string]$EvidenceRoot,[Parameter(Mandatory)][string]$CandidateRoot,[switch]$DiagnosticsOnly)
 $ErrorActionPreference='Stop'
 Import-Module (Join-Path $PSHOME 'Modules/Microsoft.PowerShell.Utility/Microsoft.PowerShell.Utility.psd1') -ErrorAction Stop
 Import-Module (Join-Path $PSScriptRoot 'Bastos.VmLab.psm1') -Force
@@ -9,7 +9,9 @@ $drives=@(Get-BastosVmDiskDrives -VmName $plan.Name)
 $null=Assert-BastosVmIsolation $plan $vm $drives @(Get-VMNetworkAdapter -VM $vm)
 if([string]$vm.State -ne 'Off'){throw 'La VM doit etre arretee par la sonde.'}
 $current=$drives[0].Path
-$before=Get-Content (Join-Path $EvidenceRoot 'VM-Test-Results/disk-before.json') -Raw|ConvertFrom-Json
+$beforeRoot=if($DiagnosticsOnly){Split-Path -Parent $EvidenceRoot}else{$EvidenceRoot}
+$before=Get-Content (Join-Path $beforeRoot 'VM-Test-Results/disk-before.json') -Raw|ConvertFrom-Json
+New-Item -ItemType Directory $EvidenceRoot -Force|Out-Null
 Mount-VHD -Path $current -ReadOnly -NoDriveLetter|Out-Null
 $mounts=@()
 try{
@@ -29,6 +31,7 @@ try{
   $path=Join-Path $r $name;if(Test-Path -LiteralPath $path){$target=Join-Path $EvidenceRoot $name;if((Get-Item $path).PSIsContainer){New-Item -ItemType Directory $target -Force|Out-Null;Get-ChildItem -LiteralPath $path -Force|Copy-Item -Destination $target -Recurse -Force}else{Copy-Item -LiteralPath $path -Destination $target -Force}}
  }
  foreach($path in @('ProgramData/BASTOS-ISO/Logs','Windows/Panther')){$from=Join-Path $w $path;if(Test-Path $from){Copy-Item -LiteralPath $from -Destination $EvidenceRoot -Recurse -Force}}
+ if($DiagnosticsOnly){Write-Output 'Diagnostics prives collectes apres echec ; aucune validation de livraison.';return}
  $proof=Get-Content (Join-Path $EvidenceRoot 'VM-Test-Results/PostInstallProbe.json') -Raw|ConvertFrom-Json
  $proof|ConvertTo-Json -Depth 8
  if($proof.Passed -ne $true){throw 'Verification finale invitee negative.'}

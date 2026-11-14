@@ -56,4 +56,4 @@ if([IO.File]::Exists($startupLink)){[IO.File]::Delete($startupLink)}
 $common=Join-Path ([Environment]::GetFolderPath('CommonStartup')) 'BASTOS-VmLabProbe.lnk'
 try{if([IO.File]::Exists($common)){[IO.File]::Delete($common)}}catch{}
 $pc=Get-CimInstance Win32_ComputerSystem
-if($pc.Model -eq 'Virtual Machine' -and $pc.Manufacturer -eq 'Microsoft Corporation' -and $expected.LabId -match '^[a-fA-F0-9]{32}$' -and (Get-Content D:\BASTOS-VM-KEEP.txt -Raw) -eq $expected.LabId){& "$env:SystemRoot\System32\shutdown.exe" /s /t 3 /f}
+if($pc.Model -eq 'Virtual Machine' -and $pc.Manufacturer -eq 'Microsoft Corporation' -and $expected.LabId -match '^[a-fA-F0-9]{32}$' -and (Get-Content D:\BASTOS-VM-KEEP.txt -Raw) -eq $expected.LabId){try{Unregister-ScheduledTask -TaskName 'BASTOS-VmLabProbe' -Confirm:$false -ErrorAction Stop}catch{};& "$env:SystemRoot\System32\shutdown.exe" /s /t 3 /f}

@@ -73,9 +73,6 @@ try {
  $build=Get-Content (Join-Path $CandidateRoot 'BASTOS-Build.json') -Raw|ConvertFrom-Json
  $expected=@{LabId=$plan.LabId;RunId=$run;CandidateSha256=$build.NativeAppSha256;RecoveryGuid=$before.PartitionGuid;OldWindowsGuid=$oldWindows;OldEfiGuid=$oldEfi;KeepEfi=$true;DesktopObserved=$true;RequireFirstLogon=$true}
  $expectedPath=Join-Path $evidence 'Expected.json';$expected|ConvertTo-Json|Set-Content $expectedPath -Encoding UTF8
- $linkPath=Join-Path $evidence 'BASTOS-VmLabProbe.lnk'
- $shell=New-Object -ComObject WScript.Shell;$link=$shell.CreateShortcut($linkPath)
- $link.TargetPath='C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe';$link.Arguments='-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\VM-Lab\VerifyInstalled.ps1"';$link.WorkingDirectory='C:\VM-Lab';$link.WindowStyle=7;$link.Save()
  $until=[DateTime]::UtcNow.AddMinutes(20);$seenRecovery=$false;$copied=$false;$lastError=''
  while([DateTime]::UtcNow -lt $until){
   Start-Sleep -Seconds 3
@@ -86,11 +83,39 @@ try {
   try {
    Copy-VMFile -VM $vm -SourcePath $expectedPath -DestinationPath C:\VM-Lab\Expected.json -FileSource Host -CreateFullPath -Force -ErrorAction Stop
    Copy-VMFile -VM $vm -SourcePath (Join-Path $SourceRoot 'Tests/VmLab/Verify-InstalledWindows.ps1') -DestinationPath C:\VM-Lab\VerifyInstalled.ps1 -FileSource Host -CreateFullPath -Force -ErrorAction Stop
-   Copy-VMFile -VM $vm -SourcePath $linkPath -DestinationPath 'C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup\BASTOS-VmLabProbe.lnk' -FileSource Host -CreateFullPath -Force -ErrorAction Stop
-   $copied=$true;Write-Output 'VM : sonde transmise via Hyper-V, attente de la premiere session...';break
+   $copied=$true;Write-Output 'VM : sonde transmise via Hyper-V, attente du Bureau...';break
   } catch {$lastError=$_.Exception.Message}
  }
  if(-not $copied){throw ('Transfert de la sonde impossible : '+$lastError)}
+ # A Startup link copied after logon is never guaranteed to run. Start the
+ # probe explicitly in the existing interactive lab session, without changing
+ # its password or Windows authentication policy.
+ $probeCredential=New-Object Management.Automation.PSCredential('BastosLab',(New-Object Security.SecureString))
+ $probeStarted=$false;$until=[DateTime]::UtcNow.AddMinutes(4);$lastError=''
+ while(-not $probeStarted -and [DateTime]::UtcNow -lt $until){
+  Assert-Lab
+  try {
+   $session=New-PSSession -VMId $plan.VmId -Credential $probeCredential -ErrorAction Stop
+   $probeStarted=Invoke-Command -Session $session -ArgumentList $plan.LabId,$run -ScriptBlock {
+    param($id,$runId)
+    $pc=Get-CimInstance Win32_ComputerSystem
+    if($pc.Manufacturer -ne 'Microsoft Corporation' -or $pc.Model -ne 'Virtual Machine' -or
+       $env:COMPUTERNAME -ne 'BASTOS-VMNEW' -or $env:USERNAME -ne 'BastosLab' -or
+       (Get-Content D:\BASTOS-VM-KEEP.txt -Raw) -ne $id -or @(Get-Disk).Count -ne 1){throw 'Identite de premiere session divergente.'}
+    $expected=Get-Content C:\VM-Lab\Expected.json -Raw|ConvertFrom-Json
+    if($expected.RunId -ne $runId -or $expected.LabId -ne $id){throw 'Preuve attendue divergente.'}
+    if(@(Get-Process explorer -ErrorAction SilentlyContinue).Count -eq 0){return $false}
+    $action=New-ScheduledTaskAction -Execute "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -Argument '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\VM-Lab\VerifyInstalled.ps1"'
+    $principal=New-ScheduledTaskPrincipal -UserId (Get-LocalUser BastosLab).SID.Value -LogonType Interactive -RunLevel Highest
+    Register-ScheduledTask -TaskName 'BASTOS-VmLabProbe' -Action $action -Principal $principal -Force|Out-Null
+    Start-ScheduledTask -TaskName 'BASTOS-VmLabProbe'
+    return $true
+   }
+  }catch{$lastError=$_.Exception.Message}finally{if($session){Remove-PSSession $session;$session=$null}}
+  if(-not $probeStarted){Start-Sleep -Seconds 10}
+ }
+ if(-not $probeStarted){throw ('Lancement interactif de la sonde impossible : '+$lastError)}
+ Write-Output 'VM : sonde lancee dans la session interactive, attente du resultat...'
  $until=[DateTime]::UtcNow.AddMinutes(12)
  while([string](Get-VM -Id $plan.VmId).State -ne 'Off' -and [DateTime]::UtcNow -lt $until){Start-Sleep -Seconds 5}
  if([string](Get-VM -Id $plan.VmId).State -ne 'Off'){throw 'Sonde de premiere session non terminee : aucune extinction intermediaire forcee.'}
@@ -99,6 +124,16 @@ try {
  $receipt=(Get-Content (Join-Path $evidence 'VM-Test-Results/ReleaseRun.txt') -Raw)
  if(-not $proof.Passed -or $receipt -ne $run -or $proof.RunId -ne $run){throw 'Preuve VM absente, negative ou ancienne.'}
  [pscustomobject]@{Passed=$true;RunId=$run;VmId=$plan.VmId;Checks=$proof.Checks}|ConvertTo-Json -Depth 8|Set-Content (Join-Path $evidence 'Result.json') -Encoding UTF8
+} catch {
+ $failure=$_
+ try {
+  if($session){Remove-PSSession $session;$session=$null}
+  Assert-Lab
+  if([string]$vm.State -ne 'Off'){Stop-VM -VM $vm -TurnOff -Confirm:$false}
+  Assert-Lab
+  & (Join-Path $SourceRoot 'Tests/VmLab/Invoke-OfflineVmProbe.ps1') -Action Collect -Scenario KeepEFI -PlanPath $PlanPath -EvidenceRoot (Join-Path $evidence 'FailureDiagnostics') -CandidateRoot $CandidateRoot -DiagnosticsOnly
+ }catch{Write-Warning ('Collecte apres echec : '+$_.Exception.Message)}
+ throw $failure
 } finally {
  if($session){Remove-PSSession $session}
  Assert-Lab
