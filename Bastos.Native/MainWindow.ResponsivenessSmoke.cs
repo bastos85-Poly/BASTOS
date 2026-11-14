@@ -42,12 +42,25 @@ public partial class MainWindow
         using var blocked=new ManualResetEventSlim();
         using var entered=new ManualResetEventSlim();
         var sampler=new BackgroundSampler<CounterFixture,int>(()=>{createThread=Environment.CurrentManagedThreadId;return fixture;},c=>{Interlocked.Increment(ref c.Reads);entered.Set();blocked.Wait(TimeSpan.FromSeconds(5));return 42;});
-        int ticks=0;var timer=new DispatcherTimer(TimeSpan.FromMilliseconds(20),DispatcherPriority.Normal,(_,_)=>ticks++,Dispatcher);timer.Start();
+        int ticks=0,acknowledgements=0;long maxUiLatency=0;
+        var timer=new DispatcherTimer(TimeSpan.FromMilliseconds(20),DispatcherPriority.Normal,(_,_)=>ticks++,Dispatcher);timer.Start();
         try{
             var sample=sampler.ReadAsync();
             await Task.Run(()=>entered.Wait(TimeSpan.FromSeconds(3)));
             var second=sampler.ReadAsync();Check(ReferenceEquals(sample,second),"Mesures superposees.");
-            await Task.Delay(180);Check(ticks>=2,"Interface bloquee pendant la mesure lente.");
+            // DispatcherTimer ticks can be coalesced for occluded windows.
+            // Require two explicit UI acknowledgements while the sampler is
+            // still blocked, and measure their actual queue latency instead.
+            for(int pulse=0;pulse<2;pulse++)
+            {
+                var acknowledgement=new TaskCompletionSource<long>(TaskCreationOptions.RunContinuationsAsynchronously);
+                var queued=Stopwatch.StartNew();
+                Dispatcher.BeginInvoke(DispatcherPriority.Normal,new Action(()=>acknowledgement.TrySetResult(queued.ElapsedMilliseconds)));
+                var completed=await Task.WhenAny(acknowledgement.Task,Task.Delay(1000));
+                Check(completed==acknowledgement.Task && acknowledgement.Task.Result<1000,"Interface bloquee pendant la mesure lente : acquittement UI absent ou tardif.");
+                maxUiLatency=Math.Max(maxUiLatency,acknowledgement.Task.Result);acknowledgements++;
+            }
+            Check(!sample.IsCompleted,"La mesure lente doit rester en attente pendant les acquittements UI.");
             Check(createThread!=uiThread,"Initialisation des compteurs sur le fil UI.");
             var closing=Stopwatch.StartNew();sampler.Dispose();closing.Stop();Check(closing.ElapsedMilliseconds<100,"Fermeture bloquante.");
             blocked.Set();Check(await sample==42,"Mesure incomplete.");
@@ -67,6 +80,6 @@ public partial class MainWindow
         var navigation=Stopwatch.StartNew();await model.RefreshAllConfigurationStatesAsync();navigation.Stop();
         Check(model.CurrentPage!=null,"Navigation indisponible.");
         File.WriteAllText(Path.Combine(Path.GetTempPath(),"BASTOS-Responsiveness-SmokeTest.txt"),
-            $"OK : {checks} controles ; lectures concurrentes fusionnees, cache court, actualisation forcee, expiration, nouvel essai apres echec ; compteurs hors UI, {ticks} battements UI pendant lecture bloquee, fermeture sans attente et liberation ; 20 demandes materiel = 1 detection ; navigation GPU {navigation.ElapsedMilliseconds} ms.\n"+RuntimeTimingService.Summary());
+            $"OK : {checks} controles ; lectures concurrentes fusionnees, cache court, actualisation forcee, expiration, nouvel essai apres echec ; compteurs hors UI, {acknowledgements} acquittements UI pendant lecture bloquee, latence maximale {maxUiLatency} ms ({ticks} ticks de minuteur observes), fermeture sans attente et liberation ; 20 demandes materiel = 1 detection ; navigation GPU {navigation.ElapsedMilliseconds} ms.\n"+RuntimeTimingService.Summary());
     }
 }
