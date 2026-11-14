@@ -18,7 +18,7 @@ var paths=new AppPaths();var log=new OperationLogService(paths);var workers=new 
 var modules=new ModuleOperationService(paths,workers,runner,log);var service=new ReinstallService(paths,workers,modules,log);
 if(paths.Root != @"D:\Application")throw new InvalidOperationException("VM test : racine applicative divergente.");
 var iso=new IsoChoice("Windows 11 Pro — laboratoire",@"C:\ISO\Windows11-Pro.iso");
-var options=new RufusInstallOptions {UserName="BastosLab",ComputerName="BASTOS-VMNEW",WindowsLocale="fr-FR",WindowsUILanguage="fr-FR",KeyboardLayout="040C:0000040C",KeepOnlyRecoveryPartition=args[0]!="prepare-keep-efi"};
+var options=new RufusInstallOptions {UserName="BastosLab",ComputerName="BASTOS-VMNEW",WindowsLocale="fr-FR",WindowsUILanguage="fr-FR",KeyboardLayout="040C:0000040C",KeepOnlyRecoveryPartition=args[0]!="prepare-keep-efi",UseCleanBastosInstallation=true};
 var progress=new LabProgress(p=>{Save("progress",p);Console.WriteLine($"{p.Percent:N0}% {p.Phase} {p.Message}");});
 if(args[0].StartsWith("prepare"))
 {
