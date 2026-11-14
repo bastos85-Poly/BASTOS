@@ -1,5 +1,6 @@
 param([Parameter(Mandatory)][ValidateSet('Collect')][string]$Action,[ValidateSet('RecreateEFI','KeepEFI')][string]$Scenario='KeepEFI',[Parameter(Mandatory)][string]$PlanPath,[Parameter(Mandatory)][string]$EvidenceRoot,[Parameter(Mandatory)][string]$CandidateRoot)
 $ErrorActionPreference='Stop'
+Import-Module (Join-Path $PSHOME 'Modules/Microsoft.PowerShell.Utility/Microsoft.PowerShell.Utility.psd1') -ErrorAction Stop
 Import-Module (Join-Path $PSScriptRoot 'Bastos.VmLab.psm1') -Force
 $plan=Get-Content -LiteralPath $PlanPath -Raw|ConvertFrom-Json
 $vm=Get-VM -Id $plan.VmId

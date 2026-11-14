@@ -1,5 +1,7 @@
 param([Parameter(Mandatory)][string]$SourceRoot,[Parameter(Mandatory)][string]$CandidateRoot,[Parameter(Mandatory)][string]$RuntimeRoot,[Parameter(Mandatory)][string]$DotNetPath,[Parameter(Mandatory)][string]$PlanPath,[Parameter(Mandatory)][string]$OutputDirectory)
 $ErrorActionPreference='Stop'
+Import-Module (Join-Path $PSHOME 'Modules/Microsoft.PowerShell.Utility/Microsoft.PowerShell.Utility.psd1') -ErrorAction Stop
+Import-Module (Join-Path $PSHOME 'Modules/Microsoft.PowerShell.Management/Microsoft.PowerShell.Management.psd1') -ErrorAction Stop
 Import-Module (Join-Path $SourceRoot 'Tests/VmLab/Bastos.VmLab.psm1') -Force
 $plan=Get-Content -LiteralPath $PlanPath -Raw|ConvertFrom-Json
 $authorization=Read-BastosLabAuthorization $plan (Join-Path $plan.Directory 'LabAuthorization.json')
@@ -54,7 +56,14 @@ try {
  $beforeEvidence=Join-Path $evidence 'VM-Test-Results';New-Item -ItemType Directory $beforeEvidence -Force|Out-Null
  Copy-Item -FromSession $session -Path D:\VM-Test-Results\* -Destination $beforeEvidence -Force
  Write-Output 'VM : demarrage Recovery et reinstallation complete...'
- Invoke-Command -Session $session -ArgumentList $plan.LabId -ScriptBlock {param($id);& D:\Application\Bastos.Native\BASTOS-VM-Test.exe boot $id *> D:\VM-Test-Results\boot-console.log;if($LASTEXITCODE -ne 0){throw 'Demarrage Recovery refuse.'}}
+ $bootResult=Invoke-Command -Session $session -ArgumentList $plan.LabId -ScriptBlock {param($id);& D:\Application\Bastos.Native\BASTOS-VM-Test.exe boot $id *> D:\VM-Test-Results\boot-console.log;[pscustomobject]@{Code=$LASTEXITCODE}}
+ if($bootResult.Code -ne 0){
+  Copy-Item -FromSession $session -Path D:\VM-Test-Results\* -Destination $beforeEvidence -Force
+  $guestLogs=Invoke-Command -Session $session -ScriptBlock {Join-Path $env:LOCALAPPDATA 'BASTOS\Logs'}
+  if($guestLogs){Copy-Item -FromSession $session -LiteralPath $guestLogs -Destination (Join-Path $evidence 'BootFailureLogs') -Recurse -Force -ErrorAction Continue}
+  Get-Content (Join-Path $beforeEvidence 'boot-console.log') -Tail 30
+  throw 'Demarrage Recovery refuse : diagnostics conserves avant restauration.'
+ }
  Remove-PSSession $session;$session=$null
  # No shutdown request is sent while Windows Setup or first logon is running.
  $before=Get-Content (Join-Path $beforeEvidence 'disk-before.json') -Raw|ConvertFrom-Json
