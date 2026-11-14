@@ -17,11 +17,26 @@ $mounts=@()
 try{
  $disk=Get-Disk -Number (Get-VHD -Path $current).DiskNumber
  if(-not $disk.IsReadOnly -or $disk.IsBoot -or $disk.IsSystem -or $disk.Number -in @(Get-Partition -DriveLetter C,D|ForEach-Object DiskNumber)){throw 'Disque hote ou non protege refuse.'}
+ $disk|Select-Object Number,UniqueId,Size,IsReadOnly,IsOffline,BusType|ConvertTo-Json|Set-Content (Join-Path $EvidenceRoot 'DiskInventory.json') -Encoding UTF8
+ if($disk.IsOffline){Set-Disk -Number $disk.Number -IsOffline $false; $disk=Get-Disk -Number $disk.Number;if(-not $disk.IsReadOnly){throw 'Protection lecture seule perdue.'}}
  $parts=@(Get-Partition -DiskNumber $disk.Number)
- $recovery=@($parts|Where-Object {[guid]$_.Guid -eq [guid]$before.PartitionGuid});$windows=@($parts|Where-Object {$_.Size -gt 64GB -and [guid]$_.Guid -ne [guid]$before.PartitionGuid -and $_.GptType -eq '{EBD0A0A2-B9E5-4433-87C0-68B6B72699C7}'})
- if($recovery.Count -ne 1 -or $windows.Count -ne 1){throw 'Partitions virtuelles ambigues.'}
- foreach($item in @(@{Name='ReleaseEvidenceRecovery';Partition=$recovery[0]},@{Name='ReleaseEvidenceWindows';Partition=$windows[0]})){
-  $path=Join-Path $plan.Directory $item.Name;New-Item -ItemType Directory $path -Force|Out-Null
+ $parts|Select-Object PartitionNumber,Guid,GptType,Size,Offset|ConvertTo-Json -Depth 4|Set-Content (Join-Path $EvidenceRoot 'PartitionInventory.json') -Encoding UTF8
+ if($DiagnosticsOnly){
+  foreach($part in $parts|Where-Object {[guid]$_.GptType -eq [guid]'EBD0A0A2-B9E5-4433-87C0-68B6B72699C7'}){
+   $path=Join-Path $plan.Directory ('DiagnosticPartition-'+[guid]::NewGuid().ToString('N'));New-Item -ItemType Directory $path|Out-Null
+   Add-PartitionAccessPath -DiskNumber $disk.Number -PartitionNumber $part.PartitionNumber -AccessPath ($path+'\')
+   $mounts+=@{Path=$path;Partition=$part.PartitionNumber}
+   $target=Join-Path $EvidenceRoot ('Partition-'+$part.PartitionNumber);New-Item -ItemType Directory $target|Out-Null
+   foreach($relative in @('VM-Test-Results','BASTOS-Diagnostics','BASTOS-LAST-ERROR.txt','BASTOS-LAST-ATTEMPT.txt','BASTOS-Recovery.log','BASTOS-Minimal-Offline.json','ProgramData/BASTOS-ISO/Logs','Windows/Panther','Windows/Logs/MoSetup')){
+    $from=Join-Path $path $relative
+    if(Test-Path -LiteralPath $from){$dest=Join-Path $target $relative;New-Item -ItemType Directory (Split-Path -Parent $dest) -Force|Out-Null;Copy-Item -LiteralPath $from -Destination $dest -Recurse -Force}
+   }
+  }
+  Write-Output 'Diagnostics prives collectes apres echec ; aucune validation de livraison.';return
+ }
+ $selected=Get-BastosVmEvidencePartitions $parts ([guid]$before.PartitionGuid)
+ foreach($item in @(@{Name='ReleaseEvidenceRecovery';Partition=$selected.Recovery},@{Name='ReleaseEvidenceWindows';Partition=$selected.Windows})){
+  $path=Join-Path $plan.Directory ($item.Name+'-'+[guid]::NewGuid().ToString('N'));New-Item -ItemType Directory $path|Out-Null
   Add-PartitionAccessPath -DiskNumber $disk.Number -PartitionNumber $item.Partition.PartitionNumber -AccessPath ($path+'\')
   $mounts+=@{Path=$path;Partition=$item.Partition.PartitionNumber}
  }
@@ -31,7 +46,6 @@ try{
   $path=Join-Path $r $name;if(Test-Path -LiteralPath $path){$target=Join-Path $EvidenceRoot $name;if((Get-Item $path).PSIsContainer){New-Item -ItemType Directory $target -Force|Out-Null;Get-ChildItem -LiteralPath $path -Force|Copy-Item -Destination $target -Recurse -Force}else{Copy-Item -LiteralPath $path -Destination $target -Force}}
  }
  foreach($path in @('ProgramData/BASTOS-ISO/Logs','Windows/Panther')){$from=Join-Path $w $path;if(Test-Path $from){Copy-Item -LiteralPath $from -Destination $EvidenceRoot -Recurse -Force}}
- if($DiagnosticsOnly){Write-Output 'Diagnostics prives collectes apres echec ; aucune validation de livraison.';return}
  $proof=Get-Content (Join-Path $EvidenceRoot 'VM-Test-Results/PostInstallProbe.json') -Raw|ConvertFrom-Json
  $proof|ConvertTo-Json -Depth 8
  if($proof.Passed -ne $true){throw 'Verification finale invitee negative.'}

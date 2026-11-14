@@ -15,7 +15,7 @@ if([string]$vm.State -ne 'Off'){throw 'Arreter la VM de laboratoire avant la val
 $baseline=@(Get-VMSnapshot -VM $vm|Where-Object Id -eq $authorization.BaselineId)
 if($baseline.Count -ne 1){throw 'Baseline connue absente.'}
 $returnPoint=Checkpoint-VM -VM $vm -SnapshotName ('ReleaseReturn-'+[DateTime]::UtcNow.ToString('yyyyMMdd-HHmmss')) -Passthru
-$session=$null
+$session=$null;$console=$null
 $run=[guid]::NewGuid().ToString('N')
 $evidence=Join-Path $OutputDirectory 'VM';New-Item -ItemType Directory $evidence -Force|Out-Null
 try {
@@ -94,6 +94,7 @@ try {
  $probeStarted=$false;$until=[DateTime]::UtcNow.AddMinutes(4);$lastError=''
  while(-not $probeStarted -and [DateTime]::UtcNow -lt $until){
   Assert-Lab
+  if([string]$vm.State -eq 'Off'){break}
   try {
    $session=New-PSSession -VMId $plan.VmId -Credential $probeCredential -ErrorAction Stop
    $probeStarted=Invoke-Command -Session $session -ArgumentList $plan.LabId,$run -ScriptBlock {
@@ -114,8 +115,14 @@ try {
   }catch{$lastError=$_.Exception.Message}finally{if($session){Remove-PSSession $session;$session=$null}}
   if(-not $probeStarted){Start-Sleep -Seconds 10}
  }
- if(-not $probeStarted){throw ('Lancement interactif de la sonde impossible : '+$lastError)}
- Write-Output 'VM : sonde lancee dans la session interactive, attente du resultat...'
+ if(-not $probeStarted -and [string](Get-VM -Id $plan.VmId).State -ne 'Off'){
+  # Passwordless accounts may be refused by PowerShell Direct. An operator
+  # can use the isolated VM console to start the already-transferred probe.
+  # This is only a trigger: the unchanged offline proof still decides success.
+  $console=Start-Process -FilePath (Join-Path $env:WINDIR 'System32/vmconnect.exe') -ArgumentList @('localhost',('"'+$plan.Name+'"')) -WindowStyle Normal -PassThru
+  @{RunId=$run;VmId=$plan.VmId;VmName=$plan.Name;Reason=$lastError;Probe='C:\VM-Lab\VerifyInstalled.ps1';Instruction='Run the probe elevated inside this VM only; do not alter passwords or authentication policy.'}|ConvertTo-Json|Set-Content (Join-Path $evidence 'ConsoleProbeReady.json') -Encoding UTF8
+  Write-Output 'VM : console ouverte, lancement de la sonde par operateur requis.'
+ }else{Write-Output 'VM : attente du resultat de la sonde de session...'}
  $until=[DateTime]::UtcNow.AddMinutes(12)
  while([string](Get-VM -Id $plan.VmId).State -ne 'Off' -and [DateTime]::UtcNow -lt $until){Start-Sleep -Seconds 5}
  if([string](Get-VM -Id $plan.VmId).State -ne 'Off'){throw 'Sonde de premiere session non terminee : aucune extinction intermediaire forcee.'}
@@ -131,6 +138,8 @@ try {
   Assert-Lab
   if([string]$vm.State -ne 'Off'){Stop-VM -VM $vm -TurnOff -Confirm:$false}
   Assert-Lab
+  $failedPoint=Checkpoint-VM -VM $vm -SnapshotName ('ReleaseFailure-'+$run) -Passthru
+  @{SnapshotId=[string]$failedPoint.Id;RunId=$run;Purpose='Private failure evidence, never a release proof'}|ConvertTo-Json|Set-Content (Join-Path $evidence 'FailureCheckpoint.json') -Encoding UTF8
   & (Join-Path $SourceRoot 'Tests/VmLab/Invoke-OfflineVmProbe.ps1') -Action Collect -Scenario KeepEFI -PlanPath $PlanPath -EvidenceRoot (Join-Path $evidence 'FailureDiagnostics') -CandidateRoot $CandidateRoot -DiagnosticsOnly
  }catch{Write-Warning ('Collecte apres echec : '+$_.Exception.Message)}
  throw $failure
@@ -141,4 +150,5 @@ try {
  Restore-VMSnapshot -VMSnapshot $returnPoint -Confirm:$false
  Assert-Lab
  Write-Output 'VM : etat anterieur restaure, VM arretee.'
+ if($console){try{if(-not $console.HasExited){$console.CloseMainWindow()|Out-Null}}catch{};$console.Dispose()}
 }
