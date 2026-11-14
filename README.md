@@ -8,6 +8,8 @@ Lorsqu'une version validée est disponible, télécharger **BASTOS-Setup-7.120.1
 
 L'installation n'applique aucun réglage Windows. Les actions administrateur de BASTOS restent soumises à l'autorisation Windows. La désinstallation conserve les données et sauvegardes ; elle ne restaure pas automatiquement les réglages appliqués auparavant.
 
+Dans le parcours distinct de réinstallation de Windows, D: BASTOS_RECOVERY est temporaire : après validation de la première session et de l'application copiée sur C:, sa suppression automatique agrandit C: et recrée WinRE. Le bilan avant lancement avertit que les données restant sur ce D: seront effacées. Sauvegarder ces fichiers avant de confirmer ce parcours.
+
 Un fichier ReleaseStatus.json dont FullReleaseGatePassed vaut true et les empreintes SHA256SUMS accompagnent la Release validée. Un paquet marqué LOCAL-CANDIDATE-DO-NOT-PUBLISH est un candidat de développement. Les binaires de cette préparation ne sont pas signés.
 
 ## Sources et construction

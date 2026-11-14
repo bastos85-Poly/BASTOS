@@ -815,7 +815,7 @@ public sealed partial class ReinstallViewModel : ObservableObject
         var review = await service.ReviewRecoveryAsync(iso, options, reinstall, activeCancellation);
         string keyboardLabel = Keyboards.FirstOrDefault(k => k.InputLocale == options.KeyboardLayout)?.Display ?? options.KeyboardLayout;
         string regionLabel = Languages.FirstOrDefault(l => l.Locale == options.WindowsLocale)?.Display ?? options.WindowsLocale;
-        review = review with { Profile = $"Compte : {options.UserName} (sans mot de passe)\nPC : {options.ComputerName}\nClavier : {keyboardLabel}\nFormats régionaux : {regionLabel}" };
+        review = review with { Profile = $"Compte : {options.UserName} (sans mot de passe)\nPC : {options.ComputerName}\nClavier : {keyboardLabel}\nFormats régionaux : {regionLabel}\n\n{RecoveryPreflightBuilder.FinalizationNotice}" };
         var window = new Bastos.Native.RecoveryPreflightWindow(review) { Owner = Application.Current.MainWindow };
         bool confirmed = window.ShowDialog() == true && review.CanContinue;
         return (review.CanContinue, confirmed, !review.CanContinue

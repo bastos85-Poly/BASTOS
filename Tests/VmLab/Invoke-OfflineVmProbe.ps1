@@ -27,26 +27,28 @@ try{
    Add-PartitionAccessPath -DiskNumber $disk.Number -PartitionNumber $part.PartitionNumber -AccessPath ($path+'\')
    $mounts+=@{Path=$path;Partition=$part.PartitionNumber}
    $target=Join-Path $EvidenceRoot ('Partition-'+$part.PartitionNumber);New-Item -ItemType Directory $target|Out-Null
-   foreach($relative in @('VM-Test-Results','BASTOS-Diagnostics','BASTOS-LAST-ERROR.txt','BASTOS-LAST-ATTEMPT.txt','BASTOS-Recovery.log','BASTOS-Minimal-Offline.json','ProgramData/BASTOS-ISO/Logs','Windows/Panther','Windows/Logs/MoSetup')){
+   foreach($relative in @('VM-Test-Results','VM-Lab','BASTOS-Diagnostics','BASTOS-LAST-ERROR.txt','BASTOS-LAST-ATTEMPT.txt','BASTOS-Recovery.log','BASTOS-Minimal-Offline.json','ProgramData/BASTOS-ISO/Logs','ProgramData/BASTOS-ISO/Installation-Expected.json','Windows/Panther','Windows/Logs/MoSetup')){
     $from=Join-Path $path $relative
     if(Test-Path -LiteralPath $from){$dest=Join-Path $target $relative;New-Item -ItemType Directory (Split-Path -Parent $dest) -Force|Out-Null;Copy-Item -LiteralPath $from -Destination $dest -Recurse -Force}
    }
   }
   Write-Output 'Diagnostics prives collectes apres echec ; aucune validation de livraison.';return
  }
- $selected=Get-BastosVmEvidencePartitions $parts ([guid]$before.PartitionGuid)
- foreach($item in @(@{Name='ReleaseEvidenceRecovery';Partition=$selected.Recovery},@{Name='ReleaseEvidenceWindows';Partition=$selected.Windows})){
+ $expected=Get-Content (Join-Path $EvidenceRoot 'Expected.json') -Raw|ConvertFrom-Json
+ if($expected.RecoveryFinalized -ne $true){throw 'Scenario de finalisation automatique non confirme.'}
+ $selected=Get-BastosVmEvidencePartitions $parts ([guid]$before.PartitionGuid) -RecoveryFinalized
+ foreach($item in @(@{Name='ReleaseEvidenceWindows';Partition=$selected.Windows})){
   $path=Join-Path $plan.Directory ($item.Name+'-'+[guid]::NewGuid().ToString('N'));New-Item -ItemType Directory $path|Out-Null
   Add-PartitionAccessPath -DiskNumber $disk.Number -PartitionNumber $item.Partition.PartitionNumber -AccessPath ($path+'\')
   $mounts+=@{Path=$path;Partition=$item.Partition.PartitionNumber}
  }
- $r=$mounts[0].Path;$w=$mounts[1].Path
- if((Get-Content (Join-Path $r 'BASTOS-VM-KEEP.txt') -Raw) -ne $plan.LabId){throw 'Temoin invite divergent.'}
- foreach($name in @('VM-Test-Results','BASTOS-Diagnostics','BASTOS-LAST-ERROR.txt','BASTOS-LAST-ATTEMPT.txt','BASTOS-Recovery.log')){
-  $path=Join-Path $r $name;if(Test-Path -LiteralPath $path){$target=Join-Path $EvidenceRoot $name;if((Get-Item $path).PSIsContainer){New-Item -ItemType Directory $target -Force|Out-Null;Get-ChildItem -LiteralPath $path -Force|Copy-Item -Destination $target -Recurse -Force}else{Copy-Item -LiteralPath $path -Destination $target -Force}}
- }
+ $w=$mounts[0].Path
  foreach($path in @('ProgramData/BASTOS-ISO/Logs','Windows/Panther')){$from=Join-Path $w $path;if(Test-Path $from){Copy-Item -LiteralPath $from -Destination $EvidenceRoot -Recurse -Force}}
+ Copy-Item -LiteralPath (Join-Path $w 'ProgramData/BASTOS-ISO/Installation-Expected.json') -Destination (Join-Path $EvidenceRoot 'Installation-Expected.json') -Force
+ Copy-Item -LiteralPath (Join-Path $w 'VM-Lab/PostInstallProbe.json') -Destination (Join-Path $EvidenceRoot 'VM-Test-Results/PostInstallProbe.json') -Force
  $proof=Get-Content (Join-Path $EvidenceRoot 'VM-Test-Results/PostInstallProbe.json') -Raw|ConvertFrom-Json
  $proof|ConvertTo-Json -Depth 8
- if($proof.Passed -ne $true){throw 'Verification finale invitee negative.'}
+ $required=@('CandidateOnWindows','WindowsPro','ComputerName','LocalUser','Passwordless','French','Azerty','DesktopObserved','SingleVirtualDisk','TemporaryRecoveryRemoved','SpaceReturnedToWindows','WindowsRecreated','EfiPolicy','FirstLogonComplete','DesktopShortcut','DesktopShortcutTarget','FinalizationVerified','HiddenWinRE','WinREImageVerified','InstallationReportMatchesProfile','InstallationReportConformity')
+ if($proof.Schema -ne 2 -or $proof.Passed -ne $true -or $proof.RunId -ne $expected.RunId -or $proof.NativeProbeSha256 -ne $expected.NativeProbeSha256 -or @($proof.Checks.PSObject.Properties).Count -ne $required.Count){throw 'Verification finale invitee negative ou incoherente.'}
+ foreach($name in $required){if(-not $proof.Checks.PSObject.Properties[$name] -or $proof.Checks.$name -ne $true){throw ('Controle VM absent ou negatif : '+$name)}}
 }finally{foreach($m in $mounts){Remove-PartitionAccessPath -DiskNumber $disk.Number -PartitionNumber $m.Partition -AccessPath ($m.Path+'\')};Dismount-VHD -Path $current}

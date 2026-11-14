@@ -140,11 +140,11 @@ function Get-BastosVmDiskDrives {
 }
 
 function Get-BastosVmEvidencePartitions {
-    param([Parameter(Mandatory)][object[]]$Partitions,[Parameter(Mandatory)][guid]$RecoveryGuid)
+    param([Parameter(Mandatory)][object[]]$Partitions,[Parameter(Mandatory)][guid]$RecoveryGuid,[switch]$RecoveryFinalized)
     $recovery=@($Partitions|Where-Object {[guid]$_.Guid -eq $RecoveryGuid})
     $windows=@($Partitions|Where-Object {$_.Size -gt 64GB -and [guid]$_.Guid -ne $RecoveryGuid -and [guid]$_.GptType -eq [guid]'EBD0A0A2-B9E5-4433-87C0-68B6B72699C7'})
-    if($recovery.Count -ne 1 -or $windows.Count -ne 1){throw 'Partitions virtuelles ambigues.'}
-    [pscustomobject]@{Recovery=$recovery[0];Windows=$windows[0]}
+    if($windows.Count -ne 1 -or ($RecoveryFinalized -and $recovery.Count -ne 0) -or (-not $RecoveryFinalized -and $recovery.Count -ne 1)){throw 'Partitions virtuelles ambigues.'}
+    [pscustomobject]@{Recovery=$(if($recovery.Count){$recovery[0]}else{$null});Windows=$windows[0]}
 }
 
 Export-ModuleMember -Function Assert-BastosLabPath,New-BastosVmPlan,Get-BastosVmReadiness,Assert-BastosVmIsolation,Read-BastosLabAuthorization,Get-BastosVmIntegrationComponent,Get-BastosVmDiskDrives,Get-BastosVmEvidencePartitions

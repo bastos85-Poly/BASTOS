@@ -31,6 +31,9 @@ try {
  if(-not $session){throw 'Connexion a la baseline impossible.'}
  $valid=Invoke-Command -Session $session -ArgumentList $plan.LabId -ScriptBlock {param($id);$pc=Get-CimInstance Win32_ComputerSystem;$pc.Model -eq 'Virtual Machine' -and $pc.Manufacturer -eq 'Microsoft Corporation' -and $env:COMPUTERNAME -eq 'BASTOS-VMLAB' -and (Get-Content D:\BASTOS-VM-KEEP.txt -Raw) -eq $id -and @(Get-Disk).Count -eq 1}
  if(-not $valid){throw 'Identite invitee divergente.'}
+ $vmUuid=Invoke-Command -Session $session -ScriptBlock {(Get-CimInstance Win32_ComputerSystemProduct).UUID}
+ $parsedUuid=[guid]::Empty
+ if(-not ([guid]::TryParse([string]$vmUuid,[ref]$parsedUuid))){throw 'UUID de la VM absent.'}
  $manifest=Get-Content (Join-Path $CandidateRoot 'BASTOS-App-Manifest.json') -Raw|ConvertFrom-Json
  $files=@($manifest.Files)
  $remote=Invoke-Command -Session $session -ArgumentList (,$files.Path) -ScriptBlock {param($paths);foreach($relative in $paths){$p=Join-Path D:\Application $relative;if(Test-Path -LiteralPath $p -PathType Leaf){[pscustomobject]@{Path=$relative;Hash=(Get-FileHash -LiteralPath $p).Hash}}}}
@@ -50,6 +53,9 @@ try {
  $harnessOut=Join-Path $OutputDirectory 'harness'
  & $DotNetPath publish $harness -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true "-p:BastosSourceRoot=$SourceRoot" -o $harnessOut *> (Join-Path $evidence 'harness-build.log')
  if($LASTEXITCODE -ne 0){throw 'Compilation du banc VM echouee.'}
+ $nativeProbe=Join-Path $evidence 'BASTOS-VmLabProbe.exe'
+ & (Join-Path $env:WINDIR 'Microsoft.NET/Framework64/v4.0.30319/csc.exe') /nologo /target:winexe /platform:x64 /optimize+ /debug- /reference:System.Management.dll /reference:System.Web.Extensions.dll /reference:System.Windows.Forms.dll /reference:Microsoft.CSharp.dll ('/out:'+$nativeProbe) ('/win32manifest:'+(Join-Path $SourceRoot 'Tests/VmLab/Probe/NativeVmProbe.manifest')) (Join-Path $SourceRoot 'Tests/VmLab/Probe/NativeVmProbe.cs') *> (Join-Path $evidence 'native-probe-build.log')
+ if($LASTEXITCODE -ne 0){throw 'Compilation de la sonde native echouee.'}
  Copy-Item -ToSession $session -LiteralPath (Join-Path $harnessOut 'BASTOS-VM-Test.exe') -Destination D:\Application\Bastos.Native\BASTOS-VM-Test.exe -Force
  Write-Output 'VM : preparation Recovery avec le moteur candidat...'
  Invoke-Command -Session $session -ArgumentList $plan.LabId -ScriptBlock {param($id);& D:\Application\Bastos.Native\BASTOS-VM-Test.exe prepare-keep-efi $id *> D:\VM-Test-Results\prepare-console.log;if($LASTEXITCODE -ne 0){Get-Content D:\VM-Test-Results\prepare-console.log -Tail 20;throw 'Preparation refusee.'}}
@@ -71,7 +77,7 @@ try {
  $oldWindows=@($before.Partitions|Where-Object Location -eq 'C:')[0].Guid
  $oldEfi=@($snapshot.Disks.WindowsDisk.Partitions|Where-Object GptType -eq 'C12A7328-F81F-11D2-BA4B-00A0C93EC93B')[0].Guid
  $build=Get-Content (Join-Path $CandidateRoot 'BASTOS-Build.json') -Raw|ConvertFrom-Json
- $expected=@{LabId=$plan.LabId;RunId=$run;CandidateSha256=$build.NativeAppSha256;RecoveryGuid=$before.PartitionGuid;OldWindowsGuid=$oldWindows;OldEfiGuid=$oldEfi;KeepEfi=$true;DesktopObserved=$true;RequireFirstLogon=$true}
+ $expected=@{LabId=$plan.LabId;RunId=$run;CandidateSha256=$build.NativeAppSha256;RecoveryGuid=$before.PartitionGuid;OldWindowsGuid=$oldWindows;OldEfiGuid=$oldEfi;KeepEfi=$true;DesktopObserved=$true;RequireFirstLogon=$true;RecoveryFinalized=$true;VmUuid=[string]$vmUuid;DiskGuid=$before.DiskIdentity;OldWindowsBytes=@($before.Partitions|Where-Object Location -eq 'C:')[0].SizeBytes;RecoveryBytes=@($before.Partitions|Where-Object Location -eq 'D:')[0].SizeBytes;NativeProbeSha256=(Get-FileHash -LiteralPath $nativeProbe).Hash}
  $expectedPath=Join-Path $evidence 'Expected.json';$expected|ConvertTo-Json|Set-Content $expectedPath -Encoding UTF8
  $until=[DateTime]::UtcNow.AddMinutes(20);$seenRecovery=$false;$copied=$false;$lastError=''
  while([DateTime]::UtcNow -lt $until){
@@ -82,7 +88,7 @@ try {
   if(-not $seenRecovery){continue}
   try {
    Copy-VMFile -VM $vm -SourcePath $expectedPath -DestinationPath C:\VM-Lab\Expected.json -FileSource Host -CreateFullPath -Force -ErrorAction Stop
-   Copy-VMFile -VM $vm -SourcePath (Join-Path $SourceRoot 'Tests/VmLab/Verify-InstalledWindows.ps1') -DestinationPath C:\VM-Lab\VerifyInstalled.ps1 -FileSource Host -CreateFullPath -Force -ErrorAction Stop
+   Copy-VMFile -VM $vm -SourcePath $nativeProbe -DestinationPath C:\VM-Lab\BASTOS-VmLabProbe.exe -FileSource Host -CreateFullPath -Force -ErrorAction Stop
    $copied=$true;Write-Output 'VM : sonde transmise via Hyper-V, attente du Bureau...';break
   } catch {$lastError=$_.Exception.Message}
  }
@@ -102,11 +108,12 @@ try {
     $pc=Get-CimInstance Win32_ComputerSystem
     if($pc.Manufacturer -ne 'Microsoft Corporation' -or $pc.Model -ne 'Virtual Machine' -or
        $env:COMPUTERNAME -ne 'BASTOS-VMNEW' -or $env:USERNAME -ne 'BastosLab' -or
-       (Get-Content D:\BASTOS-VM-KEEP.txt -Raw) -ne $id -or @(Get-Disk).Count -ne 1){throw 'Identite de premiere session divergente.'}
+       @(Get-Disk).Count -ne 1){throw 'Identite de premiere session divergente.'}
     $expected=Get-Content C:\VM-Lab\Expected.json -Raw|ConvertFrom-Json
     if($expected.RunId -ne $runId -or $expected.LabId -ne $id){throw 'Preuve attendue divergente.'}
+    if([guid]((Get-CimInstance Win32_ComputerSystemProduct).UUID) -ne [guid]$expected.VmUuid -or [guid](@(Get-Disk)[0].Guid) -ne [guid]$expected.DiskGuid){throw 'Identite materielle virtuelle divergente.'}
     if(@(Get-Process explorer -ErrorAction SilentlyContinue).Count -eq 0){return $false}
-    $action=New-ScheduledTaskAction -Execute "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -Argument '-NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden -File "C:\VM-Lab\VerifyInstalled.ps1"'
+    $action=New-ScheduledTaskAction -Execute 'C:\VM-Lab\BASTOS-VmLabProbe.exe'
     $principal=New-ScheduledTaskPrincipal -UserId (Get-LocalUser BastosLab).SID.Value -LogonType Interactive -RunLevel Highest
     Register-ScheduledTask -TaskName 'BASTOS-VmLabProbe' -Action $action -Principal $principal -Force|Out-Null
     Start-ScheduledTask -TaskName 'BASTOS-VmLabProbe'
@@ -120,7 +127,7 @@ try {
   # can use the isolated VM console to start the already-transferred probe.
   # This is only a trigger: the unchanged offline proof still decides success.
   $console=Start-Process -FilePath (Join-Path $env:WINDIR 'System32/vmconnect.exe') -ArgumentList @('localhost',('"'+$plan.Name+'"')) -WindowStyle Normal -PassThru
-  @{RunId=$run;VmId=$plan.VmId;VmName=$plan.Name;Reason=$lastError;Probe='C:\VM-Lab\VerifyInstalled.ps1';Instruction='Run the probe elevated inside this VM only; do not alter passwords or authentication policy.'}|ConvertTo-Json|Set-Content (Join-Path $evidence 'ConsoleProbeReady.json') -Encoding UTF8
+  @{RunId=$run;VmId=$plan.VmId;VmName=$plan.Name;Reason=$lastError;Probe='C:\VM-Lab\BASTOS-VmLabProbe.exe';NativeProbeSha256=$expected.NativeProbeSha256;Instruction='Open C:\VM-Lab in File Explorer inside this VM and launch BASTOS-VmLabProbe.exe. No terminal command is needed.'}|ConvertTo-Json|Set-Content (Join-Path $evidence 'ConsoleProbeReady.json') -Encoding UTF8
   Write-Output 'VM : console ouverte, lancement de la sonde par operateur requis.'
  }else{Write-Output 'VM : attente du resultat de la sonde de session...'}
  $until=[DateTime]::UtcNow.AddMinutes(12)

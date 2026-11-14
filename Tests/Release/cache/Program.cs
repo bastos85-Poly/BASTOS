@@ -10,6 +10,7 @@ var options=new RufusInstallOptions{EditionIsoPath=iso,EditionIsoSha256=hash,Win
 var catalog=new WindowsIsoEditionCatalog(iso,hash,new[]{new WindowsIsoEdition(6,"Windows 11 Pro","Professional"){Languages=new[]{"fr-FR"}}});
 var disk=new RecoveryDiskPreview(true,"fixture","D:",partId,diskId,"fixture"){RecoverySizeBytes=40*gb,RecoveryFreeBytes=3*gb,Partitions=new[]{new RecoveryPartitionPreview(5,partId,"D:",40*gb,"CONSERVER")}};
 RecoveryPreflight Review(RecoveryDiskPreview d)=>RecoveryPreflightBuilder.Build(iso,9*gb,options,d,catalog,"",false);
+Check(Review(disk).Profile.Contains("supprimé automatiquement")&&Review(disk).Profile.Contains("Toutes les données"),"Review warns before confirmation that temporary Recovery is erased after successful installation");
 Check(!Review(disk).CanContinue,"Fresh copy still requires ISO plus reserve");
 Check(Review(disk with{RecoveryFreeBytes=11*gb}).CanContinue,"Exact fresh-copy threshold accepted");
 var reuse=disk with{CacheMode="Reuse",CacheIsoSha256=hash,CacheRequiredFreeBytes=2*gb};

@@ -7,6 +7,7 @@ namespace Bastos.Native.Services;
 
 public static class RecoveryPreflightBuilder
 {
+    public const string FinalizationNotice = "Après une réinstallation réussie, D: BASTOS_RECOVERY sera supprimé automatiquement pour agrandir C: et recréer WinRE. Toutes les données encore présentes sur D: seront effacées. Sauvegarde-les avant de confirmer.";
     public static RecoveryPreflight Build(string isoPath, long isoBytes, RufusInstallOptions options,
         RecoveryDiskPreview disk, WindowsIsoEditionCatalog? catalog, string isoError, bool reinstall)
     {
@@ -64,7 +65,7 @@ public static class RecoveryPreflightBuilder
         cleanup.Add(options.PreserveDrivers ? "Pilotes tiers : sauvegarde sur D: et transmission à Windows Setup ; espace supplémentaire contrôlé pendant l’export" : "Pilotes actuels non sauvegardés pour cette réinstallation");
         if (options.BypassHardwareChecks) cleanup.Add("contournement des exigences matérielles activé");
         return new(isoPath, $"{options.WindowsImageName} — index {options.WindowsImageIndex}\nLangue Windows : {options.WindowsUILanguage}",
-            $"Compte : {options.UserName} (sans mot de passe)\nPC : {options.ComputerName}\nClavier : {options.KeyboardLayout} — formats régionaux : {options.WindowsLocale}",
+            $"Compte : {options.UserName} (sans mot de passe)\nPC : {options.ComputerName}\nClavier : {options.KeyboardLayout} — formats régionaux : {options.WindowsLocale}\n\n{FinalizationNotice}",
             cleanup.Count == 0 ? "Aucun nettoyage facultatif sélectionné." : string.Join(" · ", cleanup), disk, isoBytes, blockers, reinstall);
     }
 

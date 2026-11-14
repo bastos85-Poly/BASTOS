@@ -74,4 +74,8 @@ Check ((Get-BastosVmEvidencePartitions @($recovery,$windows) $recoveryId).Recove
 Refused {Get-BastosVmEvidencePartitions @($windows) $recoveryId} 'Preuve sans Recovery attendue refusee'
 $extra=[pscustomobject]@{Guid=[guid]::NewGuid();Size=100GB;GptType=$dataType}
 Refused {Get-BastosVmEvidencePartitions @($recovery,$windows,$extra) $recoveryId} 'Deux partitions Windows possibles refusees'
+Check ((Get-BastosVmEvidencePartitions @($windows) $recoveryId -RecoveryFinalized).Windows.Guid -eq $windowsId) 'Windows finalise accepte seulement apres retrait de Recovery'
+Refused {Get-BastosVmEvidencePartitions @($recovery,$windows) $recoveryId -RecoveryFinalized} 'Recovery encore presente refusee pour un scenario finalise'
+Refused {Get-BastosVmEvidencePartitions @($windows,$extra) $recoveryId -RecoveryFinalized} 'Windows ambigu refuse apres finalisation aussi'
 'PASS : '+$count+' controles isolation VM, simulations uniquement.'
+& (Join-Path $PSScriptRoot 'Test-NativeVmProbe.ps1') -OutputDirectory (Join-Path $root 'NativeProbe')
