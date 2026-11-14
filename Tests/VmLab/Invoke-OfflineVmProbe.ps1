@@ -4,7 +4,7 @@ Import-Module (Join-Path $PSScriptRoot 'Bastos.VmLab.psm1') -Force
 $plan=Get-Content -LiteralPath $PlanPath -Raw|ConvertFrom-Json
 $vm=Get-VM -Id $plan.VmId
 $null=Read-BastosLabAuthorization $plan (Join-Path $plan.Directory 'LabAuthorization.json')
-$drives=@(Get-VMHardDiskDrive -VMName $plan.Name)
+$drives=@(Get-BastosVmDiskDrives -VmName $plan.Name)
 $null=Assert-BastosVmIsolation $plan $vm $drives @(Get-VMNetworkAdapter -VM $vm)
 if([string]$vm.State -ne 'Off'){throw 'La VM doit etre arretee par la sonde.'}
 $current=$drives[0].Path

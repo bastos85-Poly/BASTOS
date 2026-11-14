@@ -5,7 +5,7 @@ $plan=Get-Content -LiteralPath $PlanPath -Raw|ConvertFrom-Json
 $authorization=Read-BastosLabAuthorization $plan (Join-Path $plan.Directory 'LabAuthorization.json')
 function Assert-Lab {
  $script:vm=Get-VM -Id $plan.VmId
-  $drives=@(Get-VMHardDiskDrive -VMName $plan.Name)
+  $drives=@(Get-BastosVmDiskDrives -VmName $plan.Name)
  $null=Assert-BastosVmIsolation $plan $vm $drives @(Get-VMNetworkAdapter -VM $vm)
 }
 Assert-Lab

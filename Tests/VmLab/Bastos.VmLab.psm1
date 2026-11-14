@@ -120,4 +120,23 @@ function Get-BastosVmIntegrationComponent {
     return $matches[0]
 }
 
-Export-ModuleMember -Function Assert-BastosLabPath,New-BastosVmPlan,Get-BastosVmReadiness,Assert-BastosVmIsolation,Read-BastosLabAuthorization,Get-BastosVmIntegrationComponent
+function Get-BastosVmDiskDrives {
+    param([Parameter(Mandatory)][string]$VmName)
+    # Hyper-V objects can retain the disk path from before a checkpoint restore.
+    # Read the configuration in a fresh provider process, then keep the full
+    # existing parent-chain and physical-disk checks on the returned paths.
+    $start=[Diagnostics.ProcessStartInfo]::new((Join-Path $env:WINDIR 'System32/WindowsPowerShell/v1.0/powershell.exe'))
+    $start.UseShellExecute=$false;$start.CreateNoWindow=$true;$start.RedirectStandardOutput=$true;$start.RedirectStandardError=$true
+    $start.EnvironmentVariables['BASTOS_VM_NAME_FOR_READ']=$VmName
+    $start.Arguments='-NoProfile -NonInteractive -Command "$ErrorActionPreference=''Stop''; Import-Module Hyper-V; Get-VMHardDiskDrive -VMName $env:BASTOS_VM_NAME_FOR_READ | Select-Object Path,DiskNumber | ConvertTo-Json -Compress"'
+    $process=[Diagnostics.Process]::Start($start)
+    $stdout=$process.StandardOutput.ReadToEndAsync();$stderr=$process.StandardError.ReadToEndAsync()
+    try {
+        if(-not $process.WaitForExit(20000)){$process.Kill();throw 'VM_LAB_INVENTORY : delai de lecture depasse.'}
+        $text=$stdout.GetAwaiter().GetResult();$errorText=$stderr.GetAwaiter().GetResult()
+        if($process.ExitCode -ne 0 -or [string]::IsNullOrWhiteSpace($text)){throw ('VM_LAB_INVENTORY : inventaire indisponible. '+$errorText)}
+        return @($text|ConvertFrom-Json)
+    }finally{$process.Dispose()}
+}
+
+Export-ModuleMember -Function Assert-BastosLabPath,New-BastosVmPlan,Get-BastosVmReadiness,Assert-BastosVmIsolation,Read-BastosLabAuthorization,Get-BastosVmIntegrationComponent,Get-BastosVmDiskDrives
