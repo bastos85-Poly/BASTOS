@@ -1,4 +1,6 @@
-<p align="center"><img src="docs/images/bastos-banner.svg" alt="BASTOS — Votre PC, vos réglages" width="100%"></p>
+<p align="center"><img src="docs/images/bastos-logo-officiel.png" alt="Logo officiel BASTOS, identique à celui de l’application" width="100%"></p>
+
+<p align="center"><img src="docs/images/bastos-banner.svg" alt="Windows sans clé USB. Préparez votre PC. Libérez son potentiel gaming." width="100%"></p>
 
 <p align="center"><a href="https://github.com/bastos85-Poly/BASTOS/releases/latest"><strong>Télécharger BASTOS</strong></a> · <a href="https://github.com/bastos85-Poly/BASTOS/issues">Faire un retour</a> · <a href="https://ko-fi.com/bastos85">❤️ Soutenir sur Ko-fi</a></p>
 

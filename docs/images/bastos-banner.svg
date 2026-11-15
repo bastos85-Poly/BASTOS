@@ -1,12 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="480" viewBox="0 0 1280 480" role="img" aria-label="BASTOS — Windows sans clé USB. Application Windows 11 en français.">
-<defs><linearGradient id="bg" x2="1" y2="1"><stop stop-color="#0b1020"/><stop offset="1" stop-color="#192c52"/></linearGradient><linearGradient id="accent"><stop stop-color="#62d8ff"/><stop offset="1" stop-color="#8b9dff"/></linearGradient></defs>
-<rect width="1280" height="480" rx="24" fill="url(#bg)"/>
-<circle cx="1160" cy="30" r="280" fill="#5e8aff" opacity=".07"/><circle cx="1200" cy="480" r="230" fill="#62d8ff" opacity=".06"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="440" viewBox="0 0 1280 440" role="img" aria-label="Windows sans clé USB. Libérez le potentiel de votre PC pour le gaming.">
+<defs>
+<linearGradient id="bg" x2="1" y2="1"><stop stop-color="#050a18"/><stop offset=".55" stop-color="#101e42"/><stop offset="1" stop-color="#170c30"/></linearGradient>
+<linearGradient id="neon"><stop stop-color="#00dfff"/><stop offset=".5" stop-color="#427cff"/><stop offset="1" stop-color="#c364ff"/></linearGradient>
+<pattern id="grid" width="48" height="48" patternUnits="userSpaceOnUse"><path d="M48 0H0V48" fill="none" stroke="#5589d2" stroke-opacity=".12"/></pattern>
+</defs>
+<rect width="1280" height="440" rx="24" fill="url(#bg)"/><rect width="1280" height="440" rx="24" fill="url(#grid)"/>
+<path d="M900 0H1130L860 440H630Z" fill="#346cff" opacity=".09"/>
+<path d="M1090 0H1280L1010 440H820Z" fill="#b254ff" opacity=".08"/>
+<path d="M12 95V12H205M1075 428H1268V345" fill="none" stroke="url(#neon)" stroke-width="4"/>
+<path d="M925 64H1190L1110 160H1205L1000 375L1050 228H938L1020 130H880Z" fill="url(#neon)" opacity=".16"/>
 <g font-family="Segoe UI,Arial,sans-serif">
-<rect x="64" y="52" width="241" height="34" rx="17" fill="#213954"/><text x="84" y="75" font-size="15" letter-spacing="2" fill="#bcecff">WINDOWS 11 · FRANÇAIS</text>
-<text x="60" y="190" font-size="94" font-weight="800" font-style="italic" fill="white">BAST<tspan fill="url(#accent)">OS</tspan></text>
-<text x="66" y="247" font-size="34" font-weight="600" fill="white">Windows sans clé USB.</text>
-<text x="66" y="296" font-size="22" fill="#bfcee4">Choisissez. Téléchargez. Réinstallez.</text>
-<rect x="66" y="354" width="345" height="52" rx="12" fill="#6ad7ff"/><text x="91" y="387" font-size="19" font-weight="700" fill="#0b1830">Puis optimisez et personnalisez</text>
-<g transform="translate(835 115)"><rect width="365" height="260" rx="18" fill="#101b30" stroke="#415a7e"/><path d="M0 45H365" stroke="#415a7e"/><circle cx="23" cy="23" r="5" fill="#62d8ff"/><circle cx="42" cy="23" r="5" fill="#8b9dff"/><text x="23" y="91" font-size="19" fill="white">Votre prochain départ</text><g fill="#243c5a"><rect x="23" y="114" width="151" height="54" rx="9"/><rect x="190" y="114" width="151" height="54" rx="9"/><rect x="23" y="183" width="151" height="54" rx="9"/><rect x="190" y="183" width="151" height="54" rx="9"/></g><g fill="#d1eaff" font-size="16"><text x="39" y="147">Réinstaller</text><text x="207" y="147">Gaming</text><text x="39" y="216">Personnaliser</text><text x="207" y="216">Logiciels</text></g></g>
+<text x="64" y="65" font-size="16" font-weight="700" letter-spacing="4" fill="#67dcff">RÉINSTALLATION · GAMING · PERSONNALISATION</text>
+<text x="60" y="145" font-size="55" font-weight="800" fill="white">Windows sans clé USB.</text>
+<text x="64" y="209" font-size="39" font-weight="700" fill="#73dfff">Libérez le potentiel de votre PC.</text>
+<text x="66" y="258" font-size="22" fill="#c6d6ef">Repartez sur un Windows propre. Réglez-le pour vos jeux.</text>
+<g font-size="17" font-weight="700"><rect x="64" y="304" width="228" height="48" rx="8" fill="#11344a" stroke="#3fbbf1"/><text x="85" y="334" fill="#9eecff">01  CHOISIR WINDOWS</text><rect x="308" y="304" width="230" height="48" rx="8" fill="#182d52" stroke="#588dff"/><text x="329" y="334" fill="#b1cbff">02  RÉINSTALLER</text><rect x="554" y="304" width="290" height="48" rx="8" fill="#302049" stroke="#b47cee"/><text x="575" y="334" fill="#e1baff">03  OPTIMISER À VOTRE GOÛT</text></g>
+<text x="66" y="400" font-size="16" fill="#91a3c0">Les gains dépendent de votre matériel, de vos jeux et des réglages choisis.</text>
 </g></svg>
