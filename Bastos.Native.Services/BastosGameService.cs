@@ -148,7 +148,7 @@ public sealed class BastosGameService(AppPaths paths, OperationLogService log)
 		catch
 		{
 		}
-		if (StartThroughAuthorizedTask())
+		if (Array.IndexOf(Environment.GetCommandLineArgs(), "--language-preview") < 0 && StartThroughAuthorizedTask())
 		{
 			log.Write("Bastos Game", "Moteur natif demarre par la tache autorisee, sans UAC.");
 			return;
@@ -304,10 +304,11 @@ public sealed class BastosGameService(AppPaths paths, OperationLogService log)
 
 	private IEnumerable<string> BuildMonitorArguments()
 	{
-		return new string[14]
+		return new string[16]
 		{
 			"--config", paths.GameConfig, "--status", paths.GameStatus, "--stop", paths.GameStopRequest, "--log", paths.GameLog, "--recovery", paths.GameRecovery,
-			"--app", paths.NativeExecutable, "--icon", paths.GameTrayIcon
+			"--app", Environment.ProcessPath ?? paths.NativeExecutable, "--icon", paths.GameTrayIcon,
+            "--language-file", Bastos.Native.InterfaceLanguage.PreferencePath
 		};
 	}
 

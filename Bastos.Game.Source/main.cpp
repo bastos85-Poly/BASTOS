@@ -2,6 +2,7 @@
 #include "discovery.hpp"
 #include <d3d11.h>
 #include <iomanip>
+#include "language.hpp"
 Paths paths;
 HWND window = 0, detailBox = 0, gameList = 0, priorityBox = 0, observeCheck = 0,
      auxCheck = 0, gameObserve = 0, backgroundCheck = 0, threadCheck = 0,
@@ -393,27 +394,27 @@ void refreshDetails() {
     std::ostringstream o;
     o << "BASTOS GAME " << s.value("EngineVersion", "ancienne version") << " — "
       << s.value("State", "")
-      << "\r\nDernier état : " << s.value("UpdatedUtc", "") << "\r\n";
+      << "\r\n" << gameNarrow("Dernier état : ") << s.value("UpdatedUtc", "") << "\r\n";
     auto err = s.value("Error", "");
     if (!err.empty())
-      o << "Erreur : " << err << "\r\n";
+      o << gameNarrow("Erreur : ") << err << "\r\n";
     o << "\r\n";
     for (auto pair :
          {std::pair{"ActiveGames", "JEUX"},
           std::pair{"AuxiliaryProcesses", "AUXILIAIRES DU JEU"},
           std::pair{"BackgroundProcesses", "AUTRES APPLICATIONS"}}) {
-      o << pair.second << "\r\n";
+      o << gameNarrow(pair.second) << "\r\n";
       auto items = s.value(pair.first, J::array());
       if (items.empty())
-        o << "Aucun\r\n";
+        o << gameNarrow("Aucun") << "\r\n";
       for (auto &item : items) {
         o << item.value("Name", "") << " (PID " << item.value("ProcessId", 0)
           << ")\r\n";
         for (auto &a : item.value("Actions", J::array()))
-          o << "  " << a.value("Setting", "") << " : " << a.value("Before", "")
+          o << "  " << gameNarrow(a.value("Setting", "")) << " : " << a.value("Before", "")
             << " → " << a.value("Requested", "")
             << "\r\n    Lu : " << a.value("Actual", "") << " — "
-            << a.value("Outcome", "")
+            << gameNarrow(a.value("Outcome", ""))
             << (a.value("Win32Error", 0)
                     ? " (Windows " + std::to_string(a.value("Win32Error", 0)) +
                           ")"
@@ -422,7 +423,7 @@ void refreshDetails() {
       }
       o << "\r\n";
     }
-    o << "DERNIÈRES RESTAURATIONS\r\n";
+    o << gameNarrow("DERNIÈRES RESTAURATIONS") << "\r\n";
     auto r = s.value("Restoration", J::array());
     for (size_t i = r.size() > 12 ? r.size() - 12 : 0; i < r.size(); i++)
       o << r[i].value("Name", "") << " — " << r[i].value("Setting", "") << " : "
@@ -458,7 +459,7 @@ void showSettings() {
   wchar_t exe[32768];
   GetModuleFileNameW(0, exe, 32768);
   launch(exe, L"--settings --config \"" + paths.config.wstring() +
-                  L"\" --status \"" + paths.status.wstring() + L"\"");
+                  L"\" --status \"" + paths.status.wstring() + L"\" --language-file \"" + gameLanguageFile.wstring() + L"\"");
 }
 LRESULT CALLBACK wndProc(HWND w, UINT msg, WPARAM wp, LPARAM lp) {
   try {
@@ -580,6 +581,7 @@ LRESULT CALLBACK wndProc(HWND w, UINT msg, WPARAM wp, LPARAM lp) {
       }
       return 0;
     case WM_TIMER:
+      refreshGameLanguage();
       if (settingsMode) {
         refreshDetails();
         return 0;
@@ -595,7 +597,7 @@ LRESULT CALLBACK wndProc(HWND w, UINT msg, WPARAM wp, LPARAM lp) {
                                 ? L"Bastos Game — observation"
                                 : L"Bastos Game — actif")
                          : L"Bastos Game — erreur";
-        wcsncpy_s(tray.szTip, label, _TRUNCATE);
+        wcsncpy_s(tray.szTip, gameText(label).c_str(), _TRUNCATE);
         Shell_NotifyIconW(NIM_MODIFY, &tray);
       }
       return 0;
@@ -787,7 +789,13 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int) {
   int argc;
   wchar_t **argv = CommandLineToArgvW(GetCommandLineW(), &argc);
   paths = pathsFrom(argc, argv);
+  wchar_t languageRoot[32768]{};
+  GetEnvironmentVariableW(L"LOCALAPPDATA",languageRoot,32768);
+  gameLanguageFile=fs::path(languageRoot)/L"BASTOS"/L"InterfaceLanguage.txt";
+  for(int i=1;i+1<argc;i++) if(std::wstring(argv[i])==L"--language-file") gameLanguageFile=argv[i+1];
+  refreshGameLanguage();
   bool test = false;
+  bool languageTest = false;
   for (int i = 1; i < argc; i++) {
     if (std::wstring(argv[i]) == L"--test-child") {
       ID3D11Device *device = nullptr;
@@ -812,12 +820,37 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int) {
     }
     if (std::wstring(argv[i]) == L"--self-test")
       test = true;
+    if (std::wstring(argv[i]) == L"--language-self-test") languageTest=true;
     if (std::wstring(argv[i]) == L"--settings")
       settingsMode = true;
   }
   LocalFree(argv);
   wchar_t exe[32768];
   GetModuleFileNameW(0, exe, 32768);
+  if(languageTest) {
+    if(gameLanguageFile == fs::path(languageRoot)/L"BASTOS"/L"InterfaceLanguage.txt") return 3;
+    auto label=CreateWindowExW(0,L"STATIC",L"Ouvrir Bastos",0,0,0,200,30,0,0,instance,0);
+    auto combo=CreateWindowExW(0,L"COMBOBOX",L"",CBS_DROPDOWNLIST,0,0,200,100,0,0,instance,0);
+    SendMessageW(combo,CB_ADDSTRING,0,(LPARAM)L"Supérieure à la normale");
+    SendMessageW(combo,CB_ADDSTRING,0,(LPARAM)L"Élevée");
+    SendMessageW(combo,CB_SETCURSEL,1,0);
+    bool success=true;
+    for(auto code:{"fr","en","fr","en"}) {
+      {std::ofstream file(gameLanguageFile);file<<code;}
+      refreshGameLanguage();
+      wchar_t value[256]{};GetWindowTextW(label,value,256);
+      success &= std::wstring(value)==(gameEnglish?L"Open Bastos":L"Ouvrir Bastos");
+      success &= SendMessageW(combo,CB_GETCURSEL,0,0)==1;
+      HMENU menu=CreatePopupMenu();AppendMenuW(menu,MF_STRING,201,L"Mes réglages et performances");
+      GetMenuStringW(menu,201,value,256,MF_BYCOMMAND);
+      success &= std::wstring(value)==(gameEnglish?L"My settings and performance":L"Mes réglages et performances");
+      DestroyMenu(menu);
+      success &= gameText(L"Bastos Game — actif")== (gameEnglish?L"Bastos Game — active":L"Bastos Game — actif");
+    }
+    DestroyWindow(combo);DestroyWindow(label);
+    atomicJson(gameLanguageFile.parent_path()/L"language-tests.json",{{"Success",success},{"LiveSwitching",success},{"SelectionPreserved",success}});
+    return success?0:1;
+  }
   if (test) {
     if (paths.config == pathsFrom(0, nullptr).config)
       return 3;
@@ -870,7 +903,7 @@ int WINAPI wWinMain(HINSTANCE instance, HINSTANCE, LPWSTR, int) {
                                        32, LR_LOADFROMFILE);
       if (!tray.hIcon)
         tray.hIcon = LoadIconW(0, IDI_APPLICATION);
-      wcscpy_s(tray.szTip, L"Bastos Game 3 — réglages et profils");
+      wcscpy_s(tray.szTip, gameText(L"Bastos Game 3 — réglages et profils").c_str());
       Shell_NotifyIconW(NIM_ADD, &tray);
       e.cycle();
       SetTimer(window, 1, 1000, 0);
