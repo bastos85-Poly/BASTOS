@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="440" viewBox="0 0 1280 440" role="img" aria-label="Windows sans clé USB. Libérez le potentiel de votre PC pour le gaming.">
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="440" viewBox="0 0 1280 440" role="img" aria-label="Réinstaller Windows, facilement. Libérez le potentiel de votre PC pour le gaming.">
 <defs>
 <linearGradient id="bg" x2="1" y2="1"><stop stop-color="#050a18"/><stop offset=".55" stop-color="#101e42"/><stop offset="1" stop-color="#170c30"/></linearGradient>
 <linearGradient id="neon"><stop stop-color="#00dfff"/><stop offset=".5" stop-color="#427cff"/><stop offset="1" stop-color="#c364ff"/></linearGradient>
@@ -11,9 +11,9 @@
 <path d="M925 64H1190L1110 160H1205L1000 375L1050 228H938L1020 130H880Z" fill="url(#neon)" opacity=".16"/>
 <g font-family="Segoe UI,Arial,sans-serif">
 <text x="64" y="65" font-size="16" font-weight="700" letter-spacing="4" fill="#67dcff">RÉINSTALLATION · GAMING · PERSONNALISATION</text>
-<text x="60" y="145" font-size="55" font-weight="800" fill="white">Windows sans clé USB.</text>
-<text x="64" y="209" font-size="34" font-weight="700" fill="#73dfff">Choisissez. Suivez le guide. Installez.</text>
-<text x="66" y="258" font-size="22" fill="#c6d6ef">Un parcours simple en français, puis un PC à votre goût.</text>
+<text x="60" y="145" font-size="46" font-weight="800" fill="white">Réinstaller Windows, facilement.</text>
+<text x="64" y="209" font-size="34" font-weight="700" fill="#73dfff">Même sans connaissances techniques.</text>
+<text x="66" y="258" font-size="22" fill="#c6d6ef">Sans clé USB ni matériel supplémentaire pour installer. Guidé en français.</text>
 <g font-size="17" font-weight="700"><rect x="64" y="304" width="228" height="48" rx="8" fill="#11344a" stroke="#3fbbf1"/><text x="85" y="334" fill="#9eecff">01  CHOISIR WINDOWS</text><rect x="308" y="304" width="230" height="48" rx="8" fill="#182d52" stroke="#588dff"/><text x="329" y="334" fill="#b1cbff">02  RÉINSTALLER</text><rect x="554" y="304" width="290" height="48" rx="8" fill="#302049" stroke="#b47cee"/><text x="575" y="334" fill="#e1baff">03  OPTIMISER À VOTRE GOÛT</text></g>
 <text x="66" y="400" font-size="16" fill="#91a3c0">Les gains dépendent de votre matériel, de vos jeux et des réglages choisis.</text>
 </g></svg>

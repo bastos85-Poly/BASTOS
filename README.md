@@ -4,11 +4,13 @@
 
 <p align="center"><a href="https://github.com/bastos85-Poly/BASTOS/releases/latest"><strong>Télécharger BASTOS</strong></a> · <a href="https://github.com/bastos85-Poly/BASTOS/issues">Faire un retour</a> · <a href="https://ko-fi.com/bastos85">❤️ Soutenir sur Ko-fi</a></p>
 
-# Réinstaller Windows sans clé USB ? BASTOS vous guide, étape par étape.
+# Réinstallez Windows facilement, même sans connaissances techniques
+
+### Sans clé USB ni matériel supplémentaire pour l’installation. Un parcours guidé en français.
 
 > **Mon premier programme, un projet qui grandit avec vous.** BASTOS est encore en cours de développement. Vos retours, vos partages et votre soutien sur [Ko-fi](https://ko-fi.com/bastos85) m’aident à le faire progresser et à y consacrer davantage de temps.
 
-**Choisissez votre Windows. Suivez le guide. Lancez la réinstallation.** BASTOS rassemble le téléchargement et la préparation dans une même application en français : pas de clé USB à préparer, pas de support d’installation à créer à la main.
+**Pas besoin de savoir créer une clé USB bootable ou préparer les fichiers d’installation à la main. Choisissez votre Windows et laissez-vous guider, étape par étape.** BASTOS rassemble le téléchargement, les contrôles et la préparation dans une même application en français, directement depuis votre PC.
 
 L’objectif est simple : **rendre la réinstallation de Windows accessible, même si vous ne l’avez jamais faite.** Vous choisissez parmi les Windows proposés, BASTOS vous accompagne dans la préparation, puis vous consultez le bilan avant de confirmer. Les contrôles indiquent si votre PC remplit les conditions nécessaires.
 
