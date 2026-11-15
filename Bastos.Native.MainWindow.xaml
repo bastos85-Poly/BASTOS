@@ -388,6 +388,12 @@
       <ColumnDefinition Width="228" />
       <ColumnDefinition Width="*" />
     </Grid.ColumnDefinitions>
+    <StackPanel Grid.Column="1" Panel.ZIndex="11" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,60,0">
+      <ComboBox x:Name="InterfaceLanguageSelector" Width="132" Height="32" SelectedValuePath="Tag" SelectedValue="{Binding Language, Source={x:Static native:InterfaceLanguage.Instance}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" ToolTip="Langue / Language — aperçu / preview" AutomationProperties.Name="Langue / Language">
+        <ComboBoxItem Tag="fr" Content="Français" />
+        <ComboBoxItem Tag="en" Content="English" />
+      </ComboBox>
+    </StackPanel>
     <Button x:Name="KoFiDonationButton" Grid.Column="1" Panel.ZIndex="10" Width="38" Height="34" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,5,12,0" Click="OpenKoFiDonation" Cursor="Hand" Background="Transparent" BorderThickness="0" ToolTip="Soutenir Bastos sur Ko-fi" AutomationProperties.Name="Faire un don pour soutenir Bastos sur Ko-fi">
       <Button.Template>
         <ControlTemplate TargetType="Button">
@@ -524,13 +530,13 @@
                     <Path Data="M17,17.5 L19.5,17.5 M18.25,16.25 L18.25,18.75" StrokeThickness="1.25" StrokeStartLineCap="Round" Stroke="{Binding Foreground, RelativeSource={RelativeSource AncestorType={x:Type ListBoxItem}}}" />
                   </Canvas>
                 </Viewbox>
-                <TextBlock Grid.Column="1" FontSize="13" VerticalAlignment="Center" TextWrapping="Wrap" Margin="4,0,0,0" Text="{Binding Title}" />
+                <TextBlock Grid.Column="1" FontSize="13" VerticalAlignment="Center" TextWrapping="Wrap" Margin="4,0,0,0" Text="{native:Translate Path=Title}" />
               </Grid>
             </DataTemplate>
           </ItemsControl.ItemTemplate>
         </ListBox>
         <StackPanel Grid.Row="2" Margin="22,8,12,16">
-          <TextBlock Foreground="{StaticResource MutedBrush}" FontSize="10" TextWrapping="Wrap" Text="{Binding MigrationLabel}" />
+          <TextBlock Foreground="{StaticResource MutedBrush}" FontSize="10" TextWrapping="Wrap" Text="{native:Translate Path=MigrationLabel}" />
           <TextBlock Foreground="#65708F" FontSize="10" Margin="0,4,0,0" Text="{Binding Version, StringFormat=Version {0}}" />
         </StackPanel>
       </Grid>
@@ -542,8 +548,8 @@
         <RowDefinition Height="Auto" />
       </Grid.RowDefinitions>
       <StackPanel>
-        <TextBlock FontSize="25" FontWeight="SemiBold" Text="{Binding CurrentPage.Title}" />
-        <TextBlock Foreground="{StaticResource MutedBrush}" FontSize="13" Margin="0,6,0,22" Text="{Binding CurrentPage.Subtitle}" />
+        <TextBlock FontSize="25" FontWeight="SemiBold" Margin="0,0,190,0" TextWrapping="Wrap" Text="{native:Translate Path=CurrentPage.Title}" />
+        <TextBlock Foreground="{StaticResource MutedBrush}" FontSize="13" Margin="0,6,0,22" Text="{native:Translate Path=CurrentPage.Subtitle}" />
         <Border Background="#272119" BorderBrush="#8C682E" BorderThickness="1" CornerRadius="7" Padding="12" Margin="0,0,0,12" Visibility="{Binding Journal.HasRecoveryNotice, Converter={StaticResource BooleanToVisibilityConverter}}">
           <DockPanel>
             <Button DockPanel.Dock="Right" Content="Voir dans Journal" Command="{Binding OpenRecoveryJournalCommand}" Style="{StaticResource SecondaryButton}" Margin="12,0,0,0" />
@@ -815,7 +821,7 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel>
                       <DockPanel Margin="0,0,0,8">
-                        <Button DockPanel.Dock="Right" HorizontalAlignment="Right" Style="{DynamicResource QuietButton}" Content="Actualiser" Command="{Binding RefreshCommand}" />
+                        <Button DockPanel.Dock="Right" HorizontalAlignment="Right" Style="{DynamicResource QuietButton}" Content="{native:Translate Text=Actualiser}" Command="{Binding RefreshCommand}" />
                         <TextBlock Text="Carte réseau Ethernet" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center" />
                       </DockPanel>
                       <TextBlock Text="Profils adaptés aux options réellement exposées par le pilote. Sauvegarde individuelle avant toute modification ; aucun réglage appliqué au démarrage." Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" Margin="0,0,0,12" />
@@ -1906,7 +1912,7 @@
             <TextBlock x:Name="CancellationHintText" Grid.Column="1" Text="{Binding CancellationHint}" Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" VerticalAlignment="Center" />
           </Grid>
         </Border>
-        <Button Content="Actualiser" Style="{DynamicResource QuietButton}" Width="130" VerticalAlignment="Center" Command="{Binding DataContext.RefreshCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
+        <Button Content="{native:Translate Text=Actualiser}" Style="{DynamicResource QuietButton}" Width="130" VerticalAlignment="Center" Command="{Binding DataContext.RefreshCommand, RelativeSource={RelativeSource AncestorType=Window}}" />
       </Grid>
     </Grid>
   </Grid>

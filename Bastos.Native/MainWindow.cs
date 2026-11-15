@@ -18,6 +18,7 @@ public partial class MainWindow : Window, IComponentConnector
 	public MainWindow()
 	{
 		InitializeComponent();
+        if (Environment.GetCommandLineArgs().Contains("--language-preview")) Title = "BASTOS — aperçu Français / English";
 		SourceInitialized += (_, _) => TryEnableDarkTitleBar();
 		OptimizationCategorySelector.SelectionChanged += (_, _) => OptimizationCategoryContent.ScrollToTop();
 		base.DataContext = new MainViewModel();
@@ -34,6 +35,7 @@ public partial class MainWindow : Window, IComponentConnector
 	private async void OnLoaded(object sender, RoutedEventArgs e)
 	{
 		startup.Stop();
+        if(Environment.GetCommandLineArgs().Contains("--language-smoke-test")){await RunLanguageSmokeAsync();return;}
         Bastos.Native.Services.RuntimeTimingService.Record("window-loaded",startup.Elapsed);
         if(Environment.GetCommandLineArgs().Contains("--donation-smoke-test")){await RunDonationSmokeAsync();return;}
         if(Environment.GetCommandLineArgs().Contains("--appearance-detection-smoke-test")){await RunAppearanceDetectionSmokeAsync();return;}
@@ -45,6 +47,7 @@ public partial class MainWindow : Window, IComponentConnector
         if(Environment.GetCommandLineArgs().Contains("--extras-smoke-test")){await RunExtrasSmokeAsync();return;}
         if(Environment.GetCommandLineArgs().Contains("--competitive-smoke-test")){await RunCompetitiveSmokeAsync();return;}
 		TryEnableDarkTitleBar();
+        if(Environment.GetCommandLineArgs().Contains("--language-preview")) return;
         if(Environment.GetCommandLineArgs().Contains("--installation-display-smoke-test")) { await RunInstallationDisplaySmokeAsync(); Application.Current.Shutdown(0); return; }
 		if (!Environment.GetCommandLineArgs().Any((string arg) => arg.Equals("--smoke-test", StringComparison.OrdinalIgnoreCase)))
 		{
