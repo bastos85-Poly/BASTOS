@@ -4,7 +4,7 @@ Application Windows en français : réglages, logiciels, diagnostic et préparat
 
 ## Utiliser BASTOS
 
-Lorsqu'une version validée est disponible, télécharger **BASTOS-Setup-7.120.136.exe** depuis les Releases du dépôt. Fermer BASTOS avant une mise à jour, puis lancer l'installateur et choisir Installer. Un seul raccourci BASTOS est créé sur le Bureau. L'application apparaît aussi dans les applications installées de Windows.
+Lorsqu'une version validée est disponible, télécharger **BASTOS-Setup-7.120.137.exe** depuis les Releases du dépôt. Fermer BASTOS avant une mise à jour, puis lancer l'installateur et choisir Installer. Un seul raccourci BASTOS est créé sur le Bureau. L'application apparaît aussi dans les applications installées de Windows.
 
 L'installation n'applique aucun réglage Windows. Les actions administrateur de BASTOS restent soumises à l'autorisation Windows. La désinstallation conserve les données et sauvegardes ; elle ne restaure pas automatiquement les réglages appliqués auparavant.
 
@@ -18,7 +18,7 @@ Le dépôt comprend les sources principales C#/WPF (.NET 8 x64), le module de je
 
     dotnet publish BASTOS-Native.csproj -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o artifacts/publish
 
-Les symboles sont retirés et les chemins remappés pour éviter d'inscrire le profil personnel du développeur. Voir Bastos.Game.Source, Build/Installer/README.md et Build/README-ReleaseValidation.md. Le laboratoire se configure séparément, sans inclure ses identifiants privés dans le dépôt.
+Les symboles sont retirés et les chemins remappés pour éviter d'inscrire le profil personnel du développeur. Voir [le module de jeu](../Bastos.Game.Source/README.md), [l’installateur](../Build/Installer/README.md) et [la validation](../Build/README-ReleaseValidation.md). Le laboratoire se configure séparément, sans inclure ses identifiants privés dans le dépôt.
 
 ## Confidentialité et sécurité
 

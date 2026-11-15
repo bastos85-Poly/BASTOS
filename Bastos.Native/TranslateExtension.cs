@@ -15,7 +15,9 @@ public sealed class InterfaceLanguage : INotifyPropertyChanged
     internal static string PreferencePath => Path.Combine(
         Array.IndexOf(Environment.GetCommandLineArgs(), "--language-smoke-test") >= 0
             ? Environment.GetEnvironmentVariable("BASTOS_LANGUAGE_TEST_DATA") ?? throw new InvalidOperationException("Isolated language test directory required.")
-            : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BASTOS"), "InterfaceLanguage.txt");
+            : Array.IndexOf(Environment.GetCommandLineArgs(), "--smoke-test") >= 0 && !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("BASTOS_TEST_DATA"))
+                ? Environment.GetEnvironmentVariable("BASTOS_TEST_DATA")!
+                : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BASTOS"), "InterfaceLanguage.txt");
     private string language = "fr";
     public event PropertyChangedEventHandler? PropertyChanged;
     public string Language

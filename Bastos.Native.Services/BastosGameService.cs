@@ -308,7 +308,7 @@ public sealed class BastosGameService(AppPaths paths, OperationLogService log)
 		{
 			"--config", paths.GameConfig, "--status", paths.GameStatus, "--stop", paths.GameStopRequest, "--log", paths.GameLog, "--recovery", paths.GameRecovery,
 			"--app", Environment.ProcessPath ?? paths.NativeExecutable, "--icon", paths.GameTrayIcon,
-            "--language-file", Bastos.Native.InterfaceLanguage.PreferencePath
+            "--language-file", Path.Combine(paths.DataRoot, "InterfaceLanguage.txt")
 		};
 	}
 

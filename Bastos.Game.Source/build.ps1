@@ -1,7 +1,9 @@
 ﻿param([Parameter(Mandatory)][string]$Toolchain)
 $ErrorActionPreference='Stop'
 $root=$PSScriptRoot
-$catalog = Get-Content (Join-Path $root '../Assets/Interface.en.json') -Raw | ConvertFrom-Json -AsHashtable
+$baseCatalog=Join-Path $root '../Assets/Interface.en.json'
+if(-not(Test-Path $baseCatalog)){$baseCatalog=Join-Path $root '../../Assets/Interface.en.json'}
+$catalog = Get-Content $baseCatalog -Raw | ConvertFrom-Json -AsHashtable
 $gameCatalog = Get-Content (Join-Path $root 'Interface.en.json') -Raw | ConvertFrom-Json -AsHashtable
 foreach($key in $gameCatalog.Keys){$catalog[$key]=$gameCatalog[$key]}
 $literal = $catalog | ConvertTo-Json -Depth 4 -Compress

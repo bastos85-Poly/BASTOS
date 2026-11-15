@@ -45,7 +45,7 @@ BASTOS propose aussi des **optimisations pour votre environnement gaming**, des 
 ## Essayer BASTOS
 
 1. Ouvrez la [dernière version publiée](https://github.com/bastos85-Poly/BASTOS/releases/latest).
-2. Téléchargez **BASTOS-Setup-7.120.136.exe** pour cette version. Le fichier « Source code » est destiné au développement.
+2. Téléchargez **BASTOS-Setup-7.120.137.exe** pour cette version. Le fichier « Source code » est destiné au développement.
 3. Fermez BASTOS s’il est déjà ouvert, puis lancez l’installateur.
 4. Retrouvez **un seul raccourci BASTOS sur le Bureau**, ouvrez l’application et choisissez les fonctions qui vous intéressent.
 
@@ -55,7 +55,9 @@ Les exécutables ne sont actuellement **pas signés** : Windows peut afficher un
 
 ## Un projet à faire progresser ensemble
 
-La version **7.120.136** a passé les 13 groupes de validation de livraison, avec 21 contrôles de réinstallation réelle et 12 contrôles du paquet final dans une machine virtuelle dédiée. Le test de réinstallation a repris après une pause, après vérification des 499 fichiers sources inchangés. Ces essais ne couvrent pas toutes les configurations matérielles : les détails et limites figurent dans **VERIFICATIONS.md**, joint à la [version publiée](https://github.com/bastos85-Poly/BASTOS/releases/tag/v7.120.136).
+Les vérifications et leurs limites sont détaillées dans **VERIFICATIONS.md**, joint à la [version publiée](https://github.com/bastos85-Poly/BASTOS/releases/latest). Les tests ne couvrent pas toutes les configurations matérielles.
+
+**Français ou English : à vous de choisir.** Le menu en haut à droite change la langue de l’interface et mémorise votre préférence. Bastos Game, dans la zone de notification, reprend ce même choix. La langue de l’interface ne change pas le Windows que vous choisissez de télécharger.
 
 Un problème, une idée ou un logiciel qui ne s’installe pas ? [Ouvrez une issue](https://github.com/bastos85-Poly/BASTOS/issues) en indiquant la version de BASTOS, l’action tentée, le résultat attendu et le message obtenu. Masquez vos données personnelles dans les captures. Ne joignez aucun journal brut, mot de passe ou clé de récupération BitLocker.
 
@@ -80,8 +82,9 @@ Vous pouvez aussi m’aider sans faire de don : en partageant le projet, en sign
 Les sources principales sont disponibles sous **GPL-3.0-or-later** ; les composants tiers conservent leurs licences propres. Le projet utilise C#/WPF et .NET 8 x64, avec un module de jeu C++.
 
 - [Installation et construction des sources](docs/INSTALLATION-ET-SOURCES.md)
-- [Guide de construction](README-Build.md) et [validation des livraisons](Build/README-ReleaseValidation.md)
+- [Guide de construction](docs/BUILD.md) et [validation des livraisons](Build/README-ReleaseValidation.md)
 - [Contribuer](CONTRIBUTING.md)
+- [Nouveautés](docs/CHANGELOG.md) et [langues de l’interface](docs/INTERFACE-LANGUAGES.md)
 - [Confidentialité](CONFIDENTIALITE.md) et [signalement de sécurité](SECURITY.md)
 - [Licence](LICENSE.txt)
 

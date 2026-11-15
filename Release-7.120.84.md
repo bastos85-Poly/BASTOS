@@ -1,7 +1,0 @@
-# BASTOS 7.120.84 — Nettoyeur inspiré de Kudu 3.10.0
-
-Le nettoyeur présente désormais les dix rubriques de Kudu dans une barre latérale, avec des résultats groupés, des compteurs, la taille estimée, une recherche dans la rubrique ou partout et des détails dépliables. Les options d’analyse sont regroupées dans « Périmètre de l’analyse ». Le profil conseillé analyse les vingt familles de fichiers ; les nettoyages de préchargement, de shaders et de confidentialité restent visibles mais non présélectionnés pour la suppression.
-
-L’analyse principale inventorie aussi les entrées d’environnement obsolètes, les bases SQLite et les traces du Registre ; ces résultats restent visibles quand on change de rubrique. La suppression de ces éléments spécialisés utilise leurs commandes dédiées et leurs sauvegardes. Le moteur ajoute les caches Telegram, Maven, Conda, Cargo, AWS CLI, Claude Code, Codex, AMD, WebView2 et certains fichiers des mises à jour Electron, avec contrôles des chemins et révalidation avant toute suppression.
-
-Source de comparaison : Kudu 3.10.0 (MIT), dépôt AdventDevInc/kudu, commit 373117bbe6fd9b471bcfdb2854a0fb70d81bae82. La conception reprend la structure et les familles de règles étudiées, mais ne prétend pas couvrir chaque cible de Kudu à l’identique. Aucun nettoyage réel du poste n’a servi au test. Validation locale : 36 contrôles moteur, 16 contrôles avancés, 57 contrôles WPF et navigation. Le laboratoire VM complet n’a pas été exécuté.
