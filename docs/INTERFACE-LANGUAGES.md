@@ -8,7 +8,7 @@ La traduction porte sur les textes rendus. Elle ne change ni la culture du syst�
 
 Le test `--language-smoke-test` nécessite `BASTOS_LANGUAGE_TEST_DATA` pointant vers un dossier privé dédié. Il vérifie les changements en direct, la sauvegarde, les valeurs sources et champs protégés, puis rend douze pages et neuf fenêtres secondaires avec des données de test pour les bilans. `--expect-english` vérifie le chargement d’une préférence anglaise préalablement enregistrée dans ce dossier. Les captures et rapports de tests restent privés.
 
-Cette évolution d’interface est testée localement. Elle ne constitue pas une nouvelle livraison validée pour la réinstallation de Windows.
+Cette interface est disponible dans la [version 7.120.137](https://github.com/bastos85-Poly/BASTOS/releases/tag/v7.120.137), dont le candidat a réussi les 13 groupes de validation, réinstallation de Windows en VM comprise. Le résumé des essais et leurs limites accompagne la livraison dans VERIFICATIONS.md.
 
 L’audit `--language-smoke-test --language-audit-hardware --smoke-test` ajoute une vraie analyse matérielle et une lecture des états réseau, sans installation de pilote ni modification réseau. `BASTOS_TEST_DATA` doit alors viser un dossier de test dans TEMP. Les sections dépliables sont ouvertes pendant la revue. Des cas de régression vérifient les progressions, résultats, noms de sources officielles, compteurs et le retour au texte français, tout en conservant les chemins et valeurs variables.
 

@@ -6,11 +6,11 @@
 
 # Réinstallez Windows facilement, même sans connaissances techniques
 
-### Sans clé USB ni matériel supplémentaire pour l’installation. Un parcours guidé en français.
+### Sans clé USB ni matériel supplémentaire pour l’installation. Un parcours guidé en français ou en anglais.
 
 > **Mon premier programme, un projet qui grandit avec vous.** BASTOS est encore en cours de développement. Vos retours, vos partages et votre soutien sur [Ko-fi](https://ko-fi.com/bastos85) m’aident à le faire progresser et à y consacrer davantage de temps.
 
-**Pas besoin de savoir créer une clé USB bootable ou préparer les fichiers d’installation à la main. Choisissez votre Windows et laissez-vous guider, étape par étape.** BASTOS rassemble le téléchargement, les contrôles et la préparation dans une même application en français, directement depuis votre PC.
+**Pas besoin de savoir créer une clé USB bootable ou préparer les fichiers d’installation à la main. Choisissez votre Windows et laissez-vous guider, étape par étape.** BASTOS rassemble le téléchargement, les contrôles et la préparation dans une même application, directement depuis votre PC. **Français / English : les deux langues sont disponibles dès la version 7.120.137.**
 
 L’objectif est simple : **rendre la réinstallation de Windows accessible, même si vous ne l’avez jamais faite.** Vous choisissez parmi les Windows proposés, BASTOS vous accompagne dans la préparation, puis vous consultez le bilan avant de confirmer. Les contrôles indiquent si votre PC remplit les conditions nécessaires.
 
@@ -18,7 +18,7 @@ L’objectif est simple : **rendre la réinstallation de Windows accessible, mê
 
 ## Comment fonctionne l’installation sans clé USB ?
 
-1. **Choisissez votre Windows.** Sélectionnez la version proposée, l’édition et la langue selon les choix disponibles. BASTOS vous accompagne pour télécharger l’image Windows depuis Microsoft ; vous pouvez aussi sélectionner une ISO compatible déjà téléchargée.
+1. **Choisissez votre Windows.** Sélectionnez la version proposée, l’édition et la langue selon les choix disponibles. Le catalogue et les détails affichent la source du téléchargement ; vous pouvez aussi sélectionner une ISO compatible déjà téléchargée.
 2. **Préparez l’installation sur le PC.** BASTOS vérifie l’image et les conditions nécessaires, puis prépare une zone temporaire sur le disque interne pour les fichiers d’installation. Vous n’avez pas de clé USB à créer pour ce parcours.
 3. **Vérifiez le bilan et lancez la réinstallation.** Après votre confirmation, le PC redémarre dans l’environnement d’installation. Une fois le premier démarrage vérifié, l’espace temporaire est rendu à C: et l’environnement de récupération Windows est recréé.
 
@@ -41,6 +41,60 @@ BASTOS propose aussi des **optimisations pour votre environnement gaming**, des 
 ![Choisir Windows, préparer le disque et installer sans clé USB](docs/images/bastos-parcours.svg)
 
 *Ces visuels sont des illustrations de présentation, pas des captures de l’application.*
+
+## Découvrez le menu avant de commencer
+
+**Français et anglais sont maintenant disponibles dans la même application.** Choisissez **Français / English** en haut à droite : l’affichage change immédiatement et votre choix est mémorisé. Bastos Game reprend la même langue, y compris près de l’horloge. Ce menu ne change pas la langue du Windows que vous téléchargez.
+
+![BASTOS en français : menu et sélection de Windows](docs/images/bastos-reinstallation-fr.png)
+
+*Capture de l’interface 7.120.137 : le menu reste à gauche, le choix de langue en haut à droite et les étapes du parcours au centre. Aucune installation n’est lancée en ouvrant cet écran.*
+
+| Vous voulez… | Ouvrez… |
+| --- | --- |
+| Choisir Windows et préparer une réinstallation sans clé USB | **Réinstallation facile Windows** |
+| Préparer vos réglages de jeu et suivre leur application | **Bastos Game** |
+| Consulter les pistes de mises à jour et les téléchargements de pilotes | **Mise à jour matériel** |
+| Installer un navigateur ou choisir vos logiciels | **Explorateur Internet / Logiciels** |
+| Adapter Windows à votre usage | **Optimisations / Personnalisation / Réglages avancés** |
+| Nettoyer, diagnostiquer ou retrouver le détail d’une opération | **Nettoyeur / Réparation / Journal** |
+
+### Le parcours sans clé USB, à votre rythme
+
+**1 · Windows** : choisissez parmi les versions, éditions et langues proposées, ou continuez avec une ISO compatible que vous possédez déjà. La source du téléchargement est indiquée dans l’application.
+
+**2 · Mon ISO** : sélectionnez votre image Windows et laissez BASTOS en vérifier la compatibilité avant de poursuivre.
+
+**3 · Options et lancement** : préparez les options proposées, choisissez le parcours sur partition interne et relisez le bilan. Le lancement de la réinstallation demande une confirmation distincte. Après vérification du premier démarrage, l’espace de la partition temporaire est rendu à C: et WinRE est recréé.
+
+**Sauvegardez vos fichiers sur un autre support avant de confirmer.** Le parcours prépare et modifie les partitions ; les contrôles précisent si votre PC remplit les conditions nécessaires. Un Windows accessible, un disque compatible et suffisamment d’espace restent requis.
+
+<details>
+<summary><strong>See the English interface / Voir l’interface anglaise</strong></summary>
+
+![BASTOS in English: navigation and Windows selection](docs/images/bastos-reinstallation-en.png)
+
+Choose **English** in the top-right menu. Select a Windows image, check your ISO, review the options, then confirm the separate reinstallation workflow. No USB drive is required for the supported internal-disk workflow. Back up your files first; compatibility and available space are checked before proceeding.
+
+</details>
+
+## Bastos Game : vos jeux, vos réglages, votre suivi
+
+**Le module gaming intégré accompagne vos parties.** Ajoutez un jeu si nécessaire, choisissez vos réglages, puis démarrez le moteur. Bastos Game détecte les jeux pris en charge ou ajoutés, applique les réglages de processus autorisés et affiche un état récent. Vous retrouvez ses commandes depuis l’icône de notification près de l’horloge.
+
+![Bastos Game : détection, priorité CPU et mode observation](docs/images/bastos-game-fr.png)
+
+*Capture de l’interface 7.120.137. L’état et la version du moteur affichés dépendent du module en fonctionnement sur le PC.*
+
+- **Mes jeux** : gérer les jeux suivis et les applications à ignorer.
+- **Mes réglages** : choisir la priorité CPU, le traitement de l’arrière-plan et le mode observation.
+- **Un suivi lisible** : consulter les actions réellement appliquées et les éventuels refus dans le journal.
+- **La même langue partout dans BASTOS** : français ou anglais, jusque dans le module de notification.
+
+Le moteur tente de restaurer les valeurs initiales à la fin du suivi. Les effets dépendent de votre PC et de vos jeux ; aucun gain universel de FPS n’est garanti.
+
+**[Découvrir comment utiliser Bastos Game](docs/features/game.md)** · [Bastos Game in English](docs/images/bastos-game-en.png)
+
 
 ## Essayer BASTOS
 
