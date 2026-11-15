@@ -22,7 +22,7 @@ public partial class MainWindow
            (page.Host!="ko-fi.com" && page.Host!="www.ko-fi.com") || !page.IsDefaultPort ||
            page.UserInfo.Length>0 || page.AbsolutePath=="/")return;
         try{launchDonationPage(page);}
-        catch(Exception){MessageBox.Show(this,"La page Ko-fi ne peut pas être ouverte pour le moment.","Soutenir Bastos",MessageBoxButton.OK,MessageBoxImage.Information);}
+        catch(Exception){Bastos.Native.LocalizedMessageBox.Show(this,"La page Ko-fi ne peut pas être ouverte pour le moment.","Soutenir Bastos",MessageBoxButton.OK,MessageBoxImage.Information);}
     }
 
     private async Task RunDonationSmokeAsync()

@@ -9,7 +9,7 @@ public partial class DiagnosticExportWindow : Window
     private readonly DiagnosticExportViewModel model;
     public DiagnosticExportWindow(DiagnosticExportViewModel model)
     {
-        InitializeComponent(); DataContext = this.model = model;
+        InitializeComponent(); LocalizedPresentation.Watch(this); DataContext = this.model = model;
         MaxHeight = SystemParameters.WorkArea.Height;
         MaxWidth = SystemParameters.WorkArea.Width;
         Loaded += async (_, _) => await model.PrepareAsync();

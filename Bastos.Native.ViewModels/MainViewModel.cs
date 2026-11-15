@@ -1114,7 +1114,7 @@ public GamePageViewModel GameSettings { get; }
 		string text = string.Join("\n", from item in selected
 			where !string.IsNullOrWhiteSpace(item.UninstallWarning)
 			select "• " + item.Name + " : " + item.UninstallWarning);
-		if (MessageBox.Show($"Désinstaller complètement {selected.Length} application(s) sélectionnée(s) ?" + ((text.Length == 0) ? string.Empty : ("\n\nAttention :\n" + text)), "Suppression des logiciels", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) != MessageBoxResult.Yes)
+		if (Bastos.Native.LocalizedMessageBox.Show($"Désinstaller complètement {selected.Length} application(s) sélectionnée(s) ?" + ((text.Length == 0) ? string.Empty : ("\n\nAttention :\n" + text)), "Suppression des logiciels", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) != MessageBoxResult.Yes)
 		{
 			return;
 		}
@@ -1316,7 +1316,7 @@ public GamePageViewModel GameSettings { get; }
 
 	private static bool ConfirmBrowserRemoval(string displayName)
 	{
-		return MessageBox.Show("Supprimer completement " + displayName + " de ce PC ?\n\nLe programme, les profils locaux, l'historique, les favoris, les mots de passe non synchronises, les caches, les raccourcis et les composants de mise a jour propres a ce navigateur seront effaces definitivement.", "Suppression complete du navigateur", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) == MessageBoxResult.Yes;
+		return Bastos.Native.LocalizedMessageBox.Show("Supprimer completement " + displayName + " de ce PC ?\n\nLe programme, les profils locaux, l'historique, les favoris, les mots de passe non synchronises, les caches, les raccourcis et les composants de mise a jour propres a ce navigateur seront effaces definitivement.", "Suppression complete du navigateur", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) == MessageBoxResult.Yes;
 	}
 
 	private async Task DebloatBrowser(string target)
@@ -1407,7 +1407,7 @@ public GamePageViewModel GameSettings { get; }
 			card.State = "Sélectionne d’abord l’ISO BASTOS créée dans Réinstallation facile Windows.";
 			card.Tone = StatusTone.Warning;
 		}
-		else if (MessageBox.Show("BASTOS va vérifier l’ISO choisie, puis créer ou mettre à jour BASTOS_RECOVERY sur le disque contenant C:. La création initiale peut réduire C: de 40 Go. Continuer ?", "Préparer l’installation autonome", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) == MessageBoxResult.Yes)
+		else if (Bastos.Native.LocalizedMessageBox.Show("BASTOS va vérifier l’ISO choisie, puis créer ou mettre à jour BASTOS_RECOVERY sur le disque contenant C:. La création initiale peut réduire C: de 40 Go. Continuer ?", "Préparer l’installation autonome", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) == MessageBoxResult.Yes)
 		{
 			await RunCard(card, () => reinstallService.PrepareAutonomousAsync(Reinstall.SelectedIso, Reinstall.SelectedLanguage, Reinstall.SelectedKeyboard, Reinstall.UserName));
 		}
@@ -1415,7 +1415,7 @@ public GamePageViewModel GameSettings { get; }
 
 	private async Task StartAutonomous(StatusCard card)
 	{
-		if (MessageBox.Show("DERNIÈRE CONFIRMATION\n\nEn continuant, BASTOS programmera le redémarrage et remplacera Windows sur son disque. Toutes les partitions de ce disque qui ne sont pas explicitement protégées comme EFI ou BASTOS_RECOVERY peuvent être supprimées.\n\nEnregistre et sauvegarde tous tes fichiers avant de répondre Oui. Après cela, l’installation se déroulera sans autre question.", "Lancer la réinstallation autonome", MessageBoxButton.YesNo, MessageBoxImage.Hand, MessageBoxResult.No) == MessageBoxResult.Yes)
+		if (Bastos.Native.LocalizedMessageBox.Show("DERNIÈRE CONFIRMATION\n\nEn continuant, BASTOS programmera le redémarrage et remplacera Windows sur son disque. Toutes les partitions de ce disque qui ne sont pas explicitement protégées comme EFI ou BASTOS_RECOVERY peuvent être supprimées.\n\nEnregistre et sauvegarde tous tes fichiers avant de répondre Oui. Après cela, l’installation se déroulera sans autre question.", "Lancer la réinstallation autonome", MessageBoxButton.YesNo, MessageBoxImage.Hand, MessageBoxResult.No) == MessageBoxResult.Yes)
 		{
 			await RunCard(card, (Func<Task<(bool Success, string Message)>>)reinstallService.StartAutonomousAsync);
 		}
@@ -1471,7 +1471,7 @@ public GamePageViewModel GameSettings { get; }
 	}
 	private async Task OpenDriver(StatusCard card, DriverRecommendation recommendation)
 	{
-		if (!recommendation.Sensitive || MessageBox.Show("Une mise à jour BIOS/UEFI incorrecte ou interrompue peut empêcher le démarrage. BASTOS va uniquement ouvrir la page officielle. Continuer ?", "Pilote sensible", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) == MessageBoxResult.Yes)
+		if (!recommendation.Sensitive || Bastos.Native.LocalizedMessageBox.Show("Une mise à jour BIOS/UEFI incorrecte ou interrompue peut empêcher le démarrage. BASTOS va uniquement ouvrir la page officielle. Continuer ?", "Pilote sensible", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) == MessageBoxResult.Yes)
 		{
 			await RunCard(card, () => operations.OpenOfficialDriverAsync(recommendation));
 		}
@@ -1631,7 +1631,7 @@ public GamePageViewModel GameSettings { get; }
 		if (previous.Count > 0)
 		{
 			string names = string.Join(", ", previous.Select(item => item.Name));
-			if (MessageBox.Show($"Installer {displayName} puis supprimer complètement : {names} ?\n\nLes profils locaux, favoris et mots de passe non synchronisés de ces navigateurs seront effacés. WebView2 sera conservé.",
+			if (Bastos.Native.LocalizedMessageBox.Show($"Installer {displayName} puis supprimer complètement : {names} ?\n\nLes profils locaux, favoris et mots de passe non synchronisés de ces navigateurs seront effacés. WebView2 sera conservé.",
 				"Remplacement complet des navigateurs", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) != MessageBoxResult.Yes)
 				return (false, "Remplacement annulé.");
 		}
@@ -1771,12 +1771,12 @@ public GamePageViewModel GameSettings { get; }
 				detail = string.Join(Environment.NewLine, json.RootElement.GetProperty("Settings").EnumerateArray().Select(e => e.GetString()));
 			}
 			catch (Exception ex) { card.State = Summarize(ex.Message); card.Tone = StatusTone.Danger; return; }
-			if (MessageBox.Show("Réglages qui seront importés :" + Environment.NewLine + Environment.NewLine + detail + Environment.NewLine + Environment.NewLine +
+			if (Bastos.Native.LocalizedMessageBox.Show("Réglages qui seront importés :" + Environment.NewLine + Environment.NewLine + detail + Environment.NewLine + Environment.NewLine +
 				"Les valeurs actuelles seront sauvegardées pour une restauration. Continuer ?", card.Title, MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes)
 			{ card.State = "Importation annulée"; card.Tone = StatusTone.Neutral; return; }
 			action = "ApplyImport";
 		}
-		else if (MessageBox.Show($"Restaurer les réglages {vendorName} enregistrés avant l’importation ?", card.Title,
+		else if (Bastos.Native.LocalizedMessageBox.Show($"Restaurer les réglages {vendorName} enregistrés avant l’importation ?", card.Title,
 			MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) return;
 		card.State = "Autorisation administrateur…"; card.Tone = StatusTone.Neutral;
 		resultPath = Path.Combine(paths.LogRoot, $"GraphicsImport-{vendor}-{Guid.NewGuid():N}.json");
@@ -2178,7 +2178,7 @@ public GamePageViewModel GameSettings { get; }
 	private async Task ToggleRiskyOptimizationAsync(TroubleshootingToggle item)
 	{
 		bool requested = !item.IsOn;
-		if (requested && MessageBox.Show(item.Title + "\n\n" + item.Description + "\n\nCette option réduit la sécurité ou la fiabilité de Windows. BASTOS enregistrera l’état actuel pour pouvoir le restaurer. Continuer ?", "Option expérimentale BASTOS", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) != MessageBoxResult.Yes)
+		if (requested && Bastos.Native.LocalizedMessageBox.Show(item.Title + "\n\n" + item.Description + "\n\nCette option réduit la sécurité ou la fiabilité de Windows. BASTOS enregistrera l’état actuel pour pouvoir le restaurer. Continuer ?", "Option expérimentale BASTOS", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) != MessageBoxResult.Yes)
 		{
 			return;
 		}
@@ -2295,7 +2295,7 @@ public GamePageViewModel GameSettings { get; }
 
 	private async Task OpenRepairDisk(StatusCard card)
 	{
-		if (MessageBox.Show("Une console administrateur va ouvrir CHKDSK /f sur le lecteur Windows. S’il est utilisé, Windows proposera une vérification au prochain redémarrage ; lis la question dans la console et réponds selon ton choix. Continuer ?", "Vérifier le disque", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) != MessageBoxResult.Yes) return;
+		if (Bastos.Native.LocalizedMessageBox.Show("Une console administrateur va ouvrir CHKDSK /f sur le lecteur Windows. S’il est utilisé, Windows proposera une vérification au prochain redémarrage ; lis la question dans la console et réponds selon ton choix. Continuer ?", "Vérifier le disque", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) != MessageBoxResult.Yes) return;
 		await RunNativeCard(card, "repair-chkdsk");
 		if (card.Tone == StatusTone.Success) card.Tone = StatusTone.Warning;
 	}
@@ -2312,7 +2312,7 @@ public GamePageViewModel GameSettings { get; }
 
 	private static Task ShowBootrecInstructions(StatusCard card)
 	{
-		MessageBox.Show("Cette commande concerne les disques MBR et s’exécute dans Windows Recovery.\n\nDans Windows, ouvre Paramètres > Système > Récupération > Démarrage avancé, puis choisis Dépannage > Options avancées > Invite de commandes.\n\nSaisis : bootrec /fixmbr\n\nSur un PC UEFI avec disque GPT, cette commande ne répare pas le démarrage EFI. Utilise d’abord l’outil de redémarrage système de Windows Recovery.", "Réparer le démarrage MBR", MessageBoxButton.OK, MessageBoxImage.Information);
+		Bastos.Native.LocalizedMessageBox.Show("Cette commande concerne les disques MBR et s’exécute dans Windows Recovery.\n\nDans Windows, ouvre Paramètres > Système > Récupération > Démarrage avancé, puis choisis Dépannage > Options avancées > Invite de commandes.\n\nSaisis : bootrec /fixmbr\n\nSur un PC UEFI avec disque GPT, cette commande ne répare pas le démarrage EFI. Utilise d’abord l’outil de redémarrage système de Windows Recovery.", "Réparer le démarrage MBR", MessageBoxButton.OK, MessageBoxImage.Information);
 		card.State = "Instructions affichées — aucune réparation lancée.";
 		return Task.CompletedTask;
 	}

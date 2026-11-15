@@ -12,7 +12,7 @@ public partial class GameListWindow : Window, IComponentConnector
 
 	public GameListWindow(BastosGameService service, bool blocked)
 	{
-		InitializeComponent();
+		InitializeComponent(); LocalizedPresentation.Watch(this);
 		this.service = service;
 		this.blocked = blocked;
 		Heading.Text = (blocked ? "Applications bloquées" : "Jeux autorisés");

@@ -250,7 +250,7 @@ public sealed class CleanerViewModel : ObservableObject, IDisposable
     {
         this.paths = paths; this.integratedScan = integratedScan ?? (service == null); this.service = service ?? new SystemCleanerService();
         this.environmentCleaner = environmentCleaner ?? new(); this.databaseCleaner = databaseCleaner ?? new(); this.privacyRegistry = privacyRegistry ?? new();
-        this.confirm = confirm ?? (text => MessageBox.Show(Application.Current.MainWindow, text, "Nettoyeur — confirmer la suppression", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) == MessageBoxResult.Yes);
+        this.confirm = confirm ?? (text => Bastos.Native.LocalizedMessageBox.Show(Application.Current.MainWindow, text, "Nettoyeur — confirmer la suppression", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) == MessageBoxResult.Yes);
         Categories = new(this.service.Catalog.Select(c => new CleanerCategoryItem(c, this.service.Options.Where(o => o.CategoryId == c.Id))));
         MaintenanceActions = new(maintenance.Catalog.Select(a => new CleanerMaintenanceItem(a)));
         Groups = new[] { "Système", "Navigateurs", "Applications", "Outils d’IA", "Jeux", "Corbeille", "Raccourcis", "Environnement", "Bases de données", "Traces de confidentialité" };

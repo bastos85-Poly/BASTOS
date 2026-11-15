@@ -10,7 +10,7 @@ public partial class RecoveryPreflightWindow : Window
     public RecoveryPreflightWindow(RecoveryPreflight review)
     {
         Review = review;
-        InitializeComponent();
+        InitializeComponent(); LocalizedPresentation.Watch(this);
         DataContext = review;
         UpdateLaunchAvailability();
         MaxHeight = Math.Max(550, SystemParameters.WorkArea.Height - 32);

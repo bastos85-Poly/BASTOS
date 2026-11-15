@@ -20,6 +20,7 @@
   <ItemGroup><Compile Remove="Tests\**\*.cs" /><EmbeddedResource Remove="Tests\**\*" /><Page Remove="Tests\**\*.xaml" /></ItemGroup>
   <ItemGroup><Compile Remove="Build\Installer\**\*.cs" /></ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Assets\Interface.en.json" LogicalName="Bastos.Interface.en.json" WithCulture="false" />
     <EmbeddedResource Include="Assets\EngineIntegrity.json" LogicalName="Bastos.EngineIntegrity.json" />
     <EmbeddedResource Include="Assets\WindowsDownloadCatalog.json" LogicalName="Bastos.WindowsDownloadCatalog.json" />
     <EmbeddedResource Include="Assets\Zoic-Ultimate-Performance-AMD.pow" LogicalName="Bastos.PowerPlans.ZoicAMD.pow" />

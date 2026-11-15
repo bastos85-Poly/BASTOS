@@ -21,7 +21,7 @@ public partial class RufusInstallWindow : Window
     public RufusInstallWindow(RufusInstallOptions options, string isoPath, string target, string plan,
         Func<Task<WindowsIsoEditionCatalog>> loadEditions, IReadOnlyList<LanguageChoice> regions, IReadOnlyList<KeyboardChoice> keyboards)
     {
-        InitializeComponent();
+        InitializeComponent(); LocalizedPresentation.Watch(this);
         Options = options;
         initialKeepOnly = options.KeepOnlyRecoveryPartition;
         initialPlan = plan;

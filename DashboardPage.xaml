@@ -26,7 +26,7 @@
     </Style>
   </UserControl.Resources>
 
-  <StackPanel Margin="0,0,16,4"><TextBlock Margin="0,0,0,10" Foreground="#8EBFFF" TextWrapping="Wrap" Text="{native:Translate Text='Aperçu de traduction : les autres pages et messages restent en français.'}" />
+  <StackPanel Margin="0,0,16,4">
     <Border Padding="20" CornerRadius="14" Background="#09111E" BorderBrush="#263A55" BorderThickness="1">
       <Grid>
         <Rectangle RadiusX="12" RadiusY="12" Opacity="0.72">
@@ -49,8 +49,8 @@
 
         <Viewbox Stretch="Uniform" HorizontalAlignment="Center">
           <Canvas Width="1000" Height="500">
-            <TextBlock Canvas.Left="28" Canvas.Top="24" Text="{native:Translate Text='VUE MATÉRIELLE'}" Foreground="#8EBFFF" FontSize="11" FontWeight="SemiBold"/>
-            <TextBlock Canvas.Left="28" Canvas.Top="43" Text="{native:Translate Text='Composants détectés une fois • utilisation en direct'}" Foreground="#7890AE" FontSize="11"/>
+            <TextBlock Canvas.Left="28" Canvas.Top="24" Text="VUE MATÉRIELLE" Foreground="#8EBFFF" FontSize="11" FontWeight="SemiBold"/>
+            <TextBlock Canvas.Left="28" Canvas.Top="43" Text="Composants détectés une fois • utilisation en direct" Foreground="#7890AE" FontSize="11"/>
 
             <!-- Boîtier vitré : perspective simple et régulière -->
             <Border Canvas.Left="66" Canvas.Top="76" Width="292" Height="382" CornerRadius="8" Background="#081522" BorderBrush="#8BC6FF" BorderThickness="2"/>
@@ -115,35 +115,35 @@
             <!-- Processeur -->
             <Grid Canvas.Left="465" Canvas.Top="33" Width="500" Height="72">
               <Grid.RowDefinitions><RowDefinition Height="16"/><RowDefinition Height="24"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-              <TextBlock Text="{native:Translate Text='PROCESSEUR'}" Foreground="#67ADFF" FontSize="10" FontWeight="SemiBold"/>
+              <TextBlock Text="PROCESSEUR" Foreground="#67ADFF" FontSize="10" FontWeight="SemiBold"/>
               <Grid Grid.Row="1"><TextBlock Style="{StaticResource HardwareName}" Text="{Binding CpuHardwareName}"/><TextBlock HorizontalAlignment="Right" Text="{Binding CpuMetric.Percent, StringFormat={}{0:0}%}" Foreground="#46A5FF" FontSize="16" FontWeight="Bold"/></Grid>
               <ProgressBar Grid.Row="2" Maximum="100" Value="{Binding CpuMetric.Percent, Mode=OneWay}" Style="{StaticResource HardwareGauge}"/>
             </Grid>
             <!-- Mémoire -->
             <Grid Canvas.Left="465" Canvas.Top="125" Width="500" Height="72">
               <Grid.RowDefinitions><RowDefinition Height="16"/><RowDefinition Height="24"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-              <TextBlock Text="{native:Translate Text='MÉMOIRE VIVE'}" Foreground="#67ADFF" FontSize="10" FontWeight="SemiBold"/>
+              <TextBlock Text="MÉMOIRE VIVE" Foreground="#67ADFF" FontSize="10" FontWeight="SemiBold"/>
               <Grid Grid.Row="1"><TextBlock Style="{StaticResource HardwareName}" Text="{Binding MemoryHardwareName}"/><TextBlock HorizontalAlignment="Right" Text="{Binding MemoryMetric.Percent, StringFormat={}{0:0}%}" Foreground="#46A5FF" FontSize="16" FontWeight="Bold"/></Grid>
               <ProgressBar Grid.Row="2" Maximum="100" Value="{Binding MemoryMetric.Percent, Mode=OneWay}" Style="{StaticResource HardwareGauge}"/>
             </Grid>
             <!-- Carte graphique -->
             <Grid Canvas.Left="465" Canvas.Top="217" Width="500" Height="72">
               <Grid.RowDefinitions><RowDefinition Height="16"/><RowDefinition Height="24"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-              <TextBlock Text="{native:Translate Text='CARTE GRAPHIQUE'}" Foreground="#67ADFF" FontSize="10" FontWeight="SemiBold"/>
+              <TextBlock Text="CARTE GRAPHIQUE" Foreground="#67ADFF" FontSize="10" FontWeight="SemiBold"/>
               <Grid Grid.Row="1"><TextBlock Style="{StaticResource HardwareName}" Text="{Binding GpuHardwareName}"/><TextBlock HorizontalAlignment="Right" Text="{Binding GpuMetric.Percent, StringFormat={}{0:0}%}" Foreground="#46A5FF" FontSize="16" FontWeight="Bold"/></Grid>
               <ProgressBar Grid.Row="2" Maximum="100" Value="{Binding GpuMetric.Percent, Mode=OneWay}" Style="{StaticResource HardwareGauge}"/>
             </Grid>
             <!-- Disque -->
             <Grid Canvas.Left="465" Canvas.Top="309" Width="500" Height="72">
               <Grid.RowDefinitions><RowDefinition Height="16"/><RowDefinition Height="24"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-              <TextBlock Text="{native:Translate Text='DISQUE SYSTÈME'}" Foreground="#67ADFF" FontSize="10" FontWeight="SemiBold"/>
+              <TextBlock Text="DISQUE SYSTÈME" Foreground="#67ADFF" FontSize="10" FontWeight="SemiBold"/>
               <Grid Grid.Row="1"><TextBlock Style="{StaticResource HardwareName}" Text="{Binding DiskHardwareName}"/><TextBlock HorizontalAlignment="Right" Text="{Binding DiskMetric.Percent, StringFormat={}{0:0}%}" Foreground="#46A5FF" FontSize="16" FontWeight="Bold"/></Grid>
               <ProgressBar Grid.Row="2" Maximum="100" Value="{Binding DiskMetric.Percent, Mode=OneWay}" Style="{StaticResource HardwareGauge}"/>
             </Grid>
             <!-- Réseau -->
             <Grid Canvas.Left="465" Canvas.Top="401" Width="500" Height="72">
               <Grid.RowDefinitions><RowDefinition Height="16"/><RowDefinition Height="24"/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
-              <TextBlock Text="{native:Translate Text='CARTE RÉSEAU'}" Foreground="#67ADFF" FontSize="10" FontWeight="SemiBold"/>
+              <TextBlock Text="CARTE RÉSEAU" Foreground="#67ADFF" FontSize="10" FontWeight="SemiBold"/>
               <Grid Grid.Row="1"><TextBlock Style="{StaticResource HardwareName}" Text="{Binding NetworkHardwareName}"/><TextBlock HorizontalAlignment="Right" Text="{Binding NetworkMetric.Percent, StringFormat={}{0:0}%}" Foreground="#46A5FF" FontSize="16" FontWeight="Bold"/></Grid>
               <ProgressBar Grid.Row="2" Maximum="100" Value="{Binding NetworkMetric.Percent, Mode=OneWay}" Style="{StaticResource HardwareGauge}"/>
             </Grid>
@@ -155,7 +155,7 @@
       <Grid>
         <Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
         <Ellipse Width="8" Height="8" Fill="#39C77B" Margin="0,0,10,0" VerticalAlignment="Center"/>
-        <TextBlock Grid.Column="1" Foreground="#C7D7F4" FontSize="11" VerticalAlignment="Center" Text="{native:Translate Path=DashboardStatus}"/>
+        <TextBlock Grid.Column="1" Foreground="#C7D7F4" FontSize="11" VerticalAlignment="Center" Text="{Binding DashboardStatus}"/>
         <TextBlock Grid.Column="2" Foreground="#7482A4" FontSize="10" VerticalAlignment="Center" Margin="14,0,0,0" Text="{Binding DashboardUpdatedAt}"/>
       </Grid>
     </Border>

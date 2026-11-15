@@ -682,7 +682,7 @@ public sealed partial class ReinstallViewModel : ObservableObject
 		{
 			return Task.CompletedTask;
 		}
-		if (MessageBox.Show($"Supprimer définitivement cette ISO ?\n\n{isoChoice.FileName}\n{isoChoice.Metadata}\n{isoChoice.Path}\n\n" + "Le contenu déjà copié dans BASTOS_RECOVERY ne sera pas effacé, mais cette ISO ne pourra plus être utilisée pour une nouvelle synchronisation ou une clé USB.", "Supprimer l’ISO sélectionnée", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) != MessageBoxResult.Yes)
+		if (Bastos.Native.LocalizedMessageBox.Show($"Supprimer définitivement cette ISO ?\n\n{isoChoice.FileName}\n{isoChoice.Metadata}\n{isoChoice.Path}\n\n" + "Le contenu déjà copié dans BASTOS_RECOVERY ne sera pas effacé, mais cette ISO ne pourra plus être utilisée pour une nouvelle synchronisation ou une clé USB.", "Supprimer l’ISO sélectionnée", MessageBoxButton.YesNo, MessageBoxImage.Exclamation, MessageBoxResult.No) != MessageBoxResult.Yes)
 		{
 			return Task.CompletedTask;
 		}
@@ -759,7 +759,7 @@ public sealed partial class ReinstallViewModel : ObservableObject
 			Status = "Vérification du disque avant la création de D:…";
 			var compatibility = await service.CheckAutonomousCompatibilityAsync();
 			if (!compatibility.Success) { Status = "Création de D: refusée — " + compatibility.Message; return; }
-			if (MessageBox.Show(
+			if (Bastos.Native.LocalizedMessageBox.Show(
 				compatibility.Message + "\n\nBastos va uniquement créer la partition D: BASTOS_RECOVERY. Si 40 Go ne sont pas déjà non alloués, C: sera réduit de 40 Go si Windows le permet. L’édition Windows et les options seront choisies ensuite. Aucun redémarrage ne sera lancé. Sauvegarde tes fichiers avant de continuer.",
 				"Créer D: BASTOS_RECOVERY", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) != MessageBoxResult.Yes)
 			{
@@ -796,7 +796,7 @@ public sealed partial class ReinstallViewModel : ObservableObject
 			Status = "Vérification de Bastos sur C:, de WinRE et de D:…";
 			var preview = await service.FinalizeTemporaryRecoveryAsync(false);
 			if (!preview.Success) { Status = "Finalisation refusée — " + preview.Message; return; }
-			if (MessageBox.Show("La réinstallation est vérifiée et Bastos fonctionne depuis C:. Bastos va supprimer D: BASTOS_RECOVERY, agrandir C: et recréer une petite partition WinRE. Toutes les données encore présentes sur D: seront effacées. Une interruption pendant le partitionnement peut demander une réparation manuelle. Sauvegarde tes fichiers avant de continuer.\n\nContinuer ?", "Récupérer l’espace de D:", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) != MessageBoxResult.Yes)
+			if (Bastos.Native.LocalizedMessageBox.Show("La réinstallation est vérifiée et Bastos fonctionne depuis C:. Bastos va supprimer D: BASTOS_RECOVERY, agrandir C: et recréer une petite partition WinRE. Toutes les données encore présentes sur D: seront effacées. Une interruption pendant le partitionnement peut demander une réparation manuelle. Sauvegarde tes fichiers avant de continuer.\n\nContinuer ?", "Récupérer l’espace de D:", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) != MessageBoxResult.Yes)
 			{
 				Status = "Finalisation annulée. D: est conservé.";
 				return;

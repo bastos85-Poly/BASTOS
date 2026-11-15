@@ -10,7 +10,7 @@ public partial class IsoCustomizationWindow : Window
 	public IsoCustomizationWindow(ReinstallViewModel viewModel)
 	{
 		this.viewModel = viewModel;
-		InitializeComponent();
+		InitializeComponent(); LocalizedPresentation.Watch(this);
 		DataContext = viewModel;
 	}
 

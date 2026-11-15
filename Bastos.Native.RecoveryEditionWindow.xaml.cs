@@ -11,7 +11,7 @@ public partial class RecoveryEditionWindow : Window
 
     public RecoveryEditionWindow(IReadOnlyList<WindowsIsoEdition> editions)
     {
-        InitializeComponent();
+        InitializeComponent(); LocalizedPresentation.Watch(this);
         EditionCombo.ItemsSource = editions;
     }
 

@@ -164,7 +164,7 @@ public sealed class NetworkOptimizationViewModel : ObservableObject
             "Activer le profil « " + SelectedProfile + " » sur cette carte uniquement ?\n\n" + Details +
             "\n\nLes économies d’énergie désactivées peuvent augmenter la consommation." +
             (LowLatency ? " La désactivation de la modération des interruptions peut augmenter la charge CPU, sans gain de latence garanti." : "");
-        if (MessageBox.Show(adapter.DisplayName + "\n\n" + warning +
+        if (Bastos.Native.LocalizedMessageBox.Show(adapter.DisplayName + "\n\n" + warning +
             "\n\nLa carte pourra redémarrer et couper la connexion quelques instants. Évite cette opération pendant une session distante ou un téléchargement important.",
             "Profil Ethernet Bastos", MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) != MessageBoxResult.Yes) return;
         SetBusy(true); Status = restore ? "Restauration des valeurs initiales…" : "Sauvegarde et activation…";
@@ -196,7 +196,7 @@ public sealed class NetworkOptimizationViewModel : ObservableObject
             "Donner la priorité à IPv4 dans Windows en conservant IPv6 et toutes les liaisons réseau. Ce réglage est global, pas limité à la carte sélectionnée.";
         warning += only ? "\n\n" + OnlyTarget + "\n\nCoupure temporaire du réseau possible. Ne pas lancer pendant une session distante ou un transfert important." :
             "\n\nUn redémarrage de Windows sera nécessaire si la préférence est modifiée. Bastos ne redémarrera pas le PC automatiquement.";
-        if (MessageBox.Show(warning, title, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) != MessageBoxResult.Yes) return;
+        if (Bastos.Native.LocalizedMessageBox.Show(warning, title, MessageBoxButton.YesNo, MessageBoxImage.Warning, MessageBoxResult.No) != MessageBoxResult.Yes) return;
         SetBusy(true); IpStatus = restore ? "Restauration des réglages IP…" : "Sauvegarde et activation du mode IP…";
         string outcome;
         try

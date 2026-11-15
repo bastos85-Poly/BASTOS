@@ -23,7 +23,9 @@ public partial class App : Application
 			return;
 		}
 		base.OnStartup(e);
+        LocalizedPresentation.Initialize();
 		base.MainWindow = new MainWindow();
+        LocalizedPresentation.Watch(base.MainWindow);
 		base.MainWindow.Show();
 	}
 
