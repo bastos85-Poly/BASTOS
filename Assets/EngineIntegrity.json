@@ -78,11 +78,11 @@
       "Sha256": "2A4D60172A0A40BBE0675D51F3A7F1BF6423D824373336A7D3D88B973C86005B"
     },
     {
-      "Path": "Bastos.Game/Source/build.ps1",
+      "Path": "Bastos.Game\\Source\\build.ps1",
       "Sha256": "62D366BC004E7CF382BAE345D273619A710EB0C684DB7FE30BB0BDE9C9889503"
     },
     {
-      "Path": "Bastos.Game/Source/Test-Engine.ps1",
+      "Path": "Bastos.Game\\Source\\Test-Engine.ps1",
       "Sha256": "6EA3A3B508D2F251299DBF7F236B104A4231234D9D842B982592C75EF2440E22"
     },
     {
@@ -170,55 +170,55 @@
       "Sha256": "3B90842E5FB9F5F131C6D939F93013C9B40AD4E82683FDF209A4BF1F3100C39A"
     },
     {
-      "Path": "General-Optimization-Tools/11 Mpo.ps1",
+      "Path": "General-Optimization-Tools\\11 Mpo.ps1",
       "Sha256": "636AE8FED31EEF8BEB04B7EB081A3C662694E9F68E830F5BDA0D43B914EB9021"
     },
     {
-      "Path": "General-Optimization-Tools/25 Device Manager Power Savings & Wake.ps1",
+      "Path": "General-Optimization-Tools\\25 Device Manager Power Savings & Wake.ps1",
       "Sha256": "2B8771E5D668C0BBBA4BCEE6BE17C3A68DAD99B2A1179ACA45FFBA40351BEE59"
     },
     {
-      "Path": "General-Optimization-Tools/25-DevicePower.ps1",
+      "Path": "General-Optimization-Tools\\25-DevicePower.ps1",
       "Sha256": "1BFBF208B7A4FCCC36DEAF039D56B7BCAEE3A33171775999E2B5628F7B06CBAA"
     },
     {
-      "Path": "General-Optimization-Tools/26 Network Adapter Power Savings & Wake.ps1",
+      "Path": "General-Optimization-Tools\\26 Network Adapter Power Savings & Wake.ps1",
       "Sha256": "5BAAA5FC30219E2077AF96B969221FC0A76747D330BBBF1B99AB2CA6394F1503"
     },
     {
-      "Path": "General-Optimization-Tools/27 Network IPv4 Only.ps1",
+      "Path": "General-Optimization-Tools\\27 Network IPv4 Only.ps1",
       "Sha256": "18CC92D5F032D7A9E0DE18951D6AE5772B730EB9A7890EDED59972CAA5CBF5DA"
     },
     {
-      "Path": "General-Optimization-Tools/28 Write Cache Buffer Flushing.ps1",
+      "Path": "General-Optimization-Tools\\28 Write Cache Buffer Flushing.ps1",
       "Sha256": "EDC5BD1590E64B7A28285D2BFA12E05C24CD6ECA1755FEA9BA7CA199B158F60F"
     },
     {
-      "Path": "General-Optimization-Tools/30 Timer Resolution.ps1",
+      "Path": "General-Optimization-Tools\\30 Timer Resolution.ps1",
       "Sha256": "7F6D367A26506539A29B5B56E4101855DEE3D9868F6C425D275BD3659DC76527"
     },
     {
-      "Path": "General-Optimization-Tools/31 Services a la demande.ps1",
+      "Path": "General-Optimization-Tools\\31 Services a la demande.ps1",
       "Sha256": "490BC8A1F73157713129340661E80A3640D879E9CA6F6D6FB647185830BF51B6"
     },
     {
-      "Path": "General-Optimization-Tools/32 Defender Scan CPU 25.ps1",
+      "Path": "General-Optimization-Tools\\32 Defender Scan CPU 25.ps1",
       "Sha256": "DCD186FA2CC038FD227E041FD14308AF5CCC0C074439B67EF97F8BED519D2563"
     },
     {
-      "Path": "General-Optimization-Tools/33 SysMain Prefetch.ps1",
+      "Path": "General-Optimization-Tools\\33 SysMain Prefetch.ps1",
       "Sha256": "ABE2C6AB1E22DCA6AFD9DCAAAA33B78A2B4C8FBE9A59DB08295D29BBABFED9C0"
     },
     {
-      "Path": "General-Optimization-Tools/34 Preferer IPv4.ps1",
+      "Path": "General-Optimization-Tools\\34 Preferer IPv4.ps1",
       "Sha256": "008153FDA3381A06ECFE9D2FB7486113200D9A710A3F2672B7ADC6157FB53009"
     },
     {
-      "Path": "General-Optimization-Tools/35 Manage BASTOS Options.ps1",
+      "Path": "General-Optimization-Tools\\35 Manage BASTOS Options.ps1",
       "Sha256": "6B1D7B698C9EA2E044CA469F1EADD5ACCCAA914AAABDCE3B8A498DB88A3B3757"
     },
     {
-      "Path": "General-Optimization-Tools/6 Monitor Optimization.ps1",
+      "Path": "General-Optimization-Tools\\6 Monitor Optimization.ps1",
       "Sha256": "F9151DF51B8916C7A397198C4054F21CA9666DB1DF42344E90541699F9AAC0CF"
     },
     {

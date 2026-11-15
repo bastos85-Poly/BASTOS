@@ -12,7 +12,7 @@ $build=Get-Content -LiteralPath (Join-Path $app 'BASTOS-Build.json') -Raw -Encod
 $manifestPath=Join-Path $app 'BASTOS-App-Manifest.json'
 if((Get-FileHash -LiteralPath $manifestPath).Hash -ne $build.AppManifestSha256){throw 'Manifeste de base divergent.'}
 $manifest=Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8|ConvertFrom-Json
-$paths=@(@($manifest.Files.Path)+$AdditionalPaths|Where-Object {$_ -match '\.(ps1|psm1|psd1|cmd|bat)$' -and $_ -ne 'Installer-BASTOS.ps1' -and $_ -notin $ExcludedPaths}|Sort-Object -Unique)
+$paths=@(@($manifest.Files.Path)+$AdditionalPaths|ForEach-Object {([string]$_).Replace('/', '\')}|Where-Object {$_ -match '\.(ps1|psm1|psd1|cmd|bat)$' -and $_ -ne 'Installer-BASTOS.ps1' -and $_ -notin $ExcludedPaths}|Sort-Object -Unique)
 $files=@(foreach($relative in $paths){
     if([IO.Path]::IsPathRooted($relative) -or $relative.Contains(':') -or $relative.Split('\') -contains '..'){throw 'Chemin de catalogue refuse.'}
     $file=Join-Path $app $relative
