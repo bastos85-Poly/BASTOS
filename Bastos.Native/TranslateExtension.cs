@@ -81,7 +81,16 @@ public sealed class InterfaceLanguage : INotifyPropertyChanged
             ?? throw new InvalidOperationException("English interface catalog missing.");
         return System.Text.Json.JsonSerializer.Deserialize<Dictionary<string, string>>(stream)!;
     }
-    public string Translate(string text) => TranslateCore(text, 0);
+    private static readonly System.Collections.Concurrent.ConcurrentDictionary<string,string> Cache = new(StringComparer.Ordinal);
+    public string Translate(string text)
+    {
+        if (Language != "en" || string.IsNullOrEmpty(text)) return text;
+        if (Cache.TryGetValue(text, out var cached)) return cached;
+        var translated = TranslateCore(text, 0);
+        if (Cache.Count >= 4096) Cache.Clear();
+        Cache.TryAdd(text, translated);
+        return translated;
+    }
     private string TranslateCore(string text, int depth)
     {
         if (Language != "en" || string.IsNullOrEmpty(text)) return text;

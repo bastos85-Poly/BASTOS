@@ -18,7 +18,7 @@ public partial class DiagnosticExportWindow : Window
     private async void Save_Click(object sender, RoutedEventArgs e)
     {
         if (!model.CanExport) return;
-        var dialog = new SaveFileDialog { Title = "Enregistrer le diagnostic Bastos", Filter = "Archive ZIP (*.zip)|*.zip", DefaultExt = ".zip", AddExtension = true,
+        var dialog = new SaveFileDialog { Title = InterfaceLanguage.Instance.Translate("Enregistrer le diagnostic Bastos"), Filter = InterfaceLanguage.Instance.Translate("Archive ZIP (*.zip)|*.zip"), DefaultExt = ".zip", AddExtension = true,
             FileName = "Bastos-Diagnostic-" + DateTime.Now.ToString("yyyyMMdd-HHmmss-fff") + ".zip", OverwritePrompt = false };
         if (dialog.ShowDialog(this) == true) await model.ExportAsync(dialog.FileName);
     }

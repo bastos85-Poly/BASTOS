@@ -2440,7 +2440,7 @@ public GamePageViewModel GameSettings { get; }
 	{
 		OpenFileDialog dialog = new OpenFileDialog
 		{
-			Title = (blocked ? "Application à bloquer" : "Jeu à autoriser"),
+			Title = Bastos.Native.InterfaceLanguage.Instance.Translate(blocked ? "Application à bloquer" : "Jeu à autoriser"),
 			Filter = "Applications (*.exe)|*.exe",
 			CheckFileExists = true,
 			Multiselect = false

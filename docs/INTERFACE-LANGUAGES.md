@@ -10,4 +10,6 @@ Le test `--language-smoke-test` nécessite `BASTOS_LANGUAGE_TEST_DATA` pointant 
 
 Cette évolution d’interface est testée localement. Elle ne constitue pas une nouvelle livraison validée pour la réinstallation de Windows.
 
+L’audit `--language-smoke-test --language-audit-hardware --smoke-test` ajoute une vraie analyse matérielle et une lecture des états réseau, sans installation de pilote ni modification réseau. `BASTOS_TEST_DATA` doit alors viser un dossier de test dans TEMP. Les sections dépliables sont ouvertes pendant la revue. Des cas de régression vérifient les progressions, résultats, noms de sources officielles, compteurs et le retour au texte français, tout en conservant les chemins et valeurs variables.
+
 Bastos Game lit la même préférence, transmise par --language-file. Le module actualise son menu de notification, son infobulle et ses réglages pendant le fonctionnement. Son catalogue spécifique est Bastos.Game.Source/Interface.en.json ; build.ps1 le fusionne avec le catalogue principal pour embarquer les textes, sans requête de traduction réseau. --language-self-test exige un fichier de préférence de test distinct et vérifie le menu, le changement en direct et la conservation de la sélection. Les politiques du moteur et les résultats enregistrés ne sont pas traduits ni modifiés.

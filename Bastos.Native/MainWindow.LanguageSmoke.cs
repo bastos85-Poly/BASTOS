@@ -41,6 +41,26 @@ public partial class MainWindow
                 using var stream = File.Create(Path.Combine(root, code + ".png")); encoder.Save(stream);
             }
             InterfaceLanguageSelector.SelectedValue = "en";
+            var dynamicCases = new (string French,string English)[] {
+                ("34 % — Etape 4/9 - Carte graphique\nLecture de tous les GPU et de leurs pilotes...", "34 % — Step 4/9 - Graphics cards\nReading all GPUs and their drivers..."),
+                ("Analyse matérielle terminée: rapport et inventaire vérifiés.", "Hardware analysis completed: report and inventory verified."),
+                ("Voir les téléchargements officiels", "View official downloads"),
+                ("197 périphériques détectés · 7 liens officiels proposés · 0 problème(s).", "197 devices detected · 7 official links suggested · 0 issue(s)."),
+                ("Realtek - derniers pilotes officiels", "Realtek - latest official drivers"),
+                ("MSI Board - support officiel", "MSI Board - official support"),
+                ("AMD B840 - pilote chipset officiel", "AMD B840 - official chipset driver"),
+                ("Version installée : Information indisponible", "Installed version: Information unavailable"),
+                ("Cette action est en cours. Attends sa fin.", "This action is running. Wait for it to finish."),
+                ("Étape 2/4 — installation de Firefox en cours", "Step 2/4 — installing Firefox"),
+                ("Bases de données — 3 optimisées, 4 Mo récupérés, 2 ignorées.", "Databases — 3 optimized, 4 MB recovered, 2 skipped."),
+                ("Traces du Registre — 2 listes effacées, 1 ignorées.", "Registry traces — 2 lists cleared, 1 skipped."),
+                (@"C:\Données\Réparation.txt", @"C:\Données\Réparation.txt")
+            };
+            foreach(var test in dynamicCases)
+                if(InterfaceLanguage.Instance.Translate(test.French)!=test.English)throw new Exception("Dynamic translation regression: "+test.French+" => "+InterfaceLanguage.Instance.Translate(test.French));
+            InterfaceLanguageSelector.SelectedValue="fr";
+            foreach(var test in dynamicCases)if(InterfaceLanguage.Instance.Translate(test.French)!=test.French)throw new Exception("French source altered");
+            InterfaceLanguageSelector.SelectedValue="en";
             if (!InterfaceLanguageSelector.IsEnabled || !InterfaceLanguageSelector.IsTabStop || !InterfaceLanguageSelector.Focus()) throw new Exception("Language selector is not keyboard accessible");
             var field = new TextBox { Text="Réparation" };
             var diagnostic = new TextBox { Text="Réparation", IsReadOnly=true };
@@ -60,8 +80,23 @@ public partial class MainWindow
             foreach(var nav in vm.Navigation)
             {
                 vm.SelectedNavigation = nav;
+                if(nav.PageKey=="hardware" && Environment.GetCommandLineArgs().Contains("--language-audit-hardware"))
+                {
+                    var method=typeof(MainViewModel).GetMethod("AnalyzeHardware",System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance)!;
+                    await (Task)method.Invoke(vm,new object[]{vm.CurrentPage,vm.CurrentPage.HardwareAnalysisCard!})!;
+                    if(vm.CurrentPage.HardwareResults.Count<3)throw new Exception("Real hardware analysis did not produce driver results");
+                    foreach(var card in vm.CurrentPage.HardwareResults)
+                        foreach(var text in new[]{card.Title,card.State,card.HardwareRole,card.HardwareSource,card.HardwareDetails}) InterfaceLanguage.Instance.Translate(text);
+                }
+                if(nav.PageKey=="optimizations" && Environment.GetCommandLineArgs().Contains("--language-audit-hardware"))
+                    await vm.NetworkOptimization.RefreshAsync();
                 CollectModelText(vm.CurrentPage, new System.Collections.Generic.HashSet<object>(System.Collections.Generic.ReferenceEqualityComparer.Instance), 0);
                 await Dispatcher.InvokeAsync(() => { }, DispatcherPriority.ApplicationIdle);
+                for(int pass=0;pass<3;pass++)
+                {
+                    foreach(var expander in Descendants(this).OfType<Expander>().Where(e=>e.IsVisible).ToArray()) expander.IsExpanded=true;
+                    await Dispatcher.InvokeAsync(()=>{},DispatcherPriority.ApplicationIdle);
+                }
                 UpdateLayout();
                 var bitmap = new RenderTargetBitmap((int)ActualWidth, (int)ActualHeight, 96, 96, PixelFormats.Pbgra32);
                 bitmap.Render(this);
