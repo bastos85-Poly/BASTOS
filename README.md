@@ -2,21 +2,21 @@
 
 <p align="center"><a href="https://github.com/bastos85-Poly/BASTOS/releases/latest"><strong>Télécharger BASTOS</strong></a> · <a href="https://github.com/bastos85-Poly/BASTOS/issues">Faire un retour</a> · <a href="https://ko-fi.com/bastos85">❤️ Soutenir sur Ko-fi</a></p>
 
-# Votre Windows, plus facile à prendre en main
+# Réinstallez Windows plus facilement. Préparez votre PC pour le gaming.
 
-**BASTOS est une application en français pour Windows 11 qui rassemble les réglages, les logiciels, le diagnostic et la préparation d’une réinstallation dans une même interface.**
+**BASTOS vous accompagne pour réinstaller Windows 11 plus facilement, puis optimiser et personnaliser votre environnement gaming depuis une application en français.**
 
-Vous voulez personnaliser Windows, installer vos outils habituels ou mieux comprendre votre PC ? BASTOS réunit ces parcours pour vous aider à choisir vos actions et à consulter leur résultat. Le projet est ouvert aux personnes qui souhaitent le tester et contribuer à son amélioration.
+L’objectif : simplifier le retour à un Windows propre, puis retrouver un PC adapté à vos jeux et à vos préférences. Préparez votre réinstallation avec un parcours guidé, choisissez vos réglages et installez vos outils habituels dans une même interface.
 
 ## Ce que vous pouvez faire
 
 | Votre besoin | Ce que propose BASTOS |
 | --- | --- |
+| **Réinstaller Windows plus facilement** | Un parcours guidé pour préparer la réinstallation, avec contrôles et bilan avant lancement. Sauvegardez vos données avant de confirmer. |
+| **Optimiser votre environnement gaming** | Des réglages Windows et des outils liés au jeu et au matériel, à choisir selon votre configuration. Les gains dépendent du PC et des jeux ; aucun gain universel de FPS n’est garanti. |
 | **Personnaliser Windows** | Mode sombre, transparence, Explorateur et autres réglages Windows dans une interface commune. |
 | **Installer vos logiciels** | Un catalogue pour sélectionner et lancer l’installation de vos applications. Une connexion Internet est nécessaire ; certains éditeurs demandent une interaction. |
 | **Comprendre votre PC** | Des informations sur le matériel et des outils de diagnostic, avec un journal pour consulter les résultats et les erreurs. |
-| **Préparer votre environnement de jeu** | Des réglages et outils liés au jeu et au matériel. Leur effet dépend de votre configuration ; aucun gain universel de FPS n’est promis. |
-| **Préparer une réinstallation** | Un parcours dédié à la réinstallation de Windows, avec contrôles et bilan avant lancement. Il nécessite une sauvegarde préalable. |
 
 ![Découvrir son PC, choisir ses actions et vérifier les résultats](docs/images/bastos-parcours.svg)
 

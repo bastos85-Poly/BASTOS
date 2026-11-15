@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1280" height="360" viewBox="0 0 1280 360" role="img" aria-label="Trois étapes : découvrir son PC, choisir ses actions, vérifier le résultat.">
 <rect width="1280" height="360" rx="24" fill="#0f192b"/>
-<g font-family="Segoe UI,Arial,sans-serif"><text x="48" y="60" fill="white" font-size="29" font-weight="700">Prenez la main, étape par étape.</text>
+<g font-family="Segoe UI,Arial,sans-serif"><text x="48" y="60" fill="white" font-size="29" font-weight="700">Un nouveau départ pour votre PC.</text>
 <g fill="#18283f" stroke="#344963"><rect x="48" y="96" width="376" height="218" rx="16"/><rect x="452" y="96" width="376" height="218" rx="16"/><rect x="856" y="96" width="376" height="218" rx="16"/></g>
 <g fill="#69d7ff" font-size="36" font-weight="700"><text x="74" y="149">01</text><text x="478" y="149">02</text><text x="882" y="149">03</text></g>
-<g fill="white" font-size="25" font-weight="600"><text x="74" y="196">Découvrez</text><text x="478" y="196">Choisissez</text><text x="882" y="196">Vérifiez</text></g>
-<g fill="#bdcde3" font-size="20"><text x="74" y="238">Consultez votre matériel</text><text x="74" y="268">et les réglages proposés.</text><text x="478" y="238">Sélectionnez les logiciels</text><text x="478" y="268">et les actions utiles.</text><text x="882" y="238">Lisez les résultats</text><text x="882" y="268">et les détails du journal.</text></g>
+<g fill="white" font-size="25" font-weight="600"><text x="74" y="196">Réinstallez</text><text x="478" y="196">Optimisez</text><text x="882" y="196">Personnalisez</text></g>
+<g fill="#bdcde3" font-size="18"><text x="74" y="238">Préparez votre réinstallation</text><text x="74" y="268">avec un parcours guidé.</text><text x="478" y="238">Choisissez vos réglages</text><text x="478" y="268">pour votre environnement gaming.</text><text x="882" y="238">Adaptez Windows</text><text x="882" y="268">à vos préférences.</text></g>
 </g></svg>
