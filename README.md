@@ -6,6 +6,8 @@
 
 # Réinstaller Windows sans clé USB ? BASTOS vous guide, étape par étape.
 
+> **Mon premier programme, un projet qui grandit avec vous.** BASTOS est encore en cours de développement. Vos retours, vos partages et votre soutien sur [Ko-fi](https://ko-fi.com/bastos85) m’aident à le faire progresser et à y consacrer davantage de temps.
+
 **Choisissez votre Windows. Suivez le guide. Lancez la réinstallation.** BASTOS rassemble le téléchargement et la préparation dans une même application en français : pas de clé USB à préparer, pas de support d’installation à créer à la main.
 
 L’objectif est simple : **rendre la réinstallation de Windows accessible, même si vous ne l’avez jamais faite.** Vous choisissez parmi les Windows proposés, BASTOS vous accompagne dans la préparation, puis vous consultez le bilan avant de confirmer. Les contrôles indiquent si votre PC remplit les conditions nécessaires.
@@ -63,7 +65,11 @@ La désinstallation de BASTOS conserve les données et les sauvegardes ; elle ne
 
 ## Soutenir le développement
 
-BASTOS est un projet indépendant. Si l’application vous est utile, un don peut aider à poursuivre son développement et ses tests. Vous pouvez aussi contribuer avec un retour précis ou une proposition d’amélioration.
+**BASTOS est mon premier programme.** Je le développe avec l’envie de rendre la réinstallation de Windows plus accessible et de proposer des outils utiles pour le gaming et la personnalisation. Le projet est encore en cours de développement : il évolue, et des bugs peuvent subsister malgré les tests.
+
+J’aimerais pouvoir **m’investir à fond dans BASTOS**. Pour cela, j’ai besoin de soutien : vos dons peuvent m’aider à dégager plus de temps pour développer les fonctionnalités, corriger les problèmes et poursuivre les tests.
+
+Vous pouvez aussi m’aider sans faire de don : en partageant le projet, en signalant un bug avec des explications précises ou en proposant une amélioration. Merci à celles et ceux qui participent à cette aventure.
 
 **[❤️ Offrir un coup de pouce sur Ko-fi](https://ko-fi.com/bastos85)** — le soutien est facultatif.
 
