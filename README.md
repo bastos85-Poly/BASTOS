@@ -28,6 +28,8 @@ Ce parcours nécessite un Windows encore accessible pour la préparation, un dis
 
 BASTOS propose aussi des **optimisations pour votre environnement gaming**, des **personnalisations Windows** et un **catalogue de logiciels**. Choisissez les réglages utiles à votre configuration, adaptez l’apparence et retrouvez vos outils habituels depuis la même application.
 
+**Nouveau en 7.120.138 :** dans **Optimisations → Jeux et performances**, la tuile **Désactiver les services** propose le profil de services Atom complet, avec aperçu, sauvegarde et restauration. Ce profil facultatif est agressif : il inclut sécurité, mises à jour, Bluetooth, impression et Xbox. Windows peut refuser certaines modifications ; les pilotes noyau sont exclus. [Lire le fonctionnement et les limites avant de l’appliquer](docs/features/services.md).
+
 ## Ce que vous pouvez faire
 
 | Votre besoin | Ce que propose BASTOS |
