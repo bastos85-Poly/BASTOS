@@ -66,6 +66,10 @@
       "Sha256": "3C9D4A24E0AF3D143E4BA9790FA51B6F9ABED4093E319E0B9774121B4A573E3B"
     },
     {
+      "Path": "Bastos.AtomServices.psd1",
+      "Sha256": "DA3B605A8437C86EBB33F5865574CC27791A657D94E8D55225E808CBD201AAB0"
+    },
+    {
       "Path": "Bastos.Cancellation.psm1",
       "Sha256": "1D2DD8A9B0AD75A6F0E365DCD6C84C0C9DCB545E569F67A2C786FDED3FF0FE8B"
     },
@@ -80,6 +84,10 @@
     {
       "Path": "Bastos.Game\\Source\\build.ps1",
       "Sha256": "62D366BC004E7CF382BAE345D273619A710EB0C684DB7FE30BB0BDE9C9889503"
+    },
+    {
+      "Path": "Bastos.Game\\Source\\Test-Discovery.ps1",
+      "Sha256": "41CF9D84A982FD9ACB1596D3286684135041538B287D76B64D304F69DA5EFEB4"
     },
     {
       "Path": "Bastos.Game\\Source\\Test-Engine.ps1",
@@ -336,6 +344,10 @@
     {
       "Path": "Manage-BASTOS-SecurityPrivacy.ps1",
       "Sha256": "1D43F0664AA422A778596555F18DC2A93C9779314999024554ED1731F8B9BCD3"
+    },
+    {
+      "Path": "Manage-BASTOS-Services.ps1",
+      "Sha256": "F2D25D70C6A245639FD2CA7CEDDEA2B80B30DB654D164DA6C7ACFEC52EBD8D88"
     },
     {
       "Path": "Manage-BASTOS-SpecialSoftware.ps1",

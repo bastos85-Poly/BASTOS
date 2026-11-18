@@ -16,9 +16,15 @@ public sealed partial class MainViewModel
     private readonly Dictionary<string,StatusCard> competitiveCards = new();
     private readonly SemaphoreSlim competitiveGate = new(1,1);
     public AsyncRelayCommand RefreshCompetitiveCommand { get; private set; } = null!;
+    public AsyncRelayCommand OpenServiceProfileCommand { get; private set; } = null!;
+    internal Bastos.Native.ServiceProfileWindow CreateServiceProfileForTest() => new(workers,paths);
     private void BuildCompetitiveCards()
     {
         RefreshCompetitiveCommand = new AsyncRelayCommand(RefreshCompetitiveAsync);
+        OpenServiceProfileCommand = new AsyncRelayCommand(() => {
+            var window=new Bastos.Native.ServiceProfileWindow(workers,paths) { Owner=System.Windows.Application.Current.MainWindow };
+            window.ShowDialog();return Task.CompletedTask;
+        });
         AddCompetitive(SoundOptimizationCards,"audio-game","Audio pour les jeux compétitifs",
             "Demande 48 kHz en PCM 24 bits, ou 16 bits selon les formats réellement acceptés par le périphérique, sans changer le nombre de canaux. Désactive les améliorations audio et le son spatial lorsqu’ils sont accessibles. La période audio reste gérée par Windows et les applications. Relancez les applications audio après application.");
         AddCompetitive(SoundOptimizationCards,"audio-power","Garder le codec audio éveillé",

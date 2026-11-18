@@ -5,8 +5,8 @@ Import-Module (Join-Path $PSHOME 'Modules\Microsoft.PowerShell.Utility\Microsoft
 [Console]::OutputEncoding = [Text.UTF8Encoding]::new($false)
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 
-$version = '7.120.137'
-$payload = Join-Path $PSScriptRoot 'BASTOS-7.120.137-Payload.zip'
+$version = '7.120.138'
+$payload = Join-Path $PSScriptRoot 'BASTOS-7.120.138-Payload.zip'
 $expectedPayloadHash = '__PAYLOAD_HASH__'
 $expectedManifestHash = '__MANIFEST_HASH__'
 $expectedExeHash = '__NATIVE_HASH__'
@@ -102,7 +102,7 @@ try {
     }
     $exe = Join-Path $stage 'Bastos.Native\BASTOS-Native.exe'
     if ((Get-FileHash -LiteralPath $exe -Algorithm SHA256).Hash -ne $expectedExeHash -or
-        (Get-Item -LiteralPath $exe).VersionInfo.FileVersion -ne '7.120.137.0') { throw 'Exécutable incorrect.' }
+        (Get-Item -LiteralPath $exe).VersionInfo.FileVersion -ne '7.120.138.0') { throw 'Exécutable incorrect.' }
     if($VerifyOnly){Write-Host "BASTOS $version verifie : $($manifest.Files.Count) fichiers manifestes. Aucune installation effectuee." -ForegroundColor Green;return}
 
     if (Test-Path -LiteralPath $target) {

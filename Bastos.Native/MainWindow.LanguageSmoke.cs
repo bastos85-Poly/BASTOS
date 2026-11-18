@@ -115,15 +115,19 @@ public partial class MainWindow
                 new LogMaintenanceWindow(new LogMaintenanceViewModel(new LogMaintenanceService(logs))),
                 new DiagnosticExportWindow(new DiagnosticExportViewModel(new DiagnosticExportService(logs,"test","Windows"),null)),
                 new GameListWindow(new BastosGameService(new AppPaths(),new OperationLogService(new AppPaths())), false),
-                new DisplayCalibrationWindow(0) { WindowState=WindowState.Normal, Width=1000, Height=700, Topmost=false }
+                new DisplayCalibrationWindow(0) { WindowState=WindowState.Normal, Width=1000, Height=700, Topmost=false },
+                vm.CreateServiceProfileForTest()
             };
             foreach(var window in windows)
             {
                 window.Owner=this; LocalizedPresentation.Watch(window); window.Show();
                 await Dispatcher.InvokeAsync(() => { }, DispatcherPriority.ApplicationIdle);
+                if(window is ServiceProfileWindow services){await services.AnalysisTask;if(!services.AnalysisReady)throw new Exception("Read-only service analysis failed");}
                 foreach(var code in new[]{"en","fr","en"})
                 {
-                    InterfaceLanguageSelector.SelectedValue=code; window.UpdateLayout();
+                    InterfaceLanguageSelector.SelectedValue=code;
+                    await Dispatcher.InvokeAsync(()=>{},DispatcherPriority.ApplicationIdle);
+                    window.UpdateLayout();
                     var bitmap = new RenderTargetBitmap((int)window.ActualWidth,(int)window.ActualHeight,96,96,PixelFormats.Pbgra32); bitmap.Render(window);
                     var encoder = new PngBitmapEncoder();encoder.Frames.Add(BitmapFrame.Create(bitmap));
                     using var stream=File.Create(Path.Combine(root,window.GetType().Name+"-"+code+".png"));encoder.Save(stream);
@@ -132,7 +136,7 @@ public partial class MainWindow
             }
             File.WriteAllLines(Path.Combine(root, "untranslated.txt"), InterfaceLanguage.Untranslated.OrderBy(x=>x));
             InterfaceLanguageSelector.SelectedValue = "fr";
-            File.WriteAllText(Path.Combine(root, "result.txt"), "PASS: 12 pages and 9 secondary windows rendered; 12 navigation keys preserved; live FR/EN/FR; preference saved.");
+            File.WriteAllText(Path.Combine(root, "result.txt"), "PASS: 12 pages and 10 secondary windows rendered; read-only service analysis; 12 navigation keys preserved; live FR/EN/FR; preference saved.");
             Application.Current.Shutdown(0);
         }
         catch (Exception ex) { File.WriteAllText(Path.Combine(root, "result.txt"), ex.ToString()); Application.Current.Shutdown(1); }

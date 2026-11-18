@@ -1,0 +1,36 @@
+<Window x:Class="Bastos.Native.ServiceProfileWindow"
+ xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+ xmlns:native="clr-namespace:Bastos.Native"
+ Title="Désactiver les services" Width="1080" Height="760" MinWidth="850" MinHeight="600"
+ WindowStartupLocation="CenterOwner" Background="{DynamicResource WindowBrush}" Foreground="{DynamicResource TextBrush}">
+ <Grid Margin="24">
+  <Grid.RowDefinitions><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition Height="Auto"/><RowDefinition/><RowDefinition Height="Auto"/></Grid.RowDefinitions>
+  <StackPanel><TextBlock Text="⚙ Désactiver les services" FontSize="25" FontWeight="SemiBold"/>
+   <TextBlock Text="Profil Atom · toutes les catégories" Foreground="{DynamicResource MutedBrush}" Margin="0,8,0,12"/>
+  </StackPanel>
+  <Border Grid.Row="1" Background="{DynamicResource SurfaceBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="8" Padding="14" Margin="0,0,0,12">
+   <StackPanel>
+    <TextBlock Text="Inclut sécurité, mises à jour, Bluetooth, impression, Xbox, sauvegardes et Bureau à distance. Certaines fonctions cesseront de fonctionner après redémarrage." TextWrapping="Wrap" Foreground="{DynamicResource WarningBrush}"/>
+    <TextBlock Text="Sauvegarde du démarrage avant chaque modification. Aucun service supprimé, aucun pilote noyau modifié. Les services déjà démarrés continuent jusqu’à leur arrêt ou au redémarrage." TextWrapping="Wrap" Foreground="{DynamicResource MutedBrush}" Margin="0,8,0,0"/>
+   </StackPanel>
+  </Border>
+  <TextBlock x:Name="Summary" Grid.Row="2" TextWrapping="Wrap" Margin="0,0,0,12" Foreground="{DynamicResource AccentBrush}"/>
+  <Border Grid.Row="3" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="6">
+   <ScrollViewer VerticalScrollBarVisibility="Auto"><ItemsControl x:Name="ServiceRows">
+    <ItemsControl.ItemTemplate><DataTemplate><Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="12,9">
+     <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="2*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="2*"/></Grid.ColumnDefinitions>
+      <StackPanel><TextBlock Text="{Binding Name}" FontWeight="SemiBold"/><TextBlock Text="{Binding DisplayName}" Foreground="{DynamicResource MutedBrush}" TextWrapping="Wrap" FontSize="11"/></StackPanel>
+      <TextBlock Grid.Column="1" Text="{Binding Mode}" Margin="12,0" TextWrapping="Wrap"/>
+      <StackPanel Grid.Column="2"><TextBlock Text="{Binding Outcome}" TextWrapping="Wrap"/><TextBox Text="{Binding Error, Mode=OneWay}" IsReadOnly="True" BorderThickness="0" Background="Transparent" Foreground="{DynamicResource MutedBrush}" TextWrapping="Wrap" FontSize="11"/></StackPanel>
+     </Grid>
+    </Border></DataTemplate></ItemsControl.ItemTemplate>
+   </ItemsControl></ScrollViewer>
+  </Border>
+  <WrapPanel Grid.Row="4" Margin="0,16,0,0">
+   <Button x:Name="AnalyzeButton" Content="Analyser les services" Click="AnalyzeClick" Style="{DynamicResource SecondaryButton}" Margin="0,0,12,0"/>
+   <Button x:Name="ApplyButton" Content="Désactiver les services" Click="ApplyClick" Style="{DynamicResource DestructiveButton}" IsEnabled="False" Margin="0,0,12,0"/>
+   <Button x:Name="RestoreButton" Content="Restaurer le démarrage" Click="RestoreClick" Style="{DynamicResource SecondaryButton}" IsEnabled="False"/>
+  </WrapPanel>
+ </Grid>
+</Window>

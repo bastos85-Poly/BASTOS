@@ -879,6 +879,13 @@
             <StackPanel Visibility="{Binding OptimizationCategories.IsWindows, Converter={StaticResource BooleanToVisibilityConverter}}">
               <native:WindowsSettingsPage x:Name="WindowsOptimizationCategory" />
               <Button Content="Actualiser les réglages de jeu" Command="{Binding RefreshCompetitiveCommand}" Style="{DynamicResource QuietButton}" HorizontalAlignment="Left" Margin="0,0,16,14" />
+              <Border Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="8" Padding="16" Margin="0,0,16,16">
+                <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                  <TextBlock Text="⚙" FontSize="32" Foreground="{StaticResource AccentBrush}" Margin="0,0,16,0" VerticalAlignment="Center"/>
+                  <StackPanel Grid.Column="1"><TextBlock Text="Désactiver les services" FontSize="17" FontWeight="SemiBold"/><TextBlock Text="Profil Atom complet · aperçu, sauvegarde et restauration" TextWrapping="Wrap" Foreground="{StaticResource MutedBrush}" Margin="0,6,16,0"/></StackPanel>
+                  <Button Grid.Column="2" Content="Voir les services" Command="{Binding OpenServiceProfileCommand}" Style="{DynamicResource SecondaryButton}" VerticalAlignment="Center"/>
+                </Grid>
+              </Border>
               <ItemsControl ItemsSource="{Binding CompetitiveGameCards}" ItemTemplate="{StaticResource CompetitiveCard}" Margin="0,0,16,0" />
               <native:ExtraAppsPage DataContext="{Binding Extras}" />
             </StackPanel>
