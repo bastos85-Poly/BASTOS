@@ -16,7 +16,8 @@ Mount-VHD -Path $current -ReadOnly -NoDriveLetter|Out-Null
 $mounts=@()
 try{
  $disk=Get-Disk -Number (Get-VHD -Path $current).DiskNumber
- if(-not $disk.IsReadOnly -or $disk.IsBoot -or $disk.IsSystem -or $disk.Number -in @(Get-Partition -DriveLetter C,D|ForEach-Object DiskNumber)){throw 'Disque hote ou non protege refuse.'}
+ $hostSystemDiskNumbers=@(Get-Partition | Where-Object { $_.DriveLetter -in @('C','D') } | ForEach-Object DiskNumber)
+ if(-not $disk.IsReadOnly -or $disk.IsBoot -or $disk.IsSystem -or $disk.Number -in $hostSystemDiskNumbers){throw 'Disque hote ou non protege refuse.'}
  $disk|Select-Object Number,UniqueId,Size,IsReadOnly,IsOffline,BusType|ConvertTo-Json|Set-Content (Join-Path $EvidenceRoot 'DiskInventory.json') -Encoding UTF8
  if($disk.IsOffline){Set-Disk -Number $disk.Number -IsOffline $false; $disk=Get-Disk -Number $disk.Number;if(-not $disk.IsReadOnly){throw 'Protection lecture seule perdue.'}}
  $parts=@(Get-Partition -DiskNumber $disk.Number)
