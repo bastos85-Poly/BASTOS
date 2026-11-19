@@ -2147,5 +2147,7 @@
   "Espace insuffisant dans la bibliothèque ISO.": "Insufficient space in the ISO library.",
   "Téléchargement ISO incomplet ; fichier partiel supprimé.": "Incomplete ISO download; partial file removed.",
   "Le fichier reçu n’est pas une image ISO/UDF reconnue.": "The received file is not a recognized ISO/UDF image.",
-  "La connexion Microsoft a expiré. Réessaie le téléchargement.": "The Microsoft connection timed out. Try downloading again."
+  "La connexion Microsoft a expiré. Réessaie le téléchargement.": "The Microsoft connection timed out. Try downloading again.",
+  "Windows 11 version publique actuelle": "Windows 11 current public release",
+  "Windows 10 version publique actuelle": "Windows 10 current public release"
 }
