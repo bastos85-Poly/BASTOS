@@ -4,6 +4,10 @@ Dans **Optimisations → Jeux et performances**, la tuile avec une roue dentée 
 
 Le catalogue reprend les 152 noms distincts visés par les désactivations ou suppressions de services d’Atom Playbook 0.0.8, toutes catégories facultatives comprises. BASTOS les traite comme une demande de désactivation du démarrage : aucun service n’est supprimé.
 
+Depuis la version 7.120.139, les services par utilisateur sont gérés via leur **modèle Windows**, sans suffixe de session. La valeur de démarrage du modèle est sauvegardée puis vérifiée. Windows crée les instances désactivées à la prochaine connexion ; les instances déjà présentes continuent pendant la session actuelle. L’interface indique explicitement cet effet différé. Un redémarrage renouvelle également la session.
+
+Les compteurs distinguent désormais les refus Windows, les véritables modifications externes et les autres erreurs. Une écriture refusée restée sans effet peut être relancée avec sa sauvegarde initiale, y compris une sauvegarde créée par la 138. Une sauvegarde ne devient pas une preuve de modification réussie.
+
 ## Appliquer
 
 1. Relire la liste des services détectés et leur démarrage actuel.
@@ -24,5 +28,7 @@ La sauvegarde locale est écrite avant chaque changement sous `ProgramData\BASTO
 Les services protégés par Windows ou la protection contre les falsifications peuvent refuser le changement. BASTOS ne contourne pas ces protections et ne présente pas ces refus comme des réussites. Les pilotes noyau, y compris ceux cités dans Atom, sont exclus : le profil ne modifie que les services recensés par `Win32_Service`.
 
 Le bouton ne reproduit pas les autres modifications d’Atom : suppression d’applications, réglages réseau, démarrage système, nettoyage de fichiers, désactivation de Smart App Control ou suppression de WinRE.
+
+La gestion des modèles suit la [documentation Microsoft sur les services par utilisateur](https://learn.microsoft.com/fr-fr/windows/application-management/per-user-services-in-windows). BASTOS ne modifie ni les autorisations des services ni leurs protections pour forcer une écriture refusée.
 
 L’interface est disponible en français et en anglais. Les noms système et diagnostics bruts restent tels que Windows les fournit.

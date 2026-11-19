@@ -42,6 +42,9 @@ public partial class MainWindow
             }
             InterfaceLanguageSelector.SelectedValue = "en";
             var dynamicCases = new (string French,string English)[] {
+                ("Modèle désactivé — prochaine session", "Template disabled — next session"),
+                ("Refus de Windows — voir le détail", "Denied by Windows — see details"),
+                ("Détectés : 112 · Démarrages désactivés : 102 · Indisponibles : 40 · Refus Windows : 8 · Conflits : 1 · Erreurs : 0.", "Detected: 112 · Startup settings disabled: 102 · Unavailable: 40 · Windows refusals: 8 · Conflicts: 1 · Errors: 0."),
                 ("34 % — Etape 4/9 - Carte graphique\nLecture de tous les GPU et de leurs pilotes...", "34 % — Step 4/9 - Graphics cards\nReading all GPUs and their drivers..."),
                 ("Analyse matérielle terminée: rapport et inventaire vérifiés.", "Hardware analysis completed: report and inventory verified."),
                 ("Voir les téléchargements officiels", "View official downloads"),

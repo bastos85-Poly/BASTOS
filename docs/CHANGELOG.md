@@ -1,5 +1,12 @@
 # Nouveautés
 
+## 7.120.139
+
+- Correction des refus « Paramètre incorrect » : les services par utilisateur sont configurés via leur modèle Windows, avec effet à la prochaine session indiqué dans le bilan.
+- Les tentatives refusées restées sans effet peuvent être relancées, y compris avec une sauvegarde créée par la 138. Les valeurs initiales restent préservées.
+- Refus Windows, modifications externes et autres erreurs affichés séparément en français et en anglais.
+- Restauration des modèles et compatibilité des anciennes sauvegardes ; les protections Windows et les pilotes noyau restent respectés.
+
 ## 7.120.138
 
 - Tuile **Désactiver les services** dans **Optimisations → Jeux et performances**, disponible en français et en anglais.

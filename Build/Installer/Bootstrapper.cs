@@ -10,10 +10,10 @@ using System.Windows.Forms;
 [assembly: AssemblyTitle("Installation de BASTOS")]
 [assembly: AssemblyCompany("BASTOS")]
 [assembly: AssemblyProduct("BASTOS")]
-[assembly: AssemblyFileVersion("7.120.138.0")]
-[assembly: AssemblyVersion("7.120.138.0")]
+[assembly: AssemblyFileVersion("7.120.139.0")]
+[assembly: AssemblyVersion("7.120.139.0")]
 internal static class Setup {
-    private const string Version = "7.120.138";
+    private const string Version = "7.120.139";
     private const string PayloadHash = "__PAYLOAD_HASH__";
     private const string ScriptHash = "__SCRIPT_HASH__";
     private static string Hash(string path) {

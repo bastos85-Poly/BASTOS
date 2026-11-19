@@ -20,7 +20,7 @@
    <ScrollViewer VerticalScrollBarVisibility="Auto"><ItemsControl x:Name="ServiceRows">
     <ItemsControl.ItemTemplate><DataTemplate><Border BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,0,0,1" Padding="12,9">
      <Grid><Grid.ColumnDefinitions><ColumnDefinition Width="2*"/><ColumnDefinition Width="*"/><ColumnDefinition Width="2*"/></Grid.ColumnDefinitions>
-      <StackPanel><TextBlock Text="{Binding Name}" FontWeight="SemiBold"/><TextBlock Text="{Binding DisplayName}" Foreground="{DynamicResource MutedBrush}" TextWrapping="Wrap" FontSize="11"/></StackPanel>
+      <StackPanel><TextBlock Text="{Binding Name}" FontWeight="SemiBold"/><TextBlock Text="{Binding DisplayName}" Foreground="{DynamicResource MutedBrush}" TextWrapping="Wrap" FontSize="11"/><TextBlock Text="{Binding Target}" Foreground="{DynamicResource AccentBrush}" TextWrapping="Wrap" FontSize="11"/></StackPanel>
       <TextBlock Grid.Column="1" Text="{Binding Mode}" Margin="12,0" TextWrapping="Wrap"/>
       <StackPanel Grid.Column="2"><TextBlock Text="{Binding Outcome}" TextWrapping="Wrap"/><TextBox Text="{Binding Error, Mode=OneWay}" IsReadOnly="True" BorderThickness="0" Background="Transparent" Foreground="{DynamicResource MutedBrush}" TextWrapping="Wrap" FontSize="11"/></StackPanel>
      </Grid>

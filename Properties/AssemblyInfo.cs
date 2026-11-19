@@ -7,8 +7,8 @@ using System.Security.Permissions;
 
 [assembly: AssemblyCompany("BASTOS-Native")]
 [assembly: AssemblyConfiguration("Release")]
-[assembly: AssemblyFileVersion("7.120.138.0")]
-[assembly: AssemblyInformationalVersion("7.120.138")]
+[assembly: AssemblyFileVersion("7.120.139.0")]
+[assembly: AssemblyInformationalVersion("7.120.139")]
 [assembly: AssemblyProduct("BASTOS-Native")]
 [assembly: AssemblyTitle("BASTOS-Native")]
 [assembly: TargetPlatform("Windows7.0")]

@@ -1,4 +1,4 @@
-# Installateur public BASTOS 7.120.138
+# Installateur public BASTOS 7.120.139
 
 Le lanceur WinForms .NET Framework est autonome sur Windows 11 x64. Il embarque l'archive du programme et le script d'installation ; aucun SDK ou runtime .NET 8 à télécharger pour l'utilisateur. Le runtime de l'application est déjà inclus dans le payload.
 

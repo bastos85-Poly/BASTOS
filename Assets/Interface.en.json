@@ -2108,5 +2108,15 @@
   "Aucune modification à restaurer": "No changes to restore",
   "Refus ou échec — voir le détail": "Denied or failed — see details",
   "{0} détectés · {1} désactivés · {2} absents ou pilotes ignorés · {3} refus ou échecs.": "{0} detected · {1} disabled · {2} unavailable or skipped drivers · {3} denied or failed.",
-  "Redémarrez Windows pour prendre en compte les changements de démarrage.": "Restart Windows for startup changes to take effect."
+  "Redémarrez Windows pour prendre en compte les changements de démarrage.": "Restart Windows for startup changes to take effect.",
+  "Modèle utilisateur · effet à la prochaine session": "Per-user template · takes effect next session",
+  "Modèle désactivé — prochaine session": "Template disabled — next session",
+  "Modèle restauré — prochaine session": "Template restored — next session",
+  "Refus de Windows — voir le détail": "Denied by Windows — see details",
+  "Modification externe — à vérifier": "External change — review required",
+  "Erreur — voir le détail": "Error — see details",
+  "Le démarrage a changé depuis l’application précédente. Vérifiez ce changement avant de réessayer.": "Startup changed since the previous application. Review this change before retrying.",
+  "Modification externe conservée : la restauration de ce service est refusée.": "External change preserved: restoration of this service was refused.",
+  "Modèle utilisateur indisponible ; aucune instance de session n’a été modifiée.": "User template unavailable; no session instance was modified.",
+  "Détectés : {0} · Démarrages désactivés : {1} · Indisponibles : {2} · Refus Windows : {3} · Conflits : {4} · Erreurs : {5}.": "Detected: {0} · Startup settings disabled: {1} · Unavailable: {2} · Windows refusals: {3} · Conflicts: {4} · Errors: {5}."
 }
