@@ -30,7 +30,7 @@ public partial class MainWindow
                 item.Value.Contains("Business", StringComparison.OrdinalIgnoreCase) ||
                 item.Value.Contains("LTSC", StringComparison.OrdinalIgnoreCase)))
             throw new InvalidOperationException("Une famille ou version retirée reste visible dans le catalogue.");
-        var regularVersion = vm.CatalogVersions.First(item => item.Value == "Windows 11 Consumer 26H2");
+        var regularVersion = vm.CatalogVersions.First(item => item.Value == "Windows 11 Consumer version publique actuelle");
         vm.SelectedCatalogVersion = regularVersion;
         foreach (var language in vm.CatalogLanguages.ToArray())
         {
@@ -63,7 +63,7 @@ public partial class MainWindow
                 }
             }
         }
-        if (combinations != actualImages.Count || vm.CatalogFamilies.Count != 2) throw new InvalidOperationException("Catalogue ISO filtré incohérent");
+        if (combinations != actualImages.Count || vm.CatalogFamilies.Count != 2 || actualImages.Any(item=>!WindowsDownloadCatalog.IsSupportedChoice(item))) throw new InvalidOperationException("Catalogue ISO Microsoft incohérent");
         int fallbacks = 0;
         foreach (var family in vm.CatalogFamilies.ToArray())
         {

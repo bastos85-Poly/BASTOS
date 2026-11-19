@@ -526,10 +526,12 @@ public sealed partial class ReinstallViewModel : ObservableObject
 		RefreshIsos();
 	}
 
-	private async Task DownloadWindows()
+	private async Task DownloadWindows(WindowsDownloadChoice item)
 	{
 		await Execute(async delegate
 		{
+            SelectedLanguage=Languages.First(language=>language.Locale.Equals(item.Locale,StringComparison.OrdinalIgnoreCase));
+            var release=new NamedChoice(item.Family+" — version publique actuelle",item.Family=="Windows 10"?"Windows10Current":"RetailCurrent");
 			IsDownloadProgressVisible = true;
 			IsDownloadProgressIndeterminate = true;
 			DownloadProgressPercent = 0.0;
@@ -544,9 +546,9 @@ public sealed partial class ReinstallViewModel : ObservableObject
 				}
 				Status = text + " Ouverture du téléchargement Windows…";
 			}
-			Status = ((SelectedRelease.Value == "Insider26H2") ? "Connexion Microsoft Insider : connecte-toi, puis choisis manuellement l’édition Windows 11 souhaitée." : "Microsoft prépare puis télécharge l’ISO Windows 11 actuellement proposée sur son site…");
+			Status = "Microsoft prépare le lien officiel. Le téléchargement restera dans BASTOS…";
 			Progress<IsoDownloadProgress> progress = new Progress<IsoDownloadProgress>(UpdateDownloadProgress);
-			(bool, string, string) tuple2 = await service.DownloadWindowsAsync(SelectedLanguage, SelectedRelease, progress);
+			(bool, string, string) tuple2 = await service.DownloadWindowsAsync(SelectedLanguage, release, progress,item.Architecture,activeCancellation);
 			RefreshIsos(tuple2.Item3);
             if (tuple2.Item1 && tuple2.Item3 != null && File.Exists(tuple2.Item3) && SelectedIso != null)
             {

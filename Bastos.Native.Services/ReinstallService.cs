@@ -24,14 +24,6 @@ public sealed partial class ReinstallService(AppPaths paths, PowerShellWorkerSer
         (area, message, error) => log.Write(area, message, error));
 
     public string RufusOptionsPath => Path.Combine(paths.StateRoot, "Rufus-Reinstall-Options.json");
-    public void OpenCatalogLink(WindowsDownloadChoice item, bool sourcePage)
-    {
-        string target = sourcePage ? item.SourcePage : item.Url;
-        if (!Uri.TryCreate(target, UriKind.Absolute, out var uri) || uri.Scheme != "https")
-            throw new InvalidOperationException("Le lien de téléchargement doit utiliser HTTPS.");
-        operations.Open(target);
-        log.Write("Catalogue ISO", item.FileName + " — " + target);
-    }
     public bool HasRufusOptions => File.Exists(RufusOptionsPath);
 
     public async Task<(bool Success, string Message)> FinalizeTemporaryRecoveryAsync(bool apply)
@@ -256,16 +248,18 @@ public sealed partial class ReinstallService(AppPaths paths, PowerShellWorkerSer
 		};
 	}
 
-	public async Task<(bool Success, string Message, string? IsoPath)> DownloadWindowsAsync(LanguageChoice language, NamedChoice release, IProgress<IsoDownloadProgress>? progress = null)
+	public async Task<(bool Success, string Message, string? IsoPath)> DownloadWindowsAsync(LanguageChoice language, NamedChoice release, IProgress<IsoDownloadProgress>? progress = null,string architecture="x64",OperationCancellation? cancellation=null)
 	{
+        if(release.Value is not ("RetailCurrent" or "Retail25H2" or "Windows10Current") || architecture is not ("x64" or "x86") || (architecture=="x86" && release.Value!="Windows10Current"))
+            return(false,"Cette image n’est pas proposée par le téléchargement Microsoft intégré.",null);
 		Directory.CreateDirectory(paths.LogRoot);
 		string result = Path.Combine(paths.LogRoot, $"WindowsIso-{Guid.NewGuid():N}.json");
-		string text = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+		string text = operations.IsoLibrary;
 		Directory.CreateDirectory(text);
 		List<string> list = new List<string>
 		{
 			"-Architecture",
-			"x64",
+			architecture,
 			"-Language",
 			language.Value,
 			"-LanguageDisplay",
@@ -279,11 +273,11 @@ public sealed partial class ReinstallService(AppPaths paths, PowerShellWorkerSer
 			"-TimeoutSeconds",
 			(release.Value == "Insider26H2") ? "900" : "120"
 		};
-		if (release.Value == "Retail25H2")
-		{
-			list.Add("-Hidden");
-		}
-		Task<CommandResult> workerTask = workers.RunAsync("Download-BASTOS-WindowsIso.ps1", list, elevate: false, (release.Value == "Insider26H2") ? 90 : 30, release.Value == "Insider26H2");
+        list.Add("-Hidden");list.Add("-LinkOnly");
+        string? cancelPath=cancellation?.BindWorker(paths.LogRoot);
+        if(cancelPath!=null){list.Add("-CancelPath");list.Add(cancelPath);}
+        cancellation?.AllowRead();
+		Task<CommandResult> workerTask = workers.RunAsync("Download-BASTOS-WindowsIso.ps1", list, elevate:false,timeoutMinutes:5,showWindow:false);
 		long previousBytes = 0L;
 		DateTime previousSample = DateTime.UtcNow;
 		string previousSnapshot = string.Empty;
@@ -296,6 +290,7 @@ public sealed partial class ReinstallService(AppPaths paths, PowerShellWorkerSer
 		PublishIsoProgress(result, progress, ref previousBytes, ref previousSample, ref previousSnapshot, force: true);
 		try
 		{
+            if(cancellation?.Requested==true)return(false,"Téléchargement annulé ; aucun fichier incomplet n’a été ajouté à la bibliothèque.",null);
 			if (File.Exists(result))
 			{
 				using (JsonDocument jsonDocument = JsonDocument.Parse(await File.ReadAllTextAsync(result)))
@@ -303,31 +298,31 @@ public sealed partial class ReinstallService(AppPaths paths, PowerShellWorkerSer
 					JsonElement rootElement = jsonDocument.RootElement;
 					string text2 = GetString(rootElement, "Status");
 					string text3 = GetString(rootElement, "Message");
-					string text4 = GetString(rootElement, "FilePath");
-					bool flag;
-					switch (text2)
-					{
-					case "Completed":
-					case "DownloadStarted":
-					case "LinkReady":
-						flag = true;
-						break;
-					default:
-						flag = false;
-						break;
-					}
-					bool flag2 = flag;
-					log.Write("Réinstallation", $"Téléchargement {release.Display}: {text2} — {text3}", !flag2);
-					return (Success: flag2, Message: string.IsNullOrWhiteSpace(text3) ? text2 : text3, IsoPath: File.Exists(text4) ? text4 : null);
+                    if(commandResult.Success && commandResult.ProcessStopped && text2=="LinkReady")
+                    {
+                        string address=GetString(rootElement,"Uri");
+                        if(!Uri.TryCreate(address,UriKind.Absolute,out var uri) || !OfficialIsoTransfer.IsMicrosoftUri(uri))
+                            return(false,"Le lien ISO reçu n’appartient pas à Microsoft.",null);
+                        try
+                        {
+                            var completed=await OfficialIsoTransfer.DownloadAsync(uri,text,progress,cancellation?.Token??System.Threading.CancellationToken.None);
+                            log.Write("Téléchargement ISO","Microsoft — "+Path.GetFileName(completed.Path)+" — SHA256 "+completed.Sha256);
+                            return(true,"ISO Microsoft téléchargée et vérifiée.",completed.Path);
+                        }
+                        catch(OperationCanceledException){return(false,"Téléchargement annulé ; aucun fichier incomplet n’a été ajouté à la bibliothèque.",null);}
+                    }
+					log.Write("Réinstallation", $"Téléchargement {release.Display}: {text2} — {text3}",true);
+					return (false,string.IsNullOrWhiteSpace(text3)?text2:text3,null);
 				}
 			}
-			return (Success: commandResult.Success, Message: commandResult.Success ? "Assistant Microsoft terminé. Actualise la liste des ISO." : commandResult.Error, IsoPath: null);
+			return (false,"Microsoft n’a pas transmis de lien ISO exploitable. Réessaie depuis BASTOS.",null);
 		}
 		finally
 		{
 			try
 			{
 				File.Delete(result);
+                if(cancelPath!=null && commandResult.ProcessStopped)File.Delete(cancelPath);
 			}
 			catch
 			{

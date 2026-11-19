@@ -3,6 +3,8 @@ $ErrorActionPreference = 'Stop'
 $sourceRoot = Split-Path -Parent $PSScriptRoot
 & $DotNetPath build (Join-Path $sourceRoot 'BASTOS-Native.csproj') -c Release --nologo
 if ($LASTEXITCODE -ne 0) { throw 'Compilation échouée.' }
+& $DotNetPath run --project (Join-Path $sourceRoot 'Tests/OfficialIsoTransfer/OfficialIsoTransfer.csproj') -c Release
+if ($LASTEXITCODE -ne 0) { throw 'Tests du téléchargement ISO échoués.' }
 & $DotNetPath run --project (Join-Path $sourceRoot 'Tests/Release/guidance/guidance-tests.csproj') -c Release "-p:BastosSourceRoot=$sourceRoot"
 if ($LASTEXITCODE -ne 0) { throw 'Tests de présentation échoués.' }
 & $DotNetPath run --project (Join-Path $sourceRoot 'Tests/CardSwitch/CardSwitch.csproj') -c Release

@@ -35,6 +35,7 @@ public partial class MainWindow : Window, IComponentConnector
 	private async void OnLoaded(object sender, RoutedEventArgs e)
 	{
 		startup.Stop();
+        if(Environment.GetCommandLineArgs().Contains("--official-iso-smoke-test")){await RunOfficialIsoSmokeAsync();return;}
         if(Environment.GetCommandLineArgs().Contains("--language-smoke-test")){await RunLanguageSmokeAsync();return;}
         Bastos.Native.Services.RuntimeTimingService.Record("window-loaded",startup.Elapsed);
         if(Environment.GetCommandLineArgs().Contains("--donation-smoke-test")){await RunDonationSmokeAsync();return;}

@@ -18,9 +18,7 @@ public sealed partial class ReinstallViewModel
     private bool populatingCatalogLanguage;
     private WindowsDownloadChoice? catalogImage;
     private bool catalogRefreshing;
-    private string catalogStatus = "Catalogue massgrave.dev — relevé du 14/10/2026";
-    private WindowsDownloadChoice? pendingDownload;
-    private DateTime downloadOpenedUtc;
+    private string catalogStatus = "Source officielle Microsoft · lien généré à chaque téléchargement";
     public ObservableCollection<NamedChoice> CatalogFamilies { get; } = new();
     public ObservableCollection<NamedChoice> CatalogVersions { get; } = new();
     public ObservableCollection<NamedChoice> CatalogLanguages { get; } = new();
@@ -28,7 +26,6 @@ public sealed partial class ReinstallViewModel
     public ObservableCollection<WindowsDownloadChoice> CatalogImages { get; } = new();
     public bool HasCatalogVariants => CatalogImages.Count > 1;
     public AsyncRelayCommand RefreshCatalogCommand { get; private set; }
-    public AsyncRelayCommand OpenCatalogSourceCommand { get; private set; }
     public bool IsCatalogRefreshing
     {
         get => catalogRefreshing;
@@ -88,9 +85,9 @@ public sealed partial class ReinstallViewModel
         get => catalogImage;
         set { if (value != null) { catalogImage = value; NotifyCatalogSelection(); } }
     }
-    public string CatalogFileName => SelectedCatalogIso?.FileName ?? "Aucune ISO disponible pour ces choix.";
+    public string CatalogFileName => SelectedCatalogIso==null?"Aucune ISO disponible pour ces choix.":"Le nom exact du fichier sera fourni par Microsoft au démarrage du téléchargement.";
     public string CatalogSelectionSummary => SelectedCatalogIso is { } item
-        ? CatalogVersionLabel(item.Version) + " • " + CatalogLanguageLabel(item) + " • " + item.Architecture.ToUpperInvariant() + "\nHébergeur : " + new Uri(item.Url).Host
+        ? CatalogVersionLabel(item.Version) + " • " + CatalogLanguageLabel(item) + " • " + item.Architecture.ToUpperInvariant() + "\nMicrosoft · téléchargement dans BASTOS"
         : "Sélectionne une version, une langue et une architecture disponibles.";
     public string CatalogCompatibilityHint => SelectedCatalogIso is { } item && (item.Family.StartsWith("Windows 10") || item.Architecture != "x64")
         ? "Téléchargement disponible. La réinstallation interne actuelle de Bastos est prévue pour Windows 11 x64 ; les autres images peuvent être utilisées avec Rufus."
@@ -100,14 +97,7 @@ public sealed partial class ReinstallViewModel
     {
         catalog = WindowsDownloadCatalog.ReadBundled();
         RefreshCatalogCommand = new AsyncRelayCommand(RefreshDownloadCatalog, () => CanChooseLocalIso, () => WaitingReason);
-        OpenCatalogSourceCommand = new AsyncRelayCommand(() =>
-        {
-            try { if (SelectedCatalogIso != null) service.OpenCatalogLink(SelectedCatalogIso, true); }
-            catch (Exception error) { Status = "Impossible d’ouvrir la rubrique : " + error.Message; }
-            return Task.CompletedTask;
-        });
         PopulateFamilies();
-        CatalogStatus += $" — {catalog.Count} ISO complètes. Actualise pour relire Windows 10 et 11.";
     }
     private string CatalogLanguageLabel(WindowsDownloadChoice item) =>
         Languages.FirstOrDefault(language => language.Locale.Equals(item.Locale, StringComparison.OrdinalIgnoreCase))?.Display ?? item.LanguageDisplay;
@@ -142,7 +132,7 @@ public sealed partial class ReinstallViewModel
         string? previous = preferredCatalogLanguage ?? catalogLanguage?.Value;
         RaisePropertyChanged(nameof(CanChooseCatalogLanguage));
         var available = catalog.Where(item => MatchesSelectedFamily(item) && item.Version == catalogVersion?.Value).ToArray();
-        Replace(CatalogLanguages, available.Concat(catalog.Where(item => item.Version.Contains(" Consumer ", StringComparison.Ordinal)))
+        Replace(CatalogLanguages, available
             .DistinctBy(item => item.Language).Select(item => new NamedChoice(CatalogLanguageLabel(item), item.Language)).OrderBy(item => item.Display));
         var supported = CatalogLanguages.Where(language => available.Any(item => item.Language == language.Value)).ToArray();
         var selected = supported.FirstOrDefault(item => item.Value == previous)
@@ -202,38 +192,15 @@ public sealed partial class ReinstallViewModel
         catch (Exception error) { CatalogStatus = "Catalogue précédent conservé : " + error.Message; }
         finally { EndCancellation(cancellation);IsCatalogRefreshing = false; }
     }
-    private Task DownloadCatalogIso()
+    private async Task DownloadCatalogIso()
     {
-        if(IsBusy || IsCatalogRefreshing)return Task.CompletedTask;
+        if(IsBusy || IsCatalogRefreshing)return;
         var item = SelectedCatalogIso;
-        if (item == null) { Status = "Aucune ISO ne correspond à ces choix."; return Task.CompletedTask; }
-        try
-        {
-            service.OpenCatalogLink(item, false);
-            pendingDownload = item;
-            downloadOpenedUtc = DateTime.UtcNow.AddSeconds(-2);
-            IsCancellationVisible=true;CanCancelOperation=false;
-            CancellationHint="Le téléchargement est géré par ton navigateur. Pour l’arrêter, utilise sa liste Téléchargements.";
-            Status = "Lien ouvert dans le navigateur : " + item.FileName + ". Termine le téléchargement chez l’hébergeur, puis reviens dans Bastos. Les ISO du dossier Téléchargements seront actualisées.";
-        }
-        catch (Exception error) { Status = "Impossible d’ouvrir le téléchargement : " + error.Message; }
-        return Task.CompletedTask;
+        if (item == null) { Status = "Aucune ISO ne correspond à ces choix."; return; }
+        await DownloadWindows(item);
     }
     public void RefreshDownloadedIsos()
     {
-        if (pendingDownload == null || IsBusy) return;
-        var downloaded = service.FindIsos().Where(iso => File.GetLastWriteTimeUtc(iso.Path) >= downloadOpenedUtc &&
-            (Path.GetFileName(iso.Path).Equals(pendingDownload.FileName, StringComparison.OrdinalIgnoreCase) ||
-             Path.GetFileName(iso.Path).StartsWith(Path.GetFileNameWithoutExtension(pendingDownload.FileName) + " (", StringComparison.OrdinalIgnoreCase)))
-            .OrderByDescending(iso => File.GetLastWriteTimeUtc(iso.Path)).FirstOrDefault();
-        if (downloaded == null) return;
-        try { using var completed = new FileStream(downloaded.Path, FileMode.Open, FileAccess.Read, FileShare.None); if (completed.Length < 1024 * 1024) return; }
-        catch (IOException) { return; }
-        catch (UnauthorizedAccessException) { return; }
-        var language = Languages.FirstOrDefault(item => item.Locale.Equals(pendingDownload.Locale, StringComparison.OrdinalIgnoreCase));
-        if (language != null) SelectedLanguage = language;
-        RefreshIsos(downloaded.Path);
-        Status = "ISO détectée : " + Path.GetFileName(downloaded.Path) + ". Choisis maintenant la méthode d’installation et les options du compte.";
-        pendingDownload = null;
+        if(!IsBusy)RefreshIsos(SelectedIso?.Path);
     }
 }

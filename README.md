@@ -1,4 +1,4 @@
-<p align="center"><img src="docs/images/bastos-logo-officiel.png" alt="Logo officiel BASTOS, identique à celui de l’application" width="100%"></p>
+﻿<p align="center"><img src="docs/images/bastos-logo-officiel.png" alt="Logo officiel BASTOS, identique à celui de l’application" width="100%"></p>
 
 <p align="center"><img src="docs/images/bastos-banner.svg" alt="Windows sans clé USB. Préparez votre PC. Libérez son potentiel gaming." width="100%"></p>
 
@@ -18,7 +18,7 @@ L’objectif est simple : **rendre la réinstallation de Windows accessible, mê
 
 ## Comment fonctionne l’installation sans clé USB ?
 
-1. **Choisissez votre Windows.** Sélectionnez la version proposée, l’édition et la langue selon les choix disponibles. Le catalogue et les détails affichent la source du téléchargement ; vous pouvez aussi sélectionner une ISO compatible déjà téléchargée.
+1. **Choisissez votre Windows.** Téléchargez l’ISO publique actuelle de Windows 11 x64 ou de Windows 10 x64/x86 directement depuis Microsoft, dans BASTOS : aucun navigateur à ouvrir, un lien neuf à chaque demande, progression et annulation intégrées. Les langues proposées dépendent de Microsoft. Vous pouvez aussi sélectionner une ISO compatible déjà téléchargée. Le parcours interne sans clé USB est prévu pour Windows 11 x64 ; les autres images restent utilisables avec Rufus.
 2. **Préparez l’installation sur le PC.** BASTOS vérifie l’image et les conditions nécessaires, puis prépare une zone temporaire sur le disque interne pour les fichiers d’installation. Vous n’avez pas de clé USB à créer pour ce parcours.
 3. **Vérifiez le bilan et lancez la réinstallation.** Après votre confirmation, le PC redémarre dans l’environnement d’installation. Une fois le premier démarrage vérifié, l’espace temporaire est rendu à C: et l’environnement de récupération Windows est recréé.
 
@@ -30,7 +30,7 @@ BASTOS propose aussi des **optimisations pour votre environnement gaming**, des 
 
 **Nouveau en 7.120.138 :** dans **Optimisations → Jeux et performances**, la tuile **Désactiver les services** propose le profil de services Atom complet, avec aperçu, sauvegarde et restauration. Ce profil facultatif est agressif : il inclut sécurité, mises à jour, Bluetooth, impression et Xbox. Windows peut refuser certaines modifications ; les pilotes noyau sont exclus. [Lire le fonctionnement et les limites avant de l’appliquer](docs/features/services.md).
 
-**Corrigé en 7.120.139 :** prise en charge des modèles de services par utilisateur et des nouvelles tentatives après un refus sans effet. Le bilan distingue les refus de Windows, les conflits et les erreurs ; les changements des modèles prennent effet à la prochaine session.
+**Corrigé en 7.120.140 :** prise en charge des modèles de services par utilisateur et des nouvelles tentatives après un refus sans effet. Le bilan distingue les refus de Windows, les conflits et les erreurs ; les changements des modèles prennent effet à la prochaine session.
 
 ## Ce que vous pouvez faire
 

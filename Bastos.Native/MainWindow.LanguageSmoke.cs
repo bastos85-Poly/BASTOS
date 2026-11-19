@@ -42,6 +42,9 @@ public partial class MainWindow
             }
             InterfaceLanguageSelector.SelectedValue = "en";
             var dynamicCases = new (string French,string English)[] {
+                ("Source officielle Microsoft · lien généré à chaque téléchargement", "Official Microsoft source · a fresh link for each download"),
+                ("Annuler le téléchargement", "Cancel download"),
+                ("Windows 11 version publique actuelle — Famille / Pro / Éducation", "Windows 11 current public release — Home / Pro / Education"),
                 ("Modèle désactivé — prochaine session", "Template disabled — next session"),
                 ("Refus de Windows — voir le détail", "Denied by Windows — see details"),
                 ("Détectés : 112 · Démarrages désactivés : 102 · Indisponibles : 40 · Refus Windows : 8 · Conflits : 1 · Erreurs : 0.", "Detected: 112 · Startup settings disabled: 102 · Unavailable: 40 · Windows refusals: 8 · Conflicts: 1 · Errors: 0."),

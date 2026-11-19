@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:models="clr-namespace:Bastos.Native.Models" xmlns:native="clr-namespace:Bastos.Native" x:Class="Bastos.Native.MainWindow" Title="BASTOS" Height="820" Width="1320" MinHeight="700" MinWidth="1080" WindowStartupLocation="CenterScreen" Background="{StaticResource WindowBrush}">
   <FrameworkElement.Resources>
     <ResourceDictionary>
@@ -1737,7 +1737,7 @@
                 <Border Padding="16" CornerRadius="7" Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Margin="0,0,0,16">
                   <StackPanel>
                     <TextBlock Text="Quel Windows télécharger ?" FontSize="16" FontWeight="SemiBold" />
-                    <TextBlock Text="Choisis le fichier ISO à télécharger dans le catalogue Massgrave." Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" Margin="0,5,0,16" />
+                    <TextBlock Text="Choisis ton Windows et ta langue. BASTOS télécharge l’ISO directement depuis Microsoft, sans ouvrir ton navigateur." Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" Margin="0,5,0,16" />
                     <Grid IsEnabled="{Binding IsCatalogReady}">
                       <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -1782,15 +1782,19 @@
                     <WrapPanel Margin="0,14,0,0">
                       <Button Content="Télécharger l’ISO choisie…" Style="{StaticResource PrimaryButton}" Command="{Binding DownloadCommand}" Margin="0,0,9,8" />
                     </WrapPanel>
+                    <StackPanel Visibility="{Binding IsDownloadProgressVisible, Converter={StaticResource BooleanToVisibilityConverter}}" Margin="0,8,0,8">
+                      <ProgressBar Height="8" Minimum="0" Maximum="100" Value="{Binding DownloadProgressPercent, Mode=OneWay}" IsIndeterminate="{Binding IsDownloadProgressIndeterminate}" />
+                      <TextBlock Text="{Binding DownloadProgressText}" Foreground="{StaticResource AccentBrush}" TextWrapping="Wrap" Margin="0,8,0,0" />
+                      <Button Content="Annuler le téléchargement" Style="{DynamicResource QuietButton}" Command="{Binding CancelOperationCommand}" IsEnabled="{Binding CanCancelOperation}" HorizontalAlignment="Left" Margin="0,8,0,0" />
+                    </StackPanel>
                     <ProgressBar IsIndeterminate="True" Height="4" Margin="0,3,0,8" Visibility="{Binding IsCatalogRefreshing, Converter={StaticResource BooleanToVisibilityConverter}}" />
                     <Expander Header="Source et détails du téléchargement" Margin="0,10,0,0">
                       <StackPanel>
                         <TextBlock Text="{Binding CatalogStatus}" Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" FontSize="12" />
-                        <TextBlock Text="Le fichier choisi s’ouvre dans ton navigateur. Enregistre l’ISO dans Téléchargements, puis reviens dans Bastos. Une validation de l’hébergeur peut être nécessaire." Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" Margin="0,10,0,0" />
+                        <TextBlock Text="Un lien Microsoft neuf est obtenu pour chaque téléchargement. La progression, l’annulation et l’ajout à la bibliothèque restent dans BASTOS." Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" Margin="0,10,0,0" />
                         <TextBlock Text="{Binding CatalogCompatibilityHint}" Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" Margin="0,10,0,0" />
                         <TextBlock Text="ISO complètes uniquement : les correctifs DVP des anciennes versions ne sont pas inclus." Foreground="{StaticResource MutedBrush}" TextWrapping="Wrap" FontSize="12" Margin="0,10,0,0" />
                         <Button Content="Actualiser le catalogue" Style="{DynamicResource QuietButton}" Command="{Binding RefreshCatalogCommand}" Margin="0,5,0,0" HorizontalAlignment="Left" />
-                        <Button Content="Voir la rubrique source" Style="{StaticResource SecondaryButton}" Command="{Binding OpenCatalogSourceCommand}" Margin="0,5,0,0" HorizontalAlignment="Left" />
                       </StackPanel>
                     </Expander>
                   </StackPanel>

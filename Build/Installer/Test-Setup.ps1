@@ -1,4 +1,4 @@
-param([Parameter(Mandatory)][string]$KitRoot,[Parameter(Mandatory)][string]$OutputDirectory)
+﻿param([Parameter(Mandatory)][string]$KitRoot,[Parameter(Mandatory)][string]$OutputDirectory)
 $ErrorActionPreference='Stop'
 $kit=(Resolve-Path -LiteralPath $KitRoot).Path
 $root=[IO.Path]::GetFullPath($OutputDirectory)
@@ -6,7 +6,7 @@ if(Test-Path -LiteralPath $root){throw 'Choose a new fixture directory.'}
 New-Item -ItemType Directory -Path $root|Out-Null
 $script:checks=0
 function Check([bool]$ok,[string]$message){if(-not $ok){throw $message};$script:checks++;Write-Output ('OK: '+$message)}
-$setup=Join-Path $kit 'BASTOS-Setup-7.120.139.exe'
+$setup=Join-Path $kit 'BASTOS-Setup-7.120.140.exe'
 function Run-Setup([string]$destination,[switch]$Verify){
  $setupArguments=@('--test-root',('"'+$destination+'"'));if($Verify){$setupArguments+='--verify-only'}
  $p=Start-Process -FilePath $setup -ArgumentList $setupArguments -WindowStyle Hidden -PassThru
@@ -20,7 +20,7 @@ Check ((Run-Setup $fresh) -eq 0) 'Single EXE installs to isolated directory cont
 $exe=Join-Path $fresh 'BASTOS/Bastos.Native/BASTOS-Native.exe'
 $meta=Get-Content (Join-Path $kit 'ReleaseStatus.json') -Raw|ConvertFrom-Json
 Check ((Get-FileHash $exe).Hash -eq $meta.NativeSha256) 'Installed executable matches compiled candidate'
-Check ((Get-Item $exe).VersionInfo.FileVersion -eq '7.120.139.0') 'Installed version is 7.120.139'
+Check ((Get-Item $exe).VersionInfo.FileVersion -eq '7.120.140.0') 'Installed version is 7.120.140'
 $manifest=Get-Content (Join-Path $fresh 'BASTOS/BASTOS-App-Manifest.json') -Raw|ConvertFrom-Json
 $wrong=@($manifest.Files|Where-Object {(Get-FileHash -LiteralPath (Join-Path "$fresh/BASTOS" $_.Path)).Hash -ne $_.Sha256})
 Check ($wrong.Count -eq 0) 'Every installed manifest entry matches SHA-256'
@@ -33,7 +33,7 @@ $backup=@(Get-ChildItem -LiteralPath $fresh -Directory -Filter 'BASTOS-before-*'
 Check ($backup.Count -eq 1 -and (Get-Content (Join-Path $backup[0].FullName 'local-sentinel.txt') -Raw) -eq 'preserve fixture') 'Previous installation and local fixture remain in backup'
 $bad=Join-Path $root 'damaged-kit';New-Item -ItemType Directory $bad|Out-Null
 Copy-Item (Join-Path $kit 'Installer.ps1') "$bad/Installer.ps1"
-[IO.File]::WriteAllText((Join-Path $bad 'BASTOS-7.120.139-Payload.zip'),'corrupted fixture')
+[IO.File]::WriteAllText((Join-Path $bad 'BASTOS-7.120.140-Payload.zip'),'corrupted fixture')
 $ps=Join-Path $env:WINDIR 'System32/WindowsPowerShell/v1.0/powershell.exe'
 $badTarget=Join-Path $root 'damaged-target'
 & $ps -NoProfile -NonInteractive -ExecutionPolicy Bypass -File "$bad/Installer.ps1" -TestRoot $badTarget *> (Join-Path $root 'damaged.log')
@@ -43,7 +43,7 @@ New-Item -ItemType Directory $actual|Out-Null
 New-Item -ItemType Junction -Path $link -Target $actual|Out-Null
 Check ((Run-Setup $link) -ne 0) 'Redirected installation directory is rejected'
 Check (-not(Test-Path "$actual/BASTOS")) 'Rejected redirect leaves destination untouched'
-$sourceZip=Join-Path $kit 'BASTOS-7.120.139-Sources.zip'
+$sourceZip=Join-Path $kit 'BASTOS-7.120.140-Sources.zip'
 Add-Type -AssemblyName System.IO.Compression.FileSystem
 $archive=[IO.Compression.ZipFile]::OpenRead($sourceZip)
 try{Check (@($archive.Entries|Where-Object {$_.FullName -match '(^|/)(bin|obj|artifacts|\.git)/|\.(exe|dll|pdb|log|lnk)$'}).Count -eq 0) 'Distributed sources exclude compiled products and private runtime evidence'}finally{$archive.Dispose()}

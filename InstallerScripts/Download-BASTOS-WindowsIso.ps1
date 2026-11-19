@@ -1,6 +1,6 @@
 ﻿[CmdletBinding()]
 param(
-    [ValidateSet('x64')]
+    [ValidateSet('x64','x86')]
     [string]$Architecture = 'x64',
 
     [Parameter(Mandatory)]
@@ -14,8 +14,10 @@ param(
 
     [string]$ResultPath,
 
-    [ValidateSet('Retail25H2','Insider26H2')]
-    [string]$Release = 'Retail25H2',
+    [ValidateSet('RetailCurrent','Retail25H2','Windows10Current','Insider26H2')]
+    [string]$Release = 'RetailCurrent',
+
+    [string]$CancelPath,
 
     [switch]$LinkOnly,
 
@@ -35,6 +37,7 @@ $ErrorActionPreference = 'Stop'
 Import-Module -Name (Join-Path $PSHOME 'Modules\Microsoft.PowerShell.Security\Microsoft.PowerShell.Security.psd1') -ErrorAction Stop
 $progressMirrorRoot = Join-Path $env:LOCALAPPDATA 'BASTOS'
 $progressMirrorPath = Join-Path $progressMirrorRoot 'WindowsIso-DownloadProgress.json'
+$script:AvailableLanguages=@()
 
 function Write-BastosIsoResult {
     param(
@@ -56,6 +59,7 @@ function Write-BastosIsoResult {
         FilePath = $FilePath
         Bytes = $Bytes
         TotalBytes = $TotalBytes
+        AvailableLanguages = @($script:AvailableLanguages)
         WorkerPid = $PID
         Date = (Get-Date).ToString('o')
     }
@@ -214,7 +218,7 @@ function Remove-BastosWebView2SessionFolder {
 if ($Language -notmatch '^[A-Za-z() -]+$') {
     throw 'La langue demandee contient un caractere non autorise.'
 }
-if ($Architecture -ne 'x64') {
+if ($Architecture -ne 'x64' -and $Release -ne 'Windows10Current') {
     throw 'Ce prototype BASTOS prend uniquement en charge ISO Windows 11 x64.'
 }
 
@@ -331,12 +335,12 @@ Add-Type -Path (Join-Path $webViewRoot 'Microsoft.Web.WebView2.Core.dll')
 Add-Type -Path (Join-Path $webViewRoot 'Microsoft.Web.WebView2.WinForms.dll')
 
 $form = New-Object Windows.Forms.Form
-$releaseDisplay = if ($Release -eq 'Insider26H2') { 'Windows 11 Insider' } else { 'Windows 11 - version publique actuelle' }
+$releaseDisplay = if ($Release -eq 'Insider26H2') { 'Windows 11 Insider' } elseif($Release -eq 'Windows10Current') {'Windows 10 - version publique actuelle'} else { 'Windows 11 - version publique actuelle' }
 $insiderDownloadPageUri = 'https://www.microsoft.com/en-us/software-download/windowsinsiderpreviewiso'
 $officialPageUri = if ($Release -eq 'Insider26H2') {
     $insiderDownloadPageUri
 } else {
-    'https://www.microsoft.com/fr-fr/software-download/windows11#SoftwareDownload_Edition'
+    if($Release -eq 'Windows10Current'){'https://www.microsoft.com/en-us/software-download/windows10ISO'}else{'https://www.microsoft.com/fr-fr/software-download/windows11#SoftwareDownload_Edition'}
 }
 $form.Text = "BASTOS - ISO $releaseDisplay officielle"
 $form.StartPosition = 'CenterScreen'
@@ -367,7 +371,7 @@ $bottomPanel.BackColor = [Drawing.Color]::FromArgb(17,18,28)
 $form.Controls.Add($bottomPanel)
 
 $officialButton = New-Object Windows.Forms.Button
-$officialButton.Text = 'Ouvrir la page officielle dans Edge'
+$officialButton.Text = 'Recharger la source Microsoft'
 $officialButton.Size = New-Object Drawing.Size(250,30)
 $officialButton.Location = New-Object Drawing.Point(12,9)
 $officialButton.FlatStyle = 'Flat'
@@ -375,7 +379,7 @@ $officialButton.FlatAppearance.BorderColor = [Drawing.Color]::FromArgb(40,42,58)
 $officialButton.BackColor = [Drawing.Color]::FromArgb(24,25,37)
 $officialButton.ForeColor = [Drawing.Color]::White
 $officialButton.Add_Click({
-    Start-Process $officialPageUri
+    $webView.CoreWebView2.Navigate($officialPageUri)
 })
 $bottomPanel.Controls.Add($officialButton)
 
@@ -410,6 +414,8 @@ if ($Hidden -and $Release -ne 'Insider26H2') {
 $script:Phase = 'Initializing'
 $script:AutomationReady = $false
 $script:AutomationTask = $null
+$script:NavigationRetries = 0
+$script:NextScriptAt = [datetime]::MinValue
 $script:AutomationStartedAt = Get-Date
 $script:PendingDownloadUri = $null
 $script:PendingDownloadPath = $null
@@ -443,7 +449,7 @@ function Complete-BastosIsoWorker {
         [switch]$Close
     )
     Write-BastosIsoResult -Status $Status -Message $Message -Uri $Uri -FilePath $FilePath -Bytes $Bytes -TotalBytes $TotalBytes
-    if ($Status -in @('Completed','Error','Interrupted','Timeout','MicrosoftError','SentinelRejected','DownloadIntercepted','LinkReady')) {
+    if ($Status -in @('Completed','Error','Interrupted','Cancelled','Timeout','MicrosoftError','SentinelRejected','DownloadIntercepted','LinkReady')) {
         $script:FinalResultWritten = $true
     }
     if ($Close) {
@@ -454,10 +460,12 @@ function Complete-BastosIsoWorker {
 
 $languageJson = $Language | ConvertTo-Json -Compress
 $releaseJson = $Release | ConvertTo-Json -Compress
+$architectureJson = $Architecture | ConvertTo-Json -Compress
 $automationScript = @"
 (function () {
     const requestedLanguage = $languageJson;
     const requestedRelease = $releaseJson;
+    const requestedArchitecture = $architectureJson;
     const state = window.__bastosIsoAutomation || {
         stage: 'warmup',
         startedAt: Date.now(),
@@ -631,11 +639,15 @@ $automationScript = @"
         button.click();
         state.stage = 'link';
         state.stageStartedAt = Date.now();
-        return reply('language-selected', option.textContent.trim());
+        const offered = Array.from(select.options).filter(item => item.value && item.value !== 'null').map(item => {
+            try { return JSON.parse(item.value).language; } catch (_) { return ''; }
+        }).filter(Boolean);
+        return reply('language-selected', option.textContent.trim(), { available: offered });
     }
     if (state.stage === 'link') {
-        const link = document.querySelector('#SoftwareDownload_DownloadLinks #download-links a[href^="https://"]') ||
-            document.querySelector('a[href^="https://"][href*=".iso"]');
+        const links = Array.from(document.querySelectorAll('a[href^="https://"][href*=".iso"]'));
+        const architecture = requestedArchitecture === 'x86' ? /_(?:x86|x32)[^/]*\.iso/i : /_x64[^/]*\.iso/i;
+        const link = links.find(item => architecture.test(item.href));
         if (link && link.href) {
             state.stage = 'done';
             return reply('link-ready', 'Lien ISO genere par Microsoft.', {
@@ -657,6 +669,13 @@ $automationScript = @"
 $automationTimer = New-Object Windows.Forms.Timer
 $automationTimer.Interval = 200
 $automationTimer.Add_Tick({
+    if($script:Phase -eq 'Initializing' -and ((Get-Date)-$script:AutomationStartedAt).TotalSeconds -ge $TimeoutSeconds){
+        $script:Phase='Error';Complete-BastosIsoWorker -Status 'Timeout' -Message 'Le delai de connexion Microsoft est depasse.' -Close;return
+    }
+    if($CancelPath -and (Test-Path -LiteralPath $CancelPath)){
+        if($script:StreamingDownloader){$script:StreamingDownloader.Cancel()}
+        else{$script:Phase='Cancelled';Complete-BastosIsoWorker -Status 'Cancelled' -Message 'Telechargement ISO annule.' -Close;return}
+    }
     if ($script:Phase -eq 'Downloading' -and $script:StreamingDownloader) {
         if (((Get-Date) - $script:LastProgressPublishAt).TotalMilliseconds -ge 200) {
             try {
@@ -728,13 +747,18 @@ $automationTimer.Add_Tick({
         return
     }
     if ($null -eq $script:AutomationTask) {
+        if((Get-Date) -lt $script:NextScriptAt){return}
         $script:AutomationTask = $webView.ExecuteScriptAsync($automationScript)
         return
     }
     if (-not $script:AutomationTask.IsCompleted) { return }
     try {
         $outerJson = $script:AutomationTask.GetAwaiter().GetResult()
+        # WebView2 returns JSON null while Microsoft replaces/navigates its page.
+        # This is not a failed request; wait for the next completed document.
+        if([string]::IsNullOrWhiteSpace($outerJson) -or $outerJson -eq 'null'){$script:AutomationTask=$null;return}
         $innerJson = $outerJson | ConvertFrom-Json
+        if([string]::IsNullOrWhiteSpace($innerJson)){$script:AutomationTask=$null;return}
         $step = $innerJson | ConvertFrom-Json
         $script:AutomationTask = $null
         switch ([string]$step.status) {
@@ -808,6 +832,7 @@ $automationTimer.Add_Tick({
                 Set-BastosIsoStatus 'Microsoft prepare la liste des langues...'
             }
             'language-selected' {
+                $script:AvailableLanguages=@($step.available)
                 Set-BastosIsoStatus "Langue selectionnee : $LanguageDisplay. Generation du lien temporaire..."
             }
             'waiting-link' {
@@ -841,6 +866,9 @@ $automationTimer.Add_Tick({
         }
     } catch {
         $script:AutomationTask = $null
+        if($_.Exception.Message -match 'CoreWebView2.*uninitialized|navigation|document' -and $script:NavigationRetries -lt 10){
+            $script:NavigationRetries++;$script:NextScriptAt=(Get-Date).AddSeconds(1);return
+        }
         $script:Phase = 'Manual'
         Set-BastosIsoStatus "Automatisation impossible : $($_.Exception.Message). La page officielle reste utilisable manuellement." ([Drawing.Color]::FromArgb(245,188,78))
         if ($Hidden -or $LinkOnly -or $InterceptDownloadTest) {
@@ -859,6 +887,10 @@ $webView.Add_CoreWebView2InitializationCompleted({
     }
     $sender.CoreWebView2.Settings.AreDevToolsEnabled = $false
     $sender.CoreWebView2.Settings.IsStatusBarEnabled = $true
+    if($Release -eq 'Windows10Current'){
+        # Microsoft's public Windows 10 ISO page is presented to non-Windows clients.
+        $sender.CoreWebView2.Settings.UserAgent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36'
+    }
     $sender.CoreWebView2.Add_NewWindowRequested({
         param($coreSender,$newWindowArgs)
         # Microsoft ouvre normalement la connexion dans une nouvelle fenêtre.
@@ -936,7 +968,7 @@ $webView.Add_NavigationCompleted({
             Set-BastosIsoStatus "Connecte-toi au programme Windows Insider. Choisis ensuite toi-même l'édition Windows 11 ; BASTOS sélectionnera $LanguageDisplay et reprendra le téléchargement."
             Complete-BastosIsoWorker -Status 'AwaitingSignIn' -Message 'Page officielle Windows Insider ouverte. Connexion Microsoft requise avant le choix manuel de l edition.'
         } else {
-            Set-BastosIsoStatus "Page Microsoft chargee. Selection automatique de Windows 11 25H2 $Architecture et $LanguageDisplay..."
+            Set-BastosIsoStatus "Page Microsoft chargee. Selection automatique de $releaseDisplay $Architecture et $LanguageDisplay..."
         }
     }
 })

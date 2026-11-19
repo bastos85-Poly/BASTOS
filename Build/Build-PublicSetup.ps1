@@ -1,13 +1,13 @@
-param(
+﻿param(
     [Parameter(Mandatory)][string]$CandidateRoot,
     [Parameter(Mandatory)][string]$OutputDirectory
 )
 $ErrorActionPreference='Stop'
-$version='7.120.139'
+$version='7.120.140'
 $source=[IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
 $candidate=(Resolve-Path -LiteralPath $CandidateRoot).Path
 $output=[IO.Path]::GetFullPath($OutputDirectory)
-if(Test-Path -LiteralPath (Join-Path $output 'BASTOS-Setup-7.120.139.exe')){throw 'Use a new output directory.'}
+if(Test-Path -LiteralPath (Join-Path $output 'BASTOS-Setup-7.120.140.exe')){throw 'Use a new output directory.'}
 if($output.StartsWith($candidate.TrimEnd('\')+'\',[StringComparison]::OrdinalIgnoreCase)){throw 'Output must be outside candidate.'}
 New-Item -ItemType Directory -Path $output -Force|Out-Null
 Add-Type -AssemblyName System.IO.Compression.FileSystem
@@ -30,7 +30,7 @@ foreach($file in Get-ChildItem -LiteralPath $candidate -Recurse -File){
  if($file.Extension -eq '.pdb'){throw 'Debug symbols must not be packaged.'}
  if($file.Attributes -band [IO.FileAttributes]::ReparsePoint){throw 'Reparse points must not be packaged.'}
 }
-$sourceZip=Join-Path $output 'BASTOS-7.120.139-Sources.zip'
+$sourceZip=Join-Path $output 'BASTOS-7.120.140-Sources.zip'
 Zip-Files $source $sourceZip -Sources
 Copy-Item -LiteralPath $sourceZip -Destination (Join-Path $candidate 'Bastos.Native/Source-Current.zip') -Force
 Copy-Item -LiteralPath (Join-Path $source 'LICENSE.txt') -Destination (Join-Path $candidate 'LICENSE.txt') -Force
