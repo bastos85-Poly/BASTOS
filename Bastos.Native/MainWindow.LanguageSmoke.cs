@@ -42,6 +42,8 @@ public partial class MainWindow
             }
             InterfaceLanguageSelector.SelectedValue = "en";
             var dynamicCases = new (string French,string English)[] {
+                ("Le composant Microsoft redémarre. Nouvelle tentative automatique…", "The Microsoft component is restarting. Retrying automatically…"),
+                ("La connexion intégrée à Microsoft a échoué. Réessaie le téléchargement.", "The integrated Microsoft connection failed. Try downloading again."),
                 ("Source officielle Microsoft · lien généré à chaque téléchargement", "Official Microsoft source · a fresh link for each download"),
                 ("Annuler le téléchargement", "Cancel download"),
                 ("Windows 11 version publique actuelle — Famille / Pro / Éducation", "Windows 11 current public release — Home / Pro / Education"),

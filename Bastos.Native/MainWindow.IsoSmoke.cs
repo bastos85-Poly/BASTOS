@@ -17,6 +17,15 @@ public partial class MainWindow
     private void RunIsoCatalogSmoke(MainViewModel main)
     {
         var vm = main.Reinstall;
+        var progressMethod=typeof(ReinstallViewModel).GetMethod("UpdateDownloadProgress",System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance)!;
+        foreach(string terminal in new[]{"Error","WebViewUnavailable","Interrupted","Timeout","MicrosoftError","SentinelRejected","Cancelled"})
+        {
+            progressMethod.Invoke(vm,new object[]{new IsoDownloadProgress("Retrying",0,0,0,0,"")});
+            if(!vm.IsDownloadProgressIndeterminate)throw new InvalidOperationException("Browser retry must show pending work.");
+            progressMethod.Invoke(vm,new object[]{new IsoDownloadProgress(terminal,0,0,0,0,"")});
+            if(vm.IsDownloadProgressIndeterminate)throw new InvalidOperationException("Download error leaves an animated progress bar: "+terminal);
+        }
+        typeof(ReinstallViewModel).GetProperty(nameof(vm.IsDownloadProgressVisible))!.SetValue(vm,false);
         var originalFamily = vm.SelectedCatalogFamily;
         var originalVersion = vm.SelectedCatalogVersion;
         var originalLanguage = vm.SelectedCatalogLanguage;

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -37,7 +37,7 @@ public static class OfficialIsoTransfer
         string temporary=Path.Combine(root,".BASTOS-"+Guid.NewGuid().ToString("N")+".download");
         using var handler=testHandler??new HttpClientHandler{AllowAutoRedirect=false,AutomaticDecompression=DecompressionMethods.None};
         using var client=new HttpClient(handler){Timeout=TimeSpan.FromSeconds(90)};
-        client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0 BASTOS/7.120.140");
+        client.DefaultRequestHeaders.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/138.0.0.0 Safari/537.36 Edg/138.0.0.0 BASTOS/7.120.141");
         HttpResponseMessage? response=null;
         try
         {

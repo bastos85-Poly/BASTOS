@@ -528,6 +528,8 @@ public sealed partial class ReinstallViewModel : ObservableObject
 
 	private async Task DownloadWindows(WindowsDownloadChoice item)
 	{
+		try
+		{
 		await Execute(async delegate
 		{
             SelectedLanguage=Languages.First(language=>language.Locale.Equals(item.Locale,StringComparison.OrdinalIgnoreCase));
@@ -556,12 +558,19 @@ public sealed partial class ReinstallViewModel : ObservableObject
             }
 			return (Success: tuple2.Item1, Message: tuple2.Item2);
 		});
+		}
+        finally
+        {
+            IsDownloadProgressIndeterminate=false;
+            if(DownloadProgressPercent<100)DownloadProgressText=Status;
+        }
 	}
 
 	private void UpdateDownloadProgress(IsoDownloadProgress progress)
 	{
 		IsDownloadProgressVisible = true;
-		IsDownloadProgressIndeterminate = progress.TotalBytes <= 0 && progress.Status != "Completed";
+		IsDownloadProgressIndeterminate = progress.TotalBytes <= 0 && progress.Status is not
+            ("Completed" or "Error" or "WebViewUnavailable" or "Interrupted" or "Timeout" or "MicrosoftError" or "SentinelRejected" or "Cancelled");
 		DownloadProgressPercent = ((progress.Status == "Completed") ? 100.0 : progress.Percent);
 		if (progress.Status == "Downloading" || progress.Status == "Completed")
 		{
@@ -576,6 +585,18 @@ public sealed partial class ReinstallViewModel : ObservableObject
 			string text;
 			switch (progress.Status)
 			{
+            case "Retrying":
+                text="Le composant Microsoft redémarre. Nouvelle tentative automatique…";
+                break;
+            case "WebViewUnavailable":
+                text="La connexion intégrée à Microsoft a échoué. Réessaie le téléchargement.";
+                break;
+            case "Cancelled":
+                text="Téléchargement annulé ; aucun fichier incomplet n’a été ajouté à la bibliothèque.";
+                break;
+            case "SentinelRejected":
+                text="Microsoft refuse temporairement la génération du lien. Réessaie plus tard ou sélectionne une ISO déjà téléchargée dans « Mon ISO ».";
+                break;
 			case "LinkReady":
 				text = "Lien Microsoft prêt. Démarrage du transfert…";
 				break;

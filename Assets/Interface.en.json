@@ -2149,5 +2149,8 @@
   "Le fichier reçu n’est pas une image ISO/UDF reconnue.": "The received file is not a recognized ISO/UDF image.",
   "La connexion Microsoft a expiré. Réessaie le téléchargement.": "The Microsoft connection timed out. Try downloading again.",
   "Windows 11 version publique actuelle": "Windows 11 current public release",
-  "Windows 10 version publique actuelle": "Windows 10 current public release"
+  "Windows 10 version publique actuelle": "Windows 10 current public release",
+  "Le composant Microsoft redémarre. Nouvelle tentative automatique…": "The Microsoft component is restarting. Retrying automatically…",
+  "La connexion intégrée à Microsoft a échoué. Réessaie le téléchargement.": "The integrated Microsoft connection failed. Try downloading again.",
+  "Microsoft refuse temporairement la génération du lien. Réessaie plus tard ou sélectionne une ISO déjà téléchargée dans « Mon ISO ».": "Microsoft is temporarily refusing to generate the link. Try again later or select an ISO you already downloaded in My ISO."
 }

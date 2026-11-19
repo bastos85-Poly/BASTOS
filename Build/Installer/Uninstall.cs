@@ -4,8 +4,8 @@ using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 [assembly: AssemblyTitle("Désinstallation BASTOS")]
-[assembly: AssemblyVersion("7.120.140.0")]
-[assembly: AssemblyFileVersion("7.120.140.0")]
+[assembly: AssemblyVersion("7.120.141.0")]
+[assembly: AssemblyFileVersion("7.120.141.0")]
 static class Uninstall {
  [STAThread] static int Main(string[] args) {
   try {

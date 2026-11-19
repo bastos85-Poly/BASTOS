@@ -7,6 +7,12 @@ using Bastos.Native.Services;
 int checks=0;
 void Check(bool value,string name){if(!value)throw new Exception(name);checks++;Console.WriteLine("PASS: "+name);}
 var source=new Uri("https://download.microsoft.com/fixture.iso");
+Check(OfficialIsoLinkPolicy.ShouldRetry("WebViewUnavailable",0,true,false),"Stopped browser initialization failure restarts once");
+foreach(string status in new[]{"LinkReady","MicrosoftError","SentinelRejected","Cancelled","Error"})
+ Check(!OfficialIsoLinkPolicy.ShouldRetry(status,0,true,false),"No browser retry for "+status);
+Check(!OfficialIsoLinkPolicy.ShouldRetry("WebViewUnavailable",1,true,false),"Browser retry is bounded");
+Check(!OfficialIsoLinkPolicy.ShouldRetry("WebViewUnavailable",0,false,false),"A live worker is never restarted");
+Check(!OfficialIsoLinkPolicy.ShouldRetry("WebViewUnavailable",0,true,true),"Cancellation prevents browser restart");
 foreach(string bad in new[]{"http://download.microsoft.com/a.iso","https://microsoft.com.evil.test/a.iso","https://user@download.microsoft.com/a.iso","https://download.microsoft.com:9443/a.iso","https://example.test/a.iso"})
  Check(!OfficialIsoTransfer.IsMicrosoftUri(new Uri(bad)),"Untrusted source rejected: "+bad);
 foreach(string bad in new[]{"https://download.microsoft.com/%2fsecret.iso","https://download.microsoft.com/a.exe","https://download.microsoft.com/%5csecret.iso"}){

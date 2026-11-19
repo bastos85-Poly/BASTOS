@@ -167,7 +167,7 @@
     },
     {
       "Path": "Download-BASTOS-WindowsIso.ps1",
-      "Sha256": "CA193F381AD1B1BBBA3CC820A5FF78C3ED78107A3932B86CBA336F04A6FE085D"
+      "Sha256": "007526F0EB0AA772E4AB1ABC5F7AE920AB6D3A14084448EEAB562A9B2F7CFFFB"
     },
     {
       "Path": "Driver-Recommendation-Service.psm1",

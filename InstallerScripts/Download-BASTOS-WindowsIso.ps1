@@ -413,6 +413,7 @@ if ($Hidden -and $Release -ne 'Insider26H2') {
 
 $script:Phase = 'Initializing'
 $script:AutomationReady = $false
+$script:DocumentReady = $false
 $script:AutomationTask = $null
 $script:NavigationRetries = 0
 $script:NextScriptAt = [datetime]::MinValue
@@ -449,7 +450,7 @@ function Complete-BastosIsoWorker {
         [switch]$Close
     )
     Write-BastosIsoResult -Status $Status -Message $Message -Uri $Uri -FilePath $FilePath -Bytes $Bytes -TotalBytes $TotalBytes
-    if ($Status -in @('Completed','Error','Interrupted','Cancelled','Timeout','MicrosoftError','SentinelRejected','DownloadIntercepted','LinkReady')) {
+    if ($Status -in @('Completed','Error','WebViewUnavailable','Interrupted','Cancelled','Timeout','MicrosoftError','SentinelRejected','DownloadIntercepted','LinkReady')) {
         $script:FinalResultWritten = $true
     }
     if ($Close) {
@@ -714,7 +715,10 @@ $automationTimer.Add_Tick({
         }
         return
     }
-    if ($script:Phase -ne 'Automating' -or -not $script:AutomationReady) { return }
+    if($script:Phase -eq 'Automating' -and ((Get-Date)-$script:AutomationStartedAt).TotalSeconds -ge $TimeoutSeconds -and ($Hidden -or $LinkOnly -or $InterceptDownloadTest)){
+        $script:Phase='Error';Complete-BastosIsoWorker -Status 'Timeout' -Message 'Le delai de connexion Microsoft est depasse.' -Close;return
+    }
+    if ($script:Phase -ne 'Automating' -or -not $script:AutomationReady -or -not $script:DocumentReady) { return }
     if ($null -ne $script:MeClickTask) {
         if(-not $script:MeClickTask.IsCompleted){ return }
         try {
@@ -746,13 +750,15 @@ $automationTimer.Add_Tick({
         }
         return
     }
-    if ($null -eq $script:AutomationTask) {
-        if((Get-Date) -lt $script:NextScriptAt){return}
-        $script:AutomationTask = $webView.ExecuteScriptAsync($automationScript)
-        return
-    }
-    if (-not $script:AutomationTask.IsCompleted) { return }
     try {
+        if ($null -eq $script:AutomationTask) {
+            if((Get-Date) -lt $script:NextScriptAt -or $null -eq $webView.CoreWebView2){return}
+            # Use the initialized Core API. The WinForms forwarding method can
+            # race its own initialization task when the hidden control loads.
+            $script:AutomationTask = $webView.CoreWebView2.ExecuteScriptAsync($automationScript)
+            return
+        }
+        if (-not $script:AutomationTask.IsCompleted) { return }
         $outerJson = $script:AutomationTask.GetAwaiter().GetResult()
         # WebView2 returns JSON null while Microsoft replaces/navigates its page.
         # This is not a failed request; wait for the next completed document.
@@ -760,6 +766,7 @@ $automationTimer.Add_Tick({
         $innerJson = $outerJson | ConvertFrom-Json
         if([string]::IsNullOrWhiteSpace($innerJson)){$script:AutomationTask=$null;return}
         $step = $innerJson | ConvertFrom-Json
+        $script:NavigationRetries = 0
         $script:AutomationTask = $null
         switch ([string]$step.status) {
             'warming-up' {
@@ -872,7 +879,8 @@ $automationTimer.Add_Tick({
         $script:Phase = 'Manual'
         Set-BastosIsoStatus "Automatisation impossible : $($_.Exception.Message). La page officielle reste utilisable manuellement." ([Drawing.Color]::FromArgb(245,188,78))
         if ($Hidden -or $LinkOnly -or $InterceptDownloadTest) {
-            Complete-BastosIsoWorker -Status 'Error' -Message $_.Exception.Message -Close
+            $failureStatus=if($_.Exception.Message -match 'CoreWebView2|0x8007139F'){'WebViewUnavailable'}else{'Error'}
+            Complete-BastosIsoWorker -Status $failureStatus -Message $_.Exception.Message -Close
         }
     }
 })
@@ -882,11 +890,18 @@ $webView.Add_CoreWebView2InitializationCompleted({
     if (-not $eventArgs.IsSuccess) {
         $message = "Initialisation WebView2 impossible : $($eventArgs.InitializationException.Message)"
         Set-BastosIsoStatus $message ([Drawing.Color]::FromArgb(232,93,106))
-        Complete-BastosIsoWorker -Status 'Error' -Message $message -Close
+        Complete-BastosIsoWorker -Status 'WebViewUnavailable' -Message $message -Close
         return
     }
     $sender.CoreWebView2.Settings.AreDevToolsEnabled = $false
     $sender.CoreWebView2.Settings.IsStatusBarEnabled = $true
+    $sender.CoreWebView2.Add_ProcessFailed({
+        param($coreSender,$failure)
+        if($script:ClosingProgrammatically){return}
+        if([string]$failure.ProcessFailedKind -notin @('BrowserProcessExited','RenderProcessExited','RenderProcessUnresponsive','FrameRenderProcessExited')){return}
+        $script:Phase='Error'
+        Complete-BastosIsoWorker -Status 'WebViewUnavailable' -Message 'Le composant Microsoft a interrompu la connexion.' -Close
+    })
     if($Release -eq 'Windows10Current'){
         # Microsoft's public Windows 10 ISO page is presented to non-Windows clients.
         $sender.CoreWebView2.Settings.UserAgent='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36'
@@ -952,8 +967,14 @@ $webView.Add_CoreWebView2InitializationCompleted({
     $sender.CoreWebView2.Navigate($officialPageUri)
 })
 
+$webView.Add_NavigationStarting({
+    $script:DocumentReady=$false
+    $script:AutomationTask=$null
+})
+
 $webView.Add_NavigationCompleted({
     param($sender,$eventArgs)
+    $script:DocumentReady=[bool]$eventArgs.IsSuccess
     if ($script:Phase -eq 'Initializing') {
         if (-not $eventArgs.IsSuccess) {
             $message = "Navigation Microsoft impossible : $($eventArgs.WebErrorStatus)"

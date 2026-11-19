@@ -277,17 +277,35 @@ public sealed partial class ReinstallService(AppPaths paths, PowerShellWorkerSer
         string? cancelPath=cancellation?.BindWorker(paths.LogRoot);
         if(cancelPath!=null){list.Add("-CancelPath");list.Add(cancelPath);}
         cancellation?.AllowRead();
-		Task<CommandResult> workerTask = workers.RunAsync("Download-BASTOS-WindowsIso.ps1", list, elevate:false,timeoutMinutes:5,showWindow:false);
-		long previousBytes = 0L;
-		DateTime previousSample = DateTime.UtcNow;
-		string previousSnapshot = string.Empty;
-		while (!workerTask.IsCompleted)
-		{
-			PublishIsoProgress(result, progress, ref previousBytes, ref previousSample, ref previousSnapshot);
-			await Task.WhenAny(workerTask, Task.Delay(250));
-		}
-		CommandResult commandResult = await workerTask;
-		PublishIsoProgress(result, progress, ref previousBytes, ref previousSample, ref previousSnapshot, force: true);
+		CommandResult commandResult = new(false,-1,"","");
+        for(int attempt=0;attempt<2;attempt++)
+        {
+            cancellation?.ThrowIfRequested();
+            Task<CommandResult> workerTask=workers.RunAsync("Download-BASTOS-WindowsIso.ps1",list,elevate:false,timeoutMinutes:5,showWindow:false);
+            long previousBytes=0;
+            DateTime previousSample=DateTime.UtcNow;
+            string previousSnapshot=string.Empty;
+            while(!workerTask.IsCompleted)
+            {
+                PublishIsoProgress(result,progress,ref previousBytes,ref previousSample,ref previousSnapshot);
+                await Task.WhenAny(workerTask,Task.Delay(250));
+            }
+            commandResult=await workerTask;
+            string status="";
+            if(File.Exists(result))
+            {
+                using var report=JsonDocument.Parse(await File.ReadAllTextAsync(result));
+                status=GetString(report.RootElement,"Status");
+            }
+            if(!OfficialIsoLinkPolicy.ShouldRetry(status,attempt,commandResult.ProcessStopped,cancellation?.Requested==true))
+            {
+                PublishIsoProgress(result,progress,ref previousBytes,ref previousSample,ref previousSnapshot,force:true);
+                break;
+            }
+            log.Write("Téléchargement ISO","Le composant Microsoft a échoué ; nouvelle session intégrée, tentative 2 sur 2.");
+            File.Delete(result);
+            progress?.Report(new("Retrying",0,0,0,0,""));
+        }
 		try
 		{
             if(cancellation?.Requested==true)return(false,"Téléchargement annulé ; aucun fichier incomplet n’a été ajouté à la bibliothèque.",null);
@@ -298,6 +316,16 @@ public sealed partial class ReinstallService(AppPaths paths, PowerShellWorkerSer
 					JsonElement rootElement = jsonDocument.RootElement;
 					string text2 = GetString(rootElement, "Status");
 					string text3 = GetString(rootElement, "Message");
+                    if(text2=="WebViewUnavailable")
+                    {
+                        log.Write("Téléchargement ISO",text3,true);
+                        return(false,"La connexion intégrée à Microsoft a échoué. Réessaie le téléchargement.",null);
+                    }
+                    if(text2=="SentinelRejected")
+                    {
+                        log.Write("Téléchargement ISO",text3,true);
+                        return(false,"Microsoft refuse temporairement la génération du lien. Réessaie plus tard ou sélectionne une ISO déjà téléchargée dans « Mon ISO ».",null);
+                    }
                     if(commandResult.Success && commandResult.ProcessStopped && text2=="LinkReady")
                     {
                         string address=GetString(rootElement,"Uri");
